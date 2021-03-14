@@ -29,6 +29,7 @@ __pycache
 *.rar
 *.tar
 *.zip
+*.cfg
 
 # Logs and databases #
 ######################
@@ -48,3 +49,6 @@ Thumbs.db
 ###########
 venv/*
 env/*
+**bin
+**lib
+**share
