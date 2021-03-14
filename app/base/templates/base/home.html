@@ -1,0 +1,126 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container-no-margin">
+
+  <section class="section welcome">
+    <div class="row mt-5 mb-5"></div>
+    <div class="row mt-5 mb-5"></div>
+    <div class="row mt-5 mb-5"></div>
+    <div class="row mt-5 mb-5 mx-3">
+      <div class="col-lg-8 col-md-8 col-sm-10 mx-auto">
+        <div class="row my-3 justify-content-center">
+          <a class="site-title">Welcome to Issue Tracker</a>
+        </div>
+        <div class="row pt-3 my-3 justify-content-center">
+          <a class="site-subtitle">A GitHub integrated project management tool</a>
+        </div>
+      </div>
+    </div>
+    <div class="row mt-5 mb-5"></div>
+    <div class="row mt-5 mb-5"></div>
+  </section>
+
+  <section class="section description">
+    <div class="row py-5 my-5 mx-5">
+      <div class="col-12">
+        <div class="row py-2 justify-content-center">
+          <a class=description-text>
+            Issue Tracker clones some of GitHub's issue tracking features and adds the ability
+            to flag issues against projects, folders, and files, down to individual lines of code.
+          </a>
+        </div>
+        <div class="row py-3 justify-content-center">
+          <a class=description-text>Synchronize a project from GitHub or check out the existing sample project.</a>
+        </div>
+        <div class="row py-2 justify-content-center">
+          <!-- <button class="button-sync my-2 my-sm-0" type="submit">Synchronize Project</button> -->
+          <div class="row">
+            <a href="{% url 'confirm-sync' %}" class="button-sync">Synchronize Project</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section dashboard my-5">
+    <div class="col-lg-8 col-lg-offset-2 
+                col-md-10 col-md-offset-2
+                col-sm-12
+                mx-auto dash-panel">
+      <div class="row pt-5 pb-4 justify-content-center">
+        <a class=tracking-header>Currently Tracking:</a>
+      </div>
+      <div class="row my-2 justify-content-center">
+        <div class="col-6 text-right">
+          <a class="tracking-text">{{ project_count }}</a>
+        </div>
+        <div class="col-6 text-left">
+          <a class="tracking-text">
+            {% if project_count > 1 %}
+              Projects
+            {% else %}
+              Project
+            {% endif %}
+          </a>
+          <i class="fas fa-project-diagram tracking-text"></i>
+        </div>
+      </div>
+      <div class="row my-2 justify-content-center">
+        <div class="col-6 text-right">
+          <a class="tracking-text">{{ folder_count }}</a>
+        </div>
+        <div class="col-6 text-left">
+          <a class="tracking-text">
+            {% if folder_count > 1 %}
+              Folders
+            {% else %}
+              Folder
+            {% endif %}
+          </a>
+          <i class="far fa-folder tracking-text"></i>
+        </div>
+      </div>
+      <div class="row my-2 justify-content-center">
+        <div class="col-6 text-right">
+          <a class="tracking-text">{{ file_count }}</a>
+        </div>
+        <div class="col-6 text-left">
+          <a class="tracking-text">
+            {% if file_count > 1 %}
+              Files
+            {% else %}
+              File
+            {% endif %}
+          </a>
+          <i class="far fa-file tracking-text"></i>
+        </div>
+      </div>
+      <div class="row my-2 justify-content-center">
+        <div class="col-6 text-right">
+          <a class="tracking-text">{{ issue_count }}</a>
+        </div>
+        <div class="col-6 text-left">
+          <a class="tracking-text">
+            {% if issue_count > 1 %}
+              Issues
+            {% else %}
+              Issue
+            {% endif %}
+          </a>
+          <i class="fas fa-bug tracking-text"></i>
+        </div>
+      </div>
+      <div class="row pt-4 pb-2 justify-content-center">
+        <button class="button-sync my-2 my-sm-0" type="submit">View Projects</button>
+      </div>
+      <div class="row pt-2 pb-5 justify-content-center">
+        <button class="button-sync my-2 my-sm-0" type="submit">View Issues</button>
+      </div>
+    </div>
+  </section>
+
+</div>
+{% endblock content %}

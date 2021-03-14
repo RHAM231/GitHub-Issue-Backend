@@ -1,11 +1,9 @@
 from django.shortcuts import render
-import requests
 
-def github(request):
-    user = {}
-    if 'username' in request.GET:
-        username = request.GET['username']
-        url = 'https://api.github.com/users/%s' % username
-        response = requests.get(url)
-        user = response.json()
-    return render(request, 'sync/testgh.html', {'user': user})
+
+def confirm_sync(request):
+    return render(request, 'sync/confirm_sync.html')
+
+
+def sync_success(request):
+    return render(request, 'sync/sync_success.html')

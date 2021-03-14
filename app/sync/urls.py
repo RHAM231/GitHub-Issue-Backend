@@ -3,5 +3,6 @@ from . import views
 
 
 urlpatterns = [
-    # path('', views.home, name='home'),
+    path('confirm-sync', views.confirm_sync, name='confirm-sync'),
+    # path('sync-success', views.sync_success, name='sync-success'),
 ]

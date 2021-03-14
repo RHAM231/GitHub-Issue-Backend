@@ -1,0 +1,65 @@
+<!-- {% extends "base/base.html" %}
+{% load static %}
+
+{% block content %} -->
+
+<div class="container-no-margin pr-3 pl-3">
+  <div class="row mt-5 mb-5"></div>
+  <div class="row mt-5 mb-5"></div>
+
+  <form action="/TBD/" method="POST">
+    {% csrf_token %}
+
+    <div class="row mt-4 mb-5">
+      <div class="col-lg-6 col-lg-offset-3 
+                  col-md-8 col-md-offset-2 
+                  col-sm-10 col-sm-offset-1 
+                  mx-auto">
+
+        <div class="form-box py-3">
+          <div class="col-lg-10 mx-auto">
+            
+            <div class="row justify-content-center mt-2 mb-4 d-flex">
+              <div class="sync-icon">
+                <i class="fas fa-sync-alt"></i>
+              </div>
+            </div>
+            
+            <div class="row justify-content-center my-3">
+              <a class="text-center"><b>Synchronize project with GitHub repository?</b></a>
+            </div>
+            <div class="row justify-content-center my-3">
+              <a class="text-center">Issue tracker will make an API call to the GitHub repository, Issue-Tracker-Sandbox.</a>
+            </div>
+            <div class="row justify-content-center my-3">
+              <a class="text-center">This will save the current project state on Issue Tracker to GitHub.</a>
+            </div>
+            <div class="row justify-content-center my-3">
+              <a class="text-center">All issue changes made since last synchronization will be uploaded.</a>
+            </div>
+            <div class="row justify-content-center my-3">
+              <a class="text-center"><b>Note: Issue Tracker will reset itself to it's initial state fifteen minutes after it's last synchronization to prepare for future visitors.</b></a>
+            </div>
+
+            <!-- <div class="row d-flex justify-content-center py-3">
+              <input type="submit" value="Confirm Synchronization" class="mx-2 form-button-cancel">
+            </div> -->
+            <div class="row my-3 d-flex justify-content-center">
+              <!-- <a href="{% url 'sync-success' %}" class="button-sync text-center">Confirm Synchronization</a> -->
+            </div>
+        
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+  </form>
+
+</div>
+
+
+<div class="row mb-4"></div>
+</div>
+<!-- {% endblock content %} -->
