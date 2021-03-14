@@ -1,0 +1,2 @@
+Django==tbd
+psycopg2-binary==tbd
