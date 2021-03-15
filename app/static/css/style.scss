@@ -1,0 +1,1464 @@
+////////////////////////////////////////////////////////////////////////////
+// TABLE OF CONTENTS
+////////////////////////////////////////////////////////////////////////////
+
+// WEBSITE BODY, FONT, WRAPPER
+// CURRENT PATH LINKS
+// MEDIA QUERIES
+// HEADER
+//   NAVBAR
+//   NAVBAR CUSTOM BREAKPOINT
+//   NAVBAR ANIMATED TOGGLER
+//   MASTER SEARCH FORM
+// BUTTONS
+//   BUTTON STYLES
+//     BUTTON STYLES: PARENT CLASSES
+//     BUTTON STYLES: CHILD CLASSES
+//   BUTTON HOVER EFFECTS
+//   BUTTON FOCUS EFFECTS
+// BASE PAGES
+//   ABOUT
+//   HOME
+//   CONFIRM SYNC
+//   SEARCH RESULTS
+// PROJECT/FOLDER/FILE PAGES
+//   PROJECT CONTENTS
+//   PROJECT LIST
+//   FOLDER CONTENTS
+//   FILE CONTENTS
+// ISSUE PAGES
+//   ISSUE CREATE
+//   ISSUE READ
+//   ISSUE UPDATE
+//   ISSUE DELETE
+//   ISSUE LIST
+// USER PAGES
+//   LOGIN
+//   LOGOUT
+//   PROFILE
+//   REGISTER
+// FOOTER
+
+////////////////////////////////////////////////////////////////////////////
+// WEBSITE BODY, FONT, WRAPPER
+////////////////////////////////////////////////////////////////////////////
+
+// Sets the default font style for the website
+body, html {
+    height: 100%;
+    margin: 0;
+    font-size: 18px;
+    font-family: 'Varela Round', sans-serif;
+    font-weight: 400;
+    line-height: 1.8em;
+    color: #232629;
+}
+
+// Sets the default background color for the website
+.wrapper {
+    background: #f6f8fc;
+    overflow: auto;
+    min-height: 100%;
+}
+
+// Gets rid of the annoying horizontal scroll bar on the home page
+.container-no-margin {
+  overflow-x: hidden;
+}
+
+////////////////////////////////////////////////////////////////////////////
+// CURRENT PATH LINKS
+////////////////////////////////////////////////////////////////////////////
+
+// Style the current path header at the top of list and detail pages
+.current-path{
+  font-size: 22px;
+}
+
+// Style the dividers between the current path links
+.link-divider{
+  font-size: 22px;
+  font-weight: bold;
+}
+
+////////////////////////////////////////////////////////////////////////////
+// HEADER
+////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////
+// ----NAVBAR----
+////////////////////////////////////////////////////////////////////////////
+
+// Set background color and remove default Bootstrap margins and padding
+.navbar {
+  background: #FFFFFF;
+  -webkit-box-shadow: 0 8px 6px -6px #999;
+  -moz-box-shadow: 0 8px 6px -6px #999;
+  box-shadow: 0 6px 32px -6px #999;
+  margin-top: 0;
+  padding:0px;
+  position: -webkit-sticky;
+  position: fixed;
+  right: 0;
+  left: 0;
+  z-index: 9;
+}
+
+// Set size and position of magnifying glass container on 
+// navbar search
+.nav-search-icon{
+  width: 40px;
+  height: 80px;
+  position: relative;
+}
+
+// Set style of nav-search icon
+.nav-search-icon > i{
+  font-size: 26px;
+  width: 60px;
+  height: 10px;
+  position: absolute;
+  top: -35%;
+  left: -20%;
+  transform: translate(-50%, 50%);
+}
+
+// Style and position the logo
+.navbar-brand{
+  color: #000000;
+  height: 80px;
+  width: 160px;
+  padding:0px 12px;
+  margin: 0px;
+  line-height: 80px;
+}
+
+// Adds margin for the dropdown menu for mobile
+.navbar-collapse{
+  margin: 0px 20px 0px 20px;
+}
+
+// Add margin to the bottom of the navbar on mobile
+.navbar > .show{
+  margin: 0px 20px 30px 20px;
+}
+
+// Set color of nav-links if desired
+.nav-link {
+  color:#000000;
+}
+
+// Creates the link hover effect.
+.link-effect::after{
+  text-decoration: none;
+  color: #000000;
+  content: '';
+  display: block;
+  width: 0;
+  height: 2px;
+  background: #3c4ef1;
+  transition: width .3s;
+}
+
+// Sets hover effects for the navbar links
+.link-effect:hover::after{
+  color: #000000;
+  text-decoration: none;
+  width: 100%;
+  transition: width .3s;
+}
+
+// Remove the default blue hyperlink color on hover
+.navbar-brand:hover, .nav-link:hover {
+  color: #000000;
+}
+
+// Sets text color for the drop down items
+.dropdown-item{
+  color: #000000;
+  text-align: center;
+}
+
+// Set hover effect for the dropdown items
+.dropdown-item:hover{
+  color: #ffffff;
+  background: #3c4ef1;
+}
+
+// Styles the dropdown menu opened by the toggler to match the navbar
+.dropdown-menu{
+  background: #ffffff;
+}
+
+// Centers the nav-links on the navbar dropdown for mobile
+.nav-item{
+  text-align: center;
+}
+
+////////////////////////////////////////////////////////////////////////////
+// ----NAVBAR CUSTOM BREAKPOINT----
+////////////////////////////////////////////////////////////////////////////
+
+// Let's customize the navbar breakpoint to accomodate all our links. We
+// use navbar-expand-custom in base.html and then set the breakpoint to a
+// value of our choosing. Then we re-apply some CSS to the custom class to
+// keep from breaking the navbar.
+@media (min-width: 1325px){
+  .navbar-expand-custom {
+      flex-direction: row;
+      flex-wrap: nowrap;
+      justify-content: flex-start;
+  }
+  .navbar-expand-custom .navbar-nav {
+      flex-direction: row;
+  }
+  .navbar-expand-custom .navbar-nav .nav-link {
+      padding-right: .5rem;
+      padding-left: .5rem;
+  }
+  .navbar-expand-custom .navbar-collapse {
+      display: flex!important;
+  }
+  .navbar-expand-custom .navbar-toggler {
+      display: none;
+  }
+  .navbar-expand-custom .navbar-nav .dropdown-menu {
+    position: absolute;
+  }
+  .nav-search-collapse{
+    display: none;
+  }
+}
+
+// Swap search bars for different size screens
+@media (max-width: 1325px) {
+  .nav-search{
+    display: none;
+  }
+}
+
+// Make our mobile search bar drop to a second line on very small screens
+@media (max-width: 600px) {
+  .navbar{
+    flex-wrap:wrap;
+  }
+  .nav-search-collapse{
+    width: 100%;
+    order: 3;
+    text-align: center;
+    height: 60px;
+  }
+  #id_master_search{
+    margin-right: 0px;
+    margin-left: 17px;
+  }
+  .container-no-margin {
+    margin-top: 40px;
+  }
+}
+
+// Adjust margin for nav-link hover effects for mobile dropdown
+.squash{
+  margin-right: 45%;
+  margin-left: 45%;
+}
+@media (max-width: 576px){
+  .squash{margin-right: 30%; margin-left: 30%;}
+}
+@media (max-width: 768px){
+  .squash{margin-right: 35%; margin-left: 35%;
+  }
+}
+@media (max-width: 992px){
+  .squash{margin-right: 38%; margin-left: 38%;
+  }
+}
+@media (max-width: 1200px){
+  .squash{margin-right: 40%; margin-left: 40%;
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////
+// ----NAVBAR ANIMATED TOGGLER----
+////////////////////////////////////////////////////////////////////////////
+
+// Sets colorfor the middle hamburger toggler bar
+.navbar-toggler-icon{
+  background: #000000;
+}
+
+// Sets color for the top and bottom hamburger toggler bars
+.navbar-toggler-icon::before,
+.navbar-toggler-icon::after {
+  background: #000000;
+}
+
+// Controls sizing and spacing for the container for the toggler icon
+// below. Child element is .navbar-toggler-icon.
+.navbar-toggler{
+  margin: 0px 10px;
+  padding: 0px 0px;
+  position: relative;
+  align-items: center;
+  width: 80px;
+  height: 80px;
+  cursor: pointer;
+  transition: all .5s ease-in-out;
+}
+
+// Creates and styles the center bar on the hamburger toggler icon
+.navbar-toggler-icon{
+  width: 40px;
+  height: 5px;
+  border-radius: 4px;
+  transition: all .5s ease-in-out;
+}
+
+// Creates the top and bottom toggler bars
+.navbar-toggler-icon::before,
+.navbar-toggler-icon::after {
+  content: '';
+  position: absolute;
+  margin: 0px 0 0 -20px;
+  width: 40px;
+  height: 5px;
+  border-radius: 4px;
+  transition: all .5s ease-in-out;
+}
+
+// Positions the top and bottom toggler bars
+.navbar-toggler-icon::before {
+  transform: translateY(-14px);
+}
+.navbar-toggler-icon::after {
+  transform: translateY(14px);
+}
+
+// Set's final orientation for the toggler bars after animation. Animation
+// activated by hamburger.js in static/js directory
+.navbar-toggler.open .navbar-toggler-icon {
+  transform: translateX(-50px);
+  background: transparent;
+  box-shadow: none;
+}
+.navbar-toggler.open .navbar-toggler-icon::before {
+  transform: rotate(45deg) translate(35px, -35px);
+}
+.navbar-toggler.open .navbar-toggler-icon::after {
+  transform: rotate(-45deg) translate(35px, 35px);
+}
+
+// Removes Bootstrap's default outline from the toggler
+.navbar-toggler:focus,.navbar-toggler:active {
+   outline: none;
+   box-shadow: none;
+}
+
+////////////////////////////////////////////////////////////////////////////
+// ----MASTER SEARCH FORM----
+////////////////////////////////////////////////////////////////////////////
+
+// Set login link style in the navbar
+.login-out-link{
+  color: #000000;
+  line-height: 40px;
+  font-size: 18px;
+  margin-left: 15px;
+}
+
+// Adjust the login link for mobile
+@media (max-width: 1325px) {
+  .login-out-link{
+    margin-left: 0px;
+  }
+}
+
+// Set hover effect for link
+.login-out-link:hover{
+  color: #3c4ef1;
+  text-decoration: none;
+}
+
+// Style the search field
+.ms-form-style{
+  width: 260px;
+  height: 40px;
+  background: #e7e9ec;
+  border: none;
+  border-radius: 7px;
+  margin-right: 20px;
+  padding-left: 10px;
+}
+
+// Set focus effect for the search field
+.ms-form-style:focus, .form-style:active{
+  outline: none;
+  box-shadow: 0px 0px 15px rgba(60, 78, 241, 0.6);
+}
+
+////////////////////////////////////////////////////////////////////////////
+// BUTTONS
+////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////
+// ----BUTTON STYLES----
+////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////
+// --------BUTTON STYLES: PARENT CLASSES----
+////////////////////////////////////////////////////////////////////////////
+
+// Hide the default html button element
+.hide-button{
+  display:none;
+}
+
+// Set a global style for most buttons to inherit from
+.button-style-global{
+  height: 40px;
+  border-radius: 7px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,0.15), 0 4px 6px 0 rgba(0,0,0,0.15);
+  padding: 0px 0px 0px 0px;
+}
+
+// Global button style 1
+.button-style-1{
+  width: 80px;
+  border: none;
+  background: #3c4ef1;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+// Global button style 2
+.button-style-2{
+  width: 160px;
+  border: 1px solid;
+  border-color: #000000;
+  background: #fdfdfd;
+  color: #3c4ef1;
+}
+
+// Create a parent relative position style for buttons
+.button-position-rel{
+  position: relative;
+  width: 120px;
+  height: 40px;
+}
+
+// Create a child absolute position style for buttons
+.button-position-abs{
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+////////////////////////////////////////////////////////////////////////////
+// --------BUTTON STYLES: CHILD CLASSES----
+////////////////////////////////////////////////////////////////////////////
+
+// Instantiate issue buttons
+.edit-issue-button, .new-issue-button, .issue-button{
+  @extend .button-style-global;
+  @extend .button-style-1;
+}
+
+// Instantiate form buttons
+.sign-up-button, .form-button-cancel, .form-button, .close-button{
+  @extend .button-style-global;
+  @extend .button-style-2;
+}
+
+// Customize buttons further by overiding global styles above
+.new-issue-button{
+  width: 120px;
+}
+
+.issue-button{
+  width: 85px;
+}
+
+.close-button{
+  width: 120px;
+}
+
+.form-button-cancel{
+  color: #b90000;
+}
+
+.delete-button{
+  @extend .button-style-global;
+  width: 120px;
+  border: none;
+  background: #d60000;
+  color: #FFFFFF;
+  text-align: center;
+  line-height: 40px;
+}
+
+.button-search{
+  @extend .button-style-global;
+  width: 85px;
+  border: none;
+  background: #3c4ef1;
+  color: #FFFFFF;
+}
+
+.form-button, .close-button{
+  background: #3c4ef1;
+  color: #FFFFFF;
+  border: none;
+}
+
+// Create the buttons with issue counts on the project, folder, and file
+// list pages. Inherit from button position styles above
+.project-button, .folder-file-button{
+  @extend .button-position-rel;
+}
+
+.project-button > a{
+  @extend .button-position-abs;
+  top: 30%;
+  left: 28%;
+}
+
+.project-button > .issues-count{
+  @extend .button-position-abs;
+  top: 68%;
+  left: 60%;
+}
+    
+.folder-file-button > a{
+  @extend .button-position-abs;
+  top: 75%;
+  left: 35%;
+}
+
+.folder-file-button > .issues-count{
+  @extend .button-position-abs;
+  top: 110%;
+  left: 69%;
+}
+
+// Create an orange circle icon with issue count for issue button
+// Also doubles as a button on the file contents page next to loc
+.issues-count, .issues-count-btn{
+  background-color: #e66902;
+  border-radius: 13px;
+  height: 26px;
+  width: 26px;
+  font-size: 16px;
+  color: #FFFFFF;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+// Adjust our font size for three digit numbers on issue count above
+.count-small{
+  font-size: 12px;
+}
+
+////////////////////////////////////////////////////////////////////////////
+// ----BUTTON HOVER EFFECTS----
+////////////////////////////////////////////////////////////////////////////
+
+// Remove default hover styles for the buttons
+.delete-button:hover, .close-button:hover, .sign-up-button:hover,
+.form-button:hover, .form-button-cancel:hover, .issue-button:hover,
+.new-issue-button:hover, .issues-count-btn:hover{
+  text-decoration: none;
+  color: #FFFFFF;
+}
+
+// Customize individual button hover effects
+.sign-up-button:hover{
+  background: #3c4ef1;
+}
+
+.form-button:hover, .issue-button:hover, .new-issue-button:hover{
+  background: #18b5c0;
+}
+
+.form-button-cancel:hover{
+  background: #b90000;
+}
+
+.issues-count-btn:hover{
+  box-shadow: 0px 0px 15px rgba(51, 65, 255, 0.6);
+}
+
+.button-search:hover{
+  outline: none;
+}
+
+////////////////////////////////////////////////////////////////////////////
+// ----BUTTON FOCUS EFFECTS----
+////////////////////////////////////////////////////////////////////////////
+
+// Remove default focus effect for buttons
+.form-button-cancel:focus, .sign-up-button:focus, .form-button:focus,
+.delete-button:focus, .close-button:focus, .issue-button:focus,
+.new-issue-button:focus, .issues-count-btn:focus, .button-sync:focus{
+  outline: none;
+  box-shadow: none;
+}
+
+////////////////////////////////////////////////////////////////////////////
+// BASE PAGES
+////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////
+// ----ABOUT----
+////////////////////////////////////////////////////////////////////////////
+
+// Style the logos on the about page
+.logo-box{
+  width: 120px;
+  height: 100px;
+  margin: 20px 20px;
+  line-height: 100px;
+}
+
+.aws-resize{
+  width: 80%;
+}
+
+.docker-resize{
+  width: 50%;
+}
+
+.DRF-resize{
+  width: 50%;
+}
+
+////////////////////////////////////////////////////////////////////////////
+// ----HOME----
+////////////////////////////////////////////////////////////////////////////
+
+// Style the home page sections
+.welcome{
+  text-align: center;
+}
+
+.site-title{
+  font-size: 60px;
+  line-height: 60px;
+  font-weight: bold;
+}
+
+.site-subtitle{
+  line-height: 24px;
+  font-size: 24px;
+}
+
+// Shrink the header text for smaller devices
+@media(max-width:600px){
+  .site-title{
+    line-height: 40px;
+    font-size: 40px;
+  }
+  .site-subtitle{
+    line-height: 20px;
+    font-size: 20px;
+  }
+}
+
+.description{
+  color: #ffffff;
+  background: #1d1b4b;
+  text-align: center;
+}
+
+.description-text{
+  font-size: 20px;
+}
+
+.dashboard{
+  text-align: center;
+}
+
+.dash-panel{
+  background: #ffffff;
+  border-radius: 5px;
+}
+
+.tracking-header{
+  font-size: 55px;
+  line-height: 55px;
+  font-weight: 700;
+  color:#3c4ef1;
+}
+
+.tracking-text{
+  line-height: 50px;
+  font-size: 50px;
+  color:#3c4ef1;
+}
+
+@media(max-width:600px){
+  .tracking-header {
+    line-height: 40px;
+    font-size: 40px;
+  }
+  .tracking-text{
+    line-height: 25px;
+    font-size: 25px;
+  }
+}
+
+.button-sync{
+  @extend .button-style-global;
+  font-size: 20px;
+  height: 45px;
+  line-height: 45px;
+  width: 260px;
+  border: none;
+  background: #3c4ef1;
+  color: #FFFFFF;
+}
+
+.button-sync:hover{
+  box-shadow: 0px 0px 15px rgba(190, 190, 190, 0.6);
+  text-decoration: none;
+  color: #ffffff;
+}
+
+////////////////////////////////////////////////////////////////////////////
+// ----CONFIRM SYNC----
+////////////////////////////////////////////////////////////////////////////
+
+// Create a circular symbol with related icon for delete, sync, and success
+// icons
+.circular-icon{
+  height: 60px;
+  width: 60px;
+  border-radius: 30px;
+  color: #ffffff;
+  font-size: 32px;
+  text-align: center;
+  line-height: 60px;
+}
+
+// Style the sync and sync success icons on their respective pages
+.sync-icon{
+  @extend .circular-icon;
+  background: #3c4ef1;
+}
+
+.sync-success-icon{
+  @extend .circular-icon;
+  background: #009926;
+}
+
+
+////////////////////////////////////////////////////////////////////////////
+// ----SEARCH RESULTS----
+////////////////////////////////////////////////////////////////////////////
+
+// Create and style the results tiles on the search results page
+.results-tile-container{
+  height: 80px;
+  width: 400px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// Create the label for the tile
+.results-tile{
+  background-color: #FFFFFF;
+  border: none;
+  color: #000000;
+  cursor: pointer;
+  position: relative;
+  height: 58px;
+  width: 350px;
+  border-radius: 7px;
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+// Style the color tab that contains the icon
+.icon-background-color{
+  height: 58px;
+  width: 75px;
+  border-radius: 7px 0px 0px 7px;
+  background: #3c4ef1;
+}
+
+// Style the icon inside the tiles
+.results-tile > i {
+  font-size: 35px;
+  @extend .button-position-abs;
+  color: #FFFFFF;
+  top: 50%;
+  left: 11%;
+}
+
+// Set click effect for the tiles
+.results-tile:active{
+  box-shadow: 0 8px 16px 0 rgba(0,0,0,0.05), 0 6px 20px 0 rgba(0,0,0,0.05);
+}
+
+// Styles and positions the title text within the tile
+.results-tile-title{
+  @extend .button-position-abs;
+  font-size: 18px;
+  top: 50%;
+  left: 37%;
+}
+
+// Styles and positions the description text within the tile
+.results-tile-description{
+  @extend .button-position-abs;
+  font-size: 14px;
+  white-space: nowrap;
+  color: #5e5e5e;
+  top: 50%;
+  left: 72%;
+}
+
+// Enlarge the search result tiles on hover
+.results-tile:hover{
+  height: 80px;
+  width: 400px;
+}
+
+// Enlarge the color tab to match the tile above on hover
+.results-tile:hover > .icon-background-color{
+  height: 80px;
+  width: 86px;
+}
+
+// Center project, folder, and file tiles at Bootstrap breakpoint
+@media(max-width:992px){
+  .dynamic-center {
+    display: flex;
+    justify-content: center;
+  }
+}
+
+////////////////////////////////////////////////////////////////////////////
+// PROJECT/FOLDER/FILE PAGES
+////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////
+// ----PROJECT & FOLDER CONTENTS----
+////////////////////////////////////////////////////////////////////////////
+
+// Create an inheritance class for the below elements
+.inline-block-relative{
+  display: inline-block;
+  position: relative;
+}
+
+.position-absolute{
+  position: absolute;
+  transform: translate(-50%, -50%);
+}
+
+// Style the top level html element for folder and file containers and for project
+// containers on the project list page
+.folder-file-box,
+.project-box{
+  background: #FFFFFF;
+  position: relative;
+  border-radius: 10px;
+  height: 60px;
+  box-shadow: 0 5px 9px 0 rgba(0,0,0,0.2), 0 4px 12px 0 rgba(0,0,0,0.19);
+}
+
+// Style the header container
+.folder-file-header{
+  @extend .inline-block-relative;
+  height: 60px;
+  width: 100px;
+}
+
+// Style and position the header within the above container
+.folder-file-header > .custom-header{
+  position: absolute;
+  white-space: nowrap;
+  font-size: 24px;
+  width: 100px;
+  height: 30px;
+  top: 54%;
+  left: -35%;
+  transform: translate(50%, -50%);
+}
+
+// Create the icon tab for the project list, and folder and file contents pages
+.icon-tab, 
+.icon-tab-folder-file{
+  @extend .inline-block-relative;
+  background: #3c4ef1;
+  border-radius: 10px 0px 0px 10px;
+  height: 60px;
+  width: 70px;
+}
+
+// Create a date text container for the style below
+.folder-file-date{
+  @extend .inline-block-relative;
+  height: 60px;
+  width: 50px;
+}
+
+// Style the date text on the folder and file boxes
+.folder-file-date > a{
+  @extend .position-absolute;
+  white-space: nowrap;
+  top: 50%;
+  left: -50%;
+}
+
+
+////////////////////////////////////////////////////////////////////////////
+// ----PROJECT LIST----
+////////////////////////////////////////////////////////////////////////////
+
+// Overide height on the project box class above
+.project-box{
+  height: 120px;
+}
+
+// Style the project header container
+.project-header{
+  @extend .inline-block-relative;
+  height: 60px;
+  width:220px;
+}
+
+// Style the project header text
+.project-header > h4{
+  @extend .position-absolute;
+  white-space: nowrap;
+  width: 100px;
+  height: 30px;
+  top: 54%;
+  left: 28%;
+}
+
+// Overide border radius on .icon-tab-folder-file above
+.icon-tab{
+  border-radius: 10px 0px 0px 0px;
+}
+
+// Style the icons for the project list and folder and file contents pages
+.icon-tab > i, 
+.icon-tab-folder-file >i{
+  @extend .position-absolute;
+  font-size: 35px;
+  color: #FFFFFF;
+  top: 50%;
+  left: 50%;
+}
+
+// Style icon tab text
+.icon-tab > a,
+.icon-tab-folder-file> a{
+  position: absolute;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// Style the project description text on the project list page
+.project-description{
+  width: 500px;
+  top: 62%;
+  left: -234%;
+  transform: translate(50%, 50%);
+}
+
+// Resize the text above for smaller browsers
+@media (max-width:1135px){
+  .project-description{width: 300px; left: -91%;}
+}
+
+// Style the project date text
+.project-date{
+  width: 250px;
+  top: 115%;
+  left: -56%;
+  transform: translate(50%, 50%);
+}
+
+////////////////////////////////////////////////////////////////////////////
+// ----FILE CONTENTS----
+////////////////////////////////////////////////////////////////////////////
+
+// Create the top level html element for file contents so we can apply a
+// box-shadow property to the entire set of rows without it looking weird
+.file-contents-box{
+  border-radius: 10px;
+  box-shadow: 0 5px 9px 0 rgba(0,0,0,0.2), 0 4px 12px 0 rgba(0,0,0,0.19);
+}
+
+// Custom padding to get tabs to align properly
+.p-custom{
+  padding-left: 15px;
+  padding-right: 15px;
+}
+
+// Container for all the file contents
+.file-box{
+  background: #FFFFFF;
+  position: relative;
+  border-radius: 10px 10px 0px 0px;
+  height: 60px;
+}
+
+// Style the subheader text
+.file-subheader{
+  background: #FFFFFF;
+  position: relative;
+  height: 50px;
+}
+
+// Style the code text
+.file-contents{
+  background: #FFFFFF;
+  position: relative;
+  border-radius: 0px 0px 10px 10px;
+}
+
+// Highlight issue text when an issue is present
+.code-issue{
+  background: #e60202;
+  border-radius: 17px;
+}
+
+// Create an orange circle for the issue count next to the text
+.code-issue-count{
+  background: #e66902;
+  border-radius: 17px;
+  color: #ffffff;
+}
+
+// Style the table column on the far left for issues
+.issue-present{
+  font-size: 14px;
+  padding-left: 22px;
+  padding-right: 0px;
+  width: 50px;
+  height: 20px;
+  text-align: center
+}
+
+// Style the code line number column
+.index{
+  font-size: 14px;
+  color: #7e7e7e;
+  padding-left: 10px;
+  padding-right: 10px;
+  width: 50px;
+  height: 20px;
+  text-align: right
+}
+
+// Style the code text column
+.code-text{
+  color: #000000;
+  padding-left: 10px;
+  padding-right: 10px;
+  height: 20px;
+  white-space: nowrap;
+}
+
+// Set our file contents page to scroll on small screens
+.table-scroll{
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+// Hide text on project/folder/file tiles for smaller screens
+@media(max-width:992px){
+  .dynamic-hide {display: none;}
+}
+
+// Hide text on project/folder/file tiles for smaller screens
+@media(max-width:665px){
+  .dynamic-hide-small {display: none;}
+}
+
+////////////////////////////////////////////////////////////////////////////
+// ISSUE PAGES
+////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////
+// ----ISSUE CREATE AND UPDATE----
+////////////////////////////////////////////////////////////////////////////
+
+// Style the top level html element for the form
+.form-box{
+  background: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 5px 9px 0 rgba(0,0,0,0.2), 0 4px 12px 0 rgba(0,0,0,0.19);
+}
+
+// Create a container for the user information
+.user-box{
+  height: 50px;
+  width: 50px;
+  border-radius: 25px;
+}
+
+// Style the user image
+.user-image{
+  width: 100%;
+  height: 100%;
+  border-radius: 25px;
+}
+
+// Style the user title
+.user-title{
+  line-height: 50px;
+  color: #000000;
+}
+
+// Enlarge the issue title text
+.issue-title-label{
+  font-size: 20px;
+}
+
+// Style the title form and description form fields
+#id_title, #id_comment{
+  border-radius: 7px;
+  width: 100%;
+  border: 1px solid;
+  border-color: #777777;
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+// Give the form fields a blue border on focus
+#id_title:focus, #id_comment:focus{
+  border-color: #3c4ef1;
+  outline: none;
+}
+
+// Make the issue associate dropdowns take up the full screen width
+.associate-tag{
+  width: 33.33%;
+}
+
+// Style the assoicate field container
+.associate-field{
+  height: 40px;
+  width: 100%;
+  background: #e7e9ec;
+  color: #000000;
+  border: none;
+}
+
+// Style the individual dropdown fields
+#id_project_associate{
+  border-radius: 7px 0px 0px 7px;
+}
+
+#id_folder_associate{
+  border-right: 1px solid;
+  border-left: 1px solid;
+  border-color: #cecece;
+}
+
+#id_file_associate{
+  border-radius: 0px 7px 7px 0px;
+}
+
+////////////////////////////////////////////////////////////////////////////
+// ----ISSUE READ----
+////////////////////////////////////////////////////////////////////////////
+
+// Style the issue state tabs on the issue detail page
+.issue-open, .issue-closed{
+  background: #3c4ef1;
+  color: #ffffff;
+  width: 90px;
+  height: 30px;
+  border-radius: 7px;
+  text-align: center;
+}
+
+.issue-closed{
+  background: #d60000;
+  width: 100px;
+}
+
+////////////////////////////////////////////////////////////////////////////
+// ----ISSUE DELETE----
+////////////////////////////////////////////////////////////////////////////
+
+// Create and style the delete icon on the issues delete page
+// Extend the circular-icon class from the sync pages
+.delete-icon{
+  @extend .circular-icon;
+  background: #c90000;
+}
+
+////////////////////////////////////////////////////////////////////////////
+// ----ISSUE LIST----
+////////////////////////////////////////////////////////////////////////////
+
+// Style the headers at the top of the issue list box
+.issues-header{
+  background: #ffffff;
+  border-radius: 10px 10px 0px 0px;
+  box-shadow: 0 5px 9px 0 rgba(0,0,0,0.2), 0 4px 12px 0 rgba(0,0,0,0.19);
+}
+
+.header-top, .header-bottom{
+  height: 60px;
+}
+
+// Make the search field take up all the available screen width
+.form-search{
+  width: calc(100% - 260px);
+}
+
+.line-break {
+  height: 0;
+}
+
+.header-btn-container{
+  padding-left: 25px;
+}
+
+// Rearrange the new issue button and issue search bar for mobile
+@media(max-width:767px){
+  .header-top{
+    height: 130px;
+  }
+  .line-break {
+    flex-basis: 100%;
+    height: 0;
+  }
+  .header-btn-container{
+    margin-top: 10px;
+    padding-left: 15px;
+  }
+  .form-search{
+    width: calc(100% - 130px);
+  }
+}
+
+// Force the two columns in header bottom to stay at fixed height
+// Keep the elements on one line
+.header-bottom > div{
+  white-space: nowrap;
+  height: 60px;
+}
+
+// Adjust our vertical spacing for the header for smaller devices
+@media(max-width:767px){
+  .header-bottom{
+    height: 120px;
+  }
+}
+
+// Style the colored issue tab
+.issue-tab{
+  width: 75px;
+  height: 30px;
+  position: relative;
+  background: #3c4ef1;
+  border-radius: 5px 5px 5px 5px;
+}
+
+// Style the issue icon and elements within the tab
+.issue-tab > i, .issue-tab > a{
+  color: #ffffff;
+  text-decoration: none;
+}
+
+// Create the search glass container
+.search-glass{
+  height: 40px;
+  width: 30px;
+  background: #e7e9ec;
+  color: #777777;
+  position: relative;
+}
+
+// Style the search glass
+.search-glass > i{
+  @extend .position-absolute;
+  top: 50%;
+  left: 70%;
+}
+
+// Vertically align the select all checkbox and open/closed radio buttons
+.vertical-align > a, .vertical-align > i{
+  line-height: 60px;
+}
+
+// Create the container for all the issues
+.issues-container{
+  background: #f6f8fc;
+  box-shadow: inset 0 5px 9px 0 rgba(0,0,0,0.2), inset 0 4px 12px 0 rgba(0,0,0,0.19);
+}
+
+// Style the individual issue rows
+.issue-row{
+  background: #ffffff;
+  height: 60px;
+  border-radius: 5px;
+  box-shadow: 0 3px 7px 0 rgba(0,0,0,0.2), 0 3px 9px 0 rgba(0,0,0,0.19);
+}
+
+// Style the date text on the issue rows
+.sub-date{
+  font-size: 12px;
+  color: #3a3a3a;
+}
+
+// Style the issue title text
+.issue-row > b{
+  text-decoration: none;
+  color: #000000;
+}
+
+// Vertically center the check boxes in the issue rows
+.check-center{
+  line-height: 30px;
+}
+
+// Style the dropdown
+.issue-dropdown-filters{
+  float: right;
+}
+
+.issue-dropdown-filters > a{
+  line-height: 60px;
+}
+
+// Float the Author, Projects, Sort filters to the left on
+// the Issues List page
+@media(max-width:767px){
+  .issue-dropdown-filters{
+    float: left;
+  }
+}
+
+// Style the search field
+.issue-search{
+  width: 100%;
+  height: 40px;
+  background: #e7e9ec;
+  border: none;
+  border-radius: 0px 7px 7px 0px;
+  margin-right: 20px;
+  padding-left: 10px;
+}
+
+.issue-search:focus, .issue-search:active{
+  outline: none;
+  box-shadow: 0px 0px 15px rgba(60, 78, 241, 0.6);
+}
+
+// Style the filter field box
+.filter-field{
+  height: 40px;
+  width: 100px;
+  background: #3c4ef1;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 7px 0px 0px 7px;
+  margin: 0 auto;
+}
+
+.filter-field > option{
+  background: #FFFFFF;
+  color: #000000;
+  border-bottom: #000000;
+}
+
+.filter-field:focus{
+  outline:none;
+}
+
+// Add custom padding to get the colored tabs to line up correctly
+.pl-custom{
+  padding-left: 15px;
+}
+
+// Style the filter dropdown fields
+#id_author, #id_projects, #id_sort{
+  background: #e7e9ec;
+  color: #000000;
+  box-shadow: none;
+}
+
+#id_projects{
+  border-radius: 0px;
+  border-right: 1px solid;
+  border-left: 1px solid;
+  border-color: #cecece;
+}
+
+#id_sort{
+  border-radius: 0px 7px 7px 0px;
+}
+
+// Create a footer for the issues display box
+.issues-footer{
+  background: #ffffff;
+  height: 40px;
+  border-radius: 0px 0px 10px 10px;
+  box-shadow: 0 5px 9px 0 rgba(0,0,0,0.2), 0 4px 12px 0 rgba(0,0,0,0.19);
+}
+
+
+////////////////////////////////////////////////////////////////////////////
+// USER PAGES
+////////////////////////////////////////////////////////////////////////////
+
+// Add some styling to the user forms: login, logout, register, and profile
+.content-section {
+  background: #ffffff;
+  padding: 10px 20px;
+  border-radius: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 5px 9px 0 rgba(0,0,0,0.2), 0 4px 12px 0 rgba(0,0,0,0.19);
+}
+
+////////////////////////////////////////////////////////////////////////////
+// FOOTER
+////////////////////////////////////////////////////////////////////////////
+
+// Sets footer size and color
+.footer {
+  background: #3c4ef1;
+  height: 250px;
+}
+
+// Sets footer text color and centers it
+footer .footer-text {
+  color: #FFFFFF;
+  text-align: center;
+}
+
+.footer-text > a, .footer-text > i{
+  line-height: 26px;
+}
+
+.footer-link{
+  color: #000000;
+  font-weight: bold;
+}
+
+.footer-link:hover{
+  color: #ffffff;
+  // text-decoration: none;
+}
+
+.footer-icon{
+  font-size: 26px;
+}
+
+////////////////////////////////////////////////////////////////////////////
+// END
+////////////////////////////////////////////////////////////////////////////
