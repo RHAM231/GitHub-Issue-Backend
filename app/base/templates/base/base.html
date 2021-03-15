@@ -53,7 +53,7 @@ See views.py under the projects app
 <body>
   <nav class="navbar navbar-expand-custom mb-5">
     <a class="navbar-brand" href="{% url 'home' %}">Issue Tracker</a>
-    <form class="nav-search-collapse ml-auto" action="{% url 'search-results' %}" method="get">
+    <form class="nav-search-collapse ml-auto" action="" method="get">
       <a class="nav-search-icon mr-1">
         <i class="fas fa-search"></i>
       </a>
@@ -87,13 +87,13 @@ See views.py under the projects app
             <a class="dropdown-item border-bottom" href="">Dropdown Item 2</a>
             <a class="dropdown-item" href="">Dropdown Item 3</a>
           </div>
-        <li class="nav-item"><a href="{% url 'project-list' %}" class="nav-link link-effect">Projects</a></li>
-        <li class="nav-item"><a href="{% url 'issue-list' %}" class="nav-link link-effect">Issues</a></li>
-        <li class="nav-item"><a href="{% url 'about' %}" class="nav-link link-effect">About</a></li>
+        <li class="nav-item"><a href="" class="nav-link link-effect">Projects</a></li>
+        <li class="nav-item"><a href="" class="nav-link link-effect">Issues</a></li>
+        <li class="nav-item"><a href="" class="nav-link link-effect">About</a></li>
       </ul>
       <ul class="navbar-nav ml-auto">
         <li class="nav-item nav-search">
-          <form class="pr-4 border-right" action="{% url 'search-results' %}" method="get">
+          <form class="pr-4 border-right" action="" method="get">
             <a class="px-2">Search Site:</a>
             {{ ms_search_form.master_search }}
             <button class="button-search my-2 my-sm-0" type="submit">Search</button>
