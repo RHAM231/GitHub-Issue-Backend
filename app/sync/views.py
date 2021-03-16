@@ -47,13 +47,20 @@ def github_client(request):
     search_result = {}
     if 'username' in request.GET:
         username = request.GET['username']
-        # client = Github(settings.TEST_TOKEN)
-        client = Github()
+        client = Github(settings.TEST_TOKEN)
+        # client = Github()
+        
+
+        # repository = client.get_repo(username)
+        # print(repository)
 
         try:
             user = client.get_user(username)
+            client.
             search_result['name'] = user.name
             search_result['login'] = user.login
+            print('PRINTING LOGIN')
+            print(search_result['login'])
             search_result['public_repos'] = user.public_repos
             search_result['success'] = True
         except GithubException as ge:
