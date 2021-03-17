@@ -56,7 +56,7 @@ def github_client(request):
 
         try:
             user = client.get_user(username)
-            client.
+            # client.
             search_result['name'] = user.name
             search_result['login'] = user.login
             print('PRINTING LOGIN')
