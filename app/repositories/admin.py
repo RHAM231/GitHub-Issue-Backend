@@ -1,3 +1,9 @@
 from django.contrib import admin
+from . models import (
+    Repository, RepoFolder, RepoFile
+)
 
-# Register your models here.
+registeredModels = [
+    Repository, RepoFolder, RepoFile
+]
+admin.site.register(registeredModels)

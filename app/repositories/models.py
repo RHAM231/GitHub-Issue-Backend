@@ -1,11 +1,20 @@
 from django.db import models
 
 
+def type_choices():
+    TYPE_CHOICES = (
+        ('file', 'file'),
+        ('blob', 'blob'),
+        ('tree', 'tree'),
+    )
+    return TYPE_CHOICES
+
+
 class Repository(models.Model):
     name = models.CharField(max_length=100)
-    description = models.CharField(max_length=100)
-    open_issues_count = models.CharField(max_length=100)
-    # updated_at = 
+    description = models.CharField(max_length=255)
+    open_issues_count = models.IntegerField()
+    updated_at = models.DateTimeField(auto_now=False)
 
     def __str__(self):
         return self.name
@@ -13,10 +22,10 @@ class Repository(models.Model):
 
 class RepoFolder(models.Model):
     name = models.CharField(max_length=100)
-    path = models.CharField(max_length=100)
-    sha = models.CharField(max_length=100)
-    url = models.CharField(max_length=100)
-    data_type = models.CharField(max_length=100)
+    path = models.CharField(max_length=150)
+    sha = models.CharField(max_length=40)
+    url = models.URLField(max_length=250)
+    data_type = models.CharField(max_length=4, choices=type_choices(), default='blob')
     mode = models.CharField(max_length=100)
 
     def __str__(self):
@@ -24,14 +33,17 @@ class RepoFolder(models.Model):
 
 
 class RepoFile(models.Model):
+    ENCODING_CHOICES = (
+        ('base64', 'base64')
+    )
     name = models.CharField(max_length=100)
-    path = models.CharField(max_length=100)
-    data_type = models.CharField(max_length=100)
-    content = models.CharField(max_length=100)
-    encoding = models.CharField(max_length=100)
-    size = models.CharField(max_length=100)
-    sha = models.CharField(max_length=100)
-    url = models.CharField(max_length=100)
+    path = models.CharField(max_length=150)
+    data_type = models.CharField(max_length=4, choices=type_choices(), default='blob')
+    content = models.TextField()
+    encoding = models.CharField(max_length=50, choices=ENCODING_CHOICES, default='base64')
+    size = models.CharField(max_length=10)
+    sha = models.CharField(max_length=40)
+    url = models.URLField(max_length=250)
 
     def __str__(self):
         return self.name
