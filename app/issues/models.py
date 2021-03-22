@@ -20,6 +20,9 @@ class Issue(models.Model):
     updated_at = models.DateTimeField(auto_now=False)
     closded_at = models.DateTimeField(auto_now=False) 
     number = models.IntegerField()
+    # associated_folder = 
+    # associated_file = 
+    # associated_loc = 
     
     # Let's create unique slugs for each issue from the issue name and primary key
     # We'll also define a method for updating slugs if the name changes

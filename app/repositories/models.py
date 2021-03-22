@@ -47,3 +47,12 @@ class RepoFile(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class LineOfCode(models.Model):
+    content = models.CharField(max_length=255)
+    line_number = models.IntegerField()
+    repofile = models.ForeignKey(RepoFile, max_length=100, on_delete=models.CASCADE, related_name='loc')
+
+    def __str__(self):
+        return self.line_number
