@@ -5,14 +5,17 @@ from django.utils import timezone
 from django.template.defaultfilters import slugify
 from django.db import models
 from users.models import CustomUser
+from repositories.models import RepoFile, RepoFolder, Repository, LineOfCode
 
 
 class Issue(models.Model):
+    # Choices
     STATE_CHOICES = (
         ('open', 'open'),
         ('closed', 'closed'),
     )
 
+    # Fields
     name = models.CharField(max_length=100)
     state = models.CharField(max_length=6, choices = STATE_CHOICES, default='open')
     body = models.TextField()
@@ -20,16 +23,43 @@ class Issue(models.Model):
     updated_at = models.DateTimeField(auto_now=False)
     closded_at = models.DateTimeField(auto_now=False) 
     number = models.IntegerField()
-    # associated_folder = 
-    # associated_file = 
-    # associated_loc = 
+
+    # Foreignkeys
+    repository = models.ForeignKey(
+        Repository,
+        max_length=100,
+        on_delete=models.PROTECT,
+        related_name='issue_repo'
+        )
+    associated_folder = models.ForeignKey(
+        RepoFolder, 
+        max_length=100, 
+        on_delete=models.PROTECT, 
+        related_name='repofolder', 
+        blank=True
+        )
+    associated_file = models.ForeignKey(
+        RepoFile, 
+        max_length=100, 
+        on_delete=models.PROTECT, 
+        related_name='repofile', 
+        blank=True
+        )
+    associated_loc = models.ForeignKey(
+        RepoFolder, 
+        max_length=100, 
+        on_delete=models.PROTECT, 
+        related_name='issue_loc', 
+        blank=True
+        )
     
-    # Let's create unique slugs for each issue from the issue name and primary key
+    # METHODS
+    # Let's create unique slugs for each issue from the issue name and using itertools
     # We'll also define a method for updating slugs if the name changes
     def _generate_slug(self):
         # For larger sites we would want to define a max_length for slugs
         value = self.name
-        slug_candidate = slug_original = slugify(value).upper() + '_' str(1)
+        slug_candidate = slug_original = slugify(value).upper() + '_' + str(1)
         # Count until we find an empty 'slot' for our slug
         for i in itertools.count(1):
             if not Issue.objects.filter(slug=slug_candidate).exists():

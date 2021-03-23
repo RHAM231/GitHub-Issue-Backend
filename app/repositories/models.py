@@ -28,13 +28,27 @@ class RepoFolder(models.Model):
     data_type = models.CharField(max_length=4, choices=type_choices(), default='blob')
     mode = models.CharField(max_length=100)
 
+    repository = models.ForeignKey(
+        Repository,
+        max_length=100,
+        on_delete=models.CASCADE,
+        related_name='folder_repo'
+        )
+    parent_folder = models.ForeignKey(
+        'self',
+        max_length=100,
+        on_delete=models.CASCADE,
+        related_name='folder_self',
+        blank=True
+        )
+
     def __str__(self):
         return self.name
 
 
 class RepoFile(models.Model):
     ENCODING_CHOICES = (
-        ('base64', 'base64')
+        ('base64', 'base64'),
     )
     name = models.CharField(max_length=100)
     path = models.CharField(max_length=150)
@@ -44,6 +58,19 @@ class RepoFile(models.Model):
     size = models.CharField(max_length=10)
     sha = models.CharField(max_length=40)
     url = models.URLField(max_length=250)
+
+    repository = models.ForeignKey(
+        Repository,
+        max_length=100,
+        on_delete=models.CASCADE,
+        related_name='file_repo'
+        )
+    repofolder = models.ForeignKey(
+        RepoFolder,
+        max_length=100,
+        on_delete=models.CASCADE,
+        related_name='folder_repo'
+        )
 
     def __str__(self):
         return self.name
