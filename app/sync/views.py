@@ -6,6 +6,35 @@ from github import Github, GithubException
 from pprint import pprint
 
 
+def get_query_url(key, *args, **kwargs):
+    query_dict = {
+        # Rate Limit
+        rate_limit: "https://api.github.com/rate_limit",
+
+        # Repositories
+        get_repo: f"https://api.github.com/repos/{owner}/{repo}",
+        list_branches: f"https://api.github.com/repos/{owner}/{repo}/branches",
+        get_branch: f"https://api.github.com/repos/{owner}/{repo}/branches/{branch}",
+
+        # Folders
+        get_root_repo_tree: f"https://api.github.com/repos/{owner}/{repo}/git/trees/{sha}",
+        get_folder_tree: f"https://api.github.com/repos/{owner}/{repo}/git/trees/{sha}",
+
+        # Files
+        get_file_contents: f"https://api.github.com/repos/{owner}/{repo}/contents/{path}",
+
+        # Issues
+        repo_issues: f"https://api.github.com/repos/{owner}/{repo}/issues",
+        create_issue: f"https://api.github.com/repos/{owner}/{repo}/issues",
+        get_issue: f"https://api.github.com/repos/{owner}/{repo}/issues/{issue_id}",
+        update_issue: f"https://api.github.com/repos/{owner}/{repo}/issues/{issue_id}",
+        close_issue: f"https://api.github.com/repos/{owner}/{repo}/issues/{issue_id}",
+        open_issue: f"https://api.github.com/repos/{owner}/{repo}/issues/{issue_id}",
+    }
+    url_value = query_dict.get(key, default=None)
+    return url_value
+
+
 def confirm_sync(request):
     api_call_result = {}
     # if request.method == 'POST':
@@ -33,7 +62,8 @@ def confirm_sync(request):
         owner = settings.USER
         repo = 'IssueTrackerSandbox'
         # query_url = f"https://api.github.com/repos/{owner}/{repo}/issues"
-        query_url = "https://api.github.com/rate_limit"
+        key = 'rate_limit'
+        query_url = get_query_url(key)
         params = {
             'state':'open',
         }
