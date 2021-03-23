@@ -3,14 +3,83 @@ import requests
 from django.conf import settings
 import os
 from github import Github, GithubException
+from pprint import pprint
 
 
 def confirm_sync(request):
+    api_call_result = {}
+    # if request.method == 'POST':
+    #     client = Github(settings.TEST_TOKEN)
+
+    #     try:
+    #         user = client.get_user(settings.USER)
+    #         # api_call_result['name'] = user.name
+    #         # api_call_result['login'] = user.login
+    #         # api_call_result['public_repos'] = user.public_repos
+
+    #         repo = client.get_repo('RHAM231-IssueTracker/IssueTrackerSandbox')
+    #         issues = repo.get_issues(state='open')
+    #         pprint(issues.get_page(0))
+
+    #         api_call_result['success'] = True
+    #         # print(api_call_result)
+    #     except GithubException as ge:
+    #         message = ge.data['message']
+    #         print(message)
+    #         api_call_result['success'] = False
+
+    if request.method == 'POST':
+        token = settings.TEST_TOKEN
+        owner = settings.USER
+        repo = 'IssueTrackerSandbox'
+        # query_url = f"https://api.github.com/repos/{owner}/{repo}/issues"
+        query_url = "https://api.github.com/rate_limit"
+        params = {
+            'state':'open',
+        }
+        headers = {'Authorization': f'token {token}'}
+        # r = requests.get(query_url, headers=headers, params=params)
+        r = requests.get(query_url, headers=headers)
+        pprint(r.json())
+
     return render(request, 'sync/confirm_sync.html')
 
 
 def sync_success(request):
     return render(request, 'sync/sync_success.html')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # def github(request):
