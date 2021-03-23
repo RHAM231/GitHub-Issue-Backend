@@ -69,7 +69,8 @@ class RepoFile(models.Model):
         RepoFolder,
         max_length=100,
         on_delete=models.CASCADE,
-        related_name='folder_repo'
+        related_name='folder_repo',
+        blank=True
         )
 
     def __str__(self):

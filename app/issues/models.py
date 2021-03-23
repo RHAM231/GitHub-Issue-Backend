@@ -19,9 +19,9 @@ class Issue(models.Model):
     name = models.CharField(max_length=100)
     state = models.CharField(max_length=6, choices = STATE_CHOICES, default='open')
     body = models.TextField()
-    created_at = models.DateTimeField(auto_now=False)
-    updated_at = models.DateTimeField(auto_now=False)
-    closded_at = models.DateTimeField(auto_now=False) 
+    created_at = models.DateTimeField(auto_now=False, default=timezone.now)
+    updated_at = models.DateTimeField(auto_now=False, blank=True)
+    closed_at = models.DateTimeField(auto_now=False, blank=True) 
     number = models.IntegerField()
 
     # Foreignkeys
