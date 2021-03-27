@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     'users.apps.UsersConfig',
     'issues.apps.IssuesConfig',
     'repositories.apps.RepositoriesConfig',
+    'rest_framework',
+    'consume_api.apps.ConsumeApiConfig',
 ]
 
 MIDDLEWARE = [
@@ -136,3 +138,8 @@ LOGIN_URL = 'login'
 TEST = config('test', default='')
 TEST_TOKEN = config('TEST_TOKEN', default='')
 USER = config('USER', default='')
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 3
+}
