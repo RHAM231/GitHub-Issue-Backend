@@ -15,6 +15,24 @@ from repositories.models import RepoFile, RepoFolder, Repository, LineOfCode
 # STYLE_CHOICES = sorted([(item, item) for item in get_all_styles()])
 
 
+class TestIssue(models.Model):
+    STATE_CHOICES = (
+        ('open', 'open'),
+        ('closed', 'closed'),
+    )
+    name = models.CharField(max_length=100)
+    state = models.CharField(max_length=6, choices = STATE_CHOICES, default='open')
+    body = models.TextField()
+    number = models.IntegerField()
+    created_at = models.DateTimeField(default=timezone.now)
+    repository = models.ForeignKey(
+        Repository,
+        max_length=100,
+        on_delete=models.PROTECT,
+        related_name='testissue_repo'
+        )
+
+
 class Issue(models.Model):
     # Choices
     STATE_CHOICES = (

@@ -5,8 +5,8 @@ from rest_framework import status
 from rest_framework import mixins
 from rest_framework import generics
 
-from issues.models import Issue
-from consume_api.serializers import IssueSerializer
+from issues.models import Issue, TestIssue
+from consume_api.serializers import IssueSerializer, TestIssueSerializer
 
 
 class IssueList(APIView):
@@ -32,6 +32,40 @@ class IssueDetail(mixins.RetrieveModelMixin,
                     generics.GenericAPIView):
     queryset = Issue.objects.all()
     serializer_class = IssueSerializer
+
+    def get(self, request, *args, **kwargs):
+        return self.retrieve(request, *args, **kwargs)
+
+    def put(self, request, *args, **kwargs):
+        return self.update(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        return self.destroy(request, *args, **kwargs)
+
+
+class TestIssueList(APIView):
+    """
+    List all test issues, or create a new test issue.
+    """
+    def get(self, request, format=None):
+        test_issues = TestIssue.objects.all()
+        serializer = TestIssueSerializer(test_issues, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        serializer = TestIssueSerializer(data=request.data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class TestIssueDetail(mixins.RetrieveModelMixin,
+                    mixins.UpdateModelMixin,
+                    mixins.DestroyModelMixin,
+                    generics.GenericAPIView):
+    queryset = TestIssue.objects.all()
+    serializer_class = TestIssueSerializer
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)

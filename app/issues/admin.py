@@ -1,9 +1,9 @@
 from django.contrib import admin
 from . models import (
-    Issue
+    Issue, TestIssue
 )
 
 registeredModels = [
-    Issue
+    Issue, TestIssue
 ]
-admin.site.register(Issue)
+admin.site.register(registeredModels)
