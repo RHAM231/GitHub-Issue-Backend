@@ -20,11 +20,12 @@ class TestIssue(models.Model):
         ('open', 'open'),
         ('closed', 'closed'),
     )
-    name = models.CharField(max_length=100)
+    title = models.CharField(max_length=100)
     state = models.CharField(max_length=6, choices = STATE_CHOICES, default='open')
     body = models.TextField()
     number = models.IntegerField()
     created_at = models.DateTimeField(default=timezone.now)
+    repository_url = models.URLField(max_length=200)
     repository = models.ForeignKey(
         Repository,
         max_length=100,
@@ -32,6 +33,10 @@ class TestIssue(models.Model):
         related_name='testissue_repo'
         )
 
+    # Override the model's save method so we can save and update slugs automatically
+    def save(self, *args, **kwargs):
+        self.repository = Repository.objects.get(url=self.repository_url)
+        super().save(*args, **kwargs)
 
 class Issue(models.Model):
     # Choices

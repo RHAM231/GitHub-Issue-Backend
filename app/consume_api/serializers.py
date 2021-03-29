@@ -10,10 +10,10 @@ class IssueSerializer(serializers.ModelSerializer):
 
 
 class TestIssueSerializer(serializers.ModelSerializer):
-    repository = serializers.PrimaryKeyRelatedField(queryset=Repository.objects.all())
+    # repository = serializers.PrimaryKeyRelatedField(queryset=Repository.objects.all())
     class Meta:
         model = TestIssue
-        fields = ['id', 'name', 'state', 'body', 'number', 'created_at', 'repository']
+        fields = ['id', 'title', 'state', 'body', 'number', 'created_at', 'repository_url']
     
     # def create(self, validated_data, **kwargs):
     #     repo_obj = Repository.objects.get(id=validated_data["repository"])

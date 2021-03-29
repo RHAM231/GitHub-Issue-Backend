@@ -15,6 +15,7 @@ class Repository(models.Model):
     description = models.CharField(max_length=255)
     open_issues_count = models.IntegerField()
     updated_at = models.DateTimeField(auto_now=False)
+    url = models.URLField(max_length=200)
 
     def __str__(self):
         return self.name

@@ -5,6 +5,7 @@ import os
 from github import Github, GithubException
 from pprint import pprint
 import json
+from consume_api.serializers import TestIssueSerializer
 
 
 def get_query_url(lookup, branch=None, sha=None, path=None, issue_id=None):
@@ -80,7 +81,17 @@ def confirm_sync(request):
         # headers = {'Authorization': f'token {token}', 'Accept': 'application/vnd.github.v3+json'}
         # r = requests.get(query_url, headers=headers, params=params)
         # r = requests.post(query_url, params=data, headers=headers)
-        # r = requests.get(query_url, headers=headers)
+        r = requests.get(query_url, headers=headers)
+        raw = r.json()
+        print('PRINTING RAW')
+        pprint(raw)
+        serializer = TestIssueSerializer(data=raw)
+        print('PRINTING SERIALIZER')
+        print(serializer)
+        if serializer.is_valid():
+            saved = serializer.save()
+            print('PRINTING SAVED')
+            print(saved)
         # pprint(r.json())
 
         # g = Github(token)
