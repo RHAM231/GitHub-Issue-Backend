@@ -5,7 +5,7 @@ import os
 from github import Github, GithubException
 from pprint import pprint
 import json
-from consume_api.serializers import TestIssueSerializer
+from consume_api.serializers import TestIssueSerializer, RepoSerializer
 
 
 def get_query_url(lookup, branch=None, sha=None, path=None, issue_id=None):
@@ -15,7 +15,7 @@ def get_query_url(lookup, branch=None, sha=None, path=None, issue_id=None):
         'rate_limit': "https://api.github.com/rate_limit",
         # Repositories
         'get_repo': endpoint,
-        'list_branches': endpoint + '/branches',
+        'get_branches': endpoint + '/branches',
         'get_branch': endpoint + f'/branches/{branch}',
         # Folders
         'get_root_repo_tree': endpoint + f'/git/trees/{sha}',
@@ -23,7 +23,7 @@ def get_query_url(lookup, branch=None, sha=None, path=None, issue_id=None):
         # Files
         'get_file_contents': endpoint + f'/contents/{path}',
         # Issues
-        'repo_issues': endpoint + '/issues',
+        'get_repo_issues': endpoint + '/issues',
         'create_issue': endpoint + '/issues',
         'get_issue': endpoint + f'/issues/{issue_id}',
         'update_issue': endpoint + f'/issues/{issue_id}',
@@ -32,6 +32,10 @@ def get_query_url(lookup, branch=None, sha=None, path=None, issue_id=None):
     }
     url_value = query_dict.get(lookup, None)
     return url_value
+
+lookups = [
+    'get_repo', 'get_branches', 'get_branch', 'get_root_repo_tree', 'get_folder_tree'
+]
 
 
 def confirm_sync(request):

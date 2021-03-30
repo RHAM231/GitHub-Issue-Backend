@@ -5,8 +5,27 @@ from rest_framework import status
 from rest_framework import mixins
 from rest_framework import generics
 
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from rest_framework.reverse import reverse
+from rest_framework import renderers
+
+from consume_api.serializers import (
+    IssueSerializer, TestIssueSerializer, RepoSerializer,
+    RepoFolderSerializer, RepoFileSerializer,
+    )
+
+from repositories.models import Repository, RepoFolder, RepoFile
 from issues.models import Issue, TestIssue
-from consume_api.serializers import IssueSerializer, TestIssueSerializer
+
+
+# @api_view(['GET'])
+# def api_root(request, format=None):
+#     # Reverse and Response are specific to DRF
+#     return Response({
+#         'issues': reverse('issue-list', request=request, format=format),
+#         # 'snippets': reverse('snippet-list', request=request, format=format)
+#     })
 
 
 class IssueList(APIView):
@@ -41,6 +60,36 @@ class IssueDetail(mixins.RetrieveModelMixin,
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+
+
+class RepoList(generics.ListCreateAPIView):
+    queryset = Repository.objects.all()
+    serializer_class = RepoSerializer
+
+
+class RepoDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Repository.objects.all()
+    serializer_class = RepoSerializer
+
+
+class RepoFolderList(generics.ListCreateAPIView):
+    queryset = Repository.objects.all()
+    serializer_class = RepoSerializer
+
+
+class RepoFolderDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Repository.objects.all()
+    serializer_class = RepoSerializer
+
+
+class RepoFileList(generics.ListCreateAPIView):
+    queryset = Repository.objects.all()
+    serializer_class = RepoSerializer
+
+
+class RepoFileDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Repository.objects.all()
+    serializer_class = RepoSerializer
 
 
 class TestIssueList(APIView):

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from issues.models import Issue, TestIssue
-from repositories.models import Repository
+from repositories.models import Repository, RepoFolder, RepoFile
 
 
 class IssueSerializer(serializers.ModelSerializer):
@@ -9,12 +9,32 @@ class IssueSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'state', 'body', 'created_at', 'updated_at', 'closed_at', 'number', 'repository']
 
 
-class TestIssueSerializer(serializers.ModelSerializer):
+class TestIssueSerializer(serializers.HyperlinkedModelSerializer):
     # repository = serializers.PrimaryKeyRelatedField(queryset=Repository.objects.all())
+    # highlight = serializers.HyperlinkedIdentityField(view_name='issue-highlight', format='html')
     class Meta:
         model = TestIssue
         fields = ['id', 'title', 'state', 'body', 'number', 'created_at', 'repository_url']
-    
+
+
+class RepoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Repository
+        fields = ['id', 'name', 'description', 'open_issues_count', 'updated_at', 'url']
+
+
+class RepoFolderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RepoFolder
+        fields = ['id', 'name', 'path', 'sha', 'url', 'data_type', 'mode', 'repository_url', 'parent_folder']
+
+
+class RepoFileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RepoFile
+        fields = ['id', 'name', 'path', 'sha', 'url', 'data_type', 'content', 'encoding', 'size','repository_url', 'repofolder_url']
+
+
     # def create(self, validated_data, **kwargs):
     #     repo_obj = Repository.objects.get(id=validated_data["repository"])
     #     testissue = TestIssue.objects.create(
