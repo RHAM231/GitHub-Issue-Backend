@@ -1,5 +1,9 @@
 from consume_api.serializers import TestIssueSerializer, RepoSerializer, RepoFolderSerializer, RepoFileSerializer, IssueSerializer
-from repositories.models import Repository, RepoFolder, RepoFile, Issue
+from repositories.models import Repository, RepoFolder, RepoFile
+from issues.models import Issue
+
+import requests
+from pprint import pprint
 
 
 def get_query_url(lookup, branch=None, sha=None, path=None, issue_id=None):
@@ -35,10 +39,10 @@ def get_serializer_and_model(slookup, raw):
     serializer_model_dict = {
         # Repositories
         'get_repo': (RepoSerializer(data=raw), Repository),
-        'get_branches': ,
-        'get_branch': ,
+        'get_branches': 'tbd',
+        'get_branch': 'tbd',
         # Folders
-        'get_root_repo_tree': ,
+        'get_root_repo_tree': 'tbd',
         'get_folder_tree': (RepoFolderSerializer(data=raw), RepoFolder),
         # Files
         'get_file_contents': (RepoFileSerializer(data=raw), RepoFile),
@@ -50,6 +54,64 @@ def get_serializer_and_model(slookup, raw):
 
 # 4 get functions, repo, root folder, folder, file, use json to get each next thing while dumping results in database
 
+
+def get_repo(lookup):
+    query_url = get_query_url(lookup)
+    r = requests.get(query_url, headers=headers)
+    raw = r.json()
+    serializer = RepoSerializer(data=raw)
+    if serializer.is_valid():
+        Repository.objects.all().delete()
+        saved = serializer.save()
+
+# fields = ['id', 'name', 'path', 'sha', 'url', 'data_type', 'mode', 'repository_url', 'parent_folder']
+def get_root_folder(headers):
+    # Get the GitHub project's main branch so we can access the root folder sha
+    query_url_branch = get_query_url('get_branch', branch='main')
+    main_branch = requests.get(query_url_branch, headers=headers)
+    raw_branch = main_branch.json()
+    root_folder_sha = raw_branch['commit']['commit']['tree']['sha']
+
+    # Use the root folder sha to get the root folder
+    query_url_root = get_query_url('get_root_repo_tree', sha=root_folder_sha)
+    root_folder = requests.get(query_url_root, headers=headers)
+    raw_folder = root_folder.json()
+    y = {"repository":"1"}
+    raw_folder.update(y)
+    pprint(raw_folder)
+
+    # Now save it to our database using DRFs
+    serializer = RepoFolderSerializer(data=raw_folder)
+    print(serializer)
+    if serializer.is_valid():
+        print('boo')
+        # For testing/development purposes, let's flush our model before we save the folder
+        RepoFolder.objects.all().delete()
+        saved = serializer.save(name='repo_root', path='tbd', data_type='tree', mode='040000', parent_folder=None)
+        print('PRINTING SAVED')
+        print(saved)
+
+
+def get_repofolder(lookup):
+    query_url = get_query_url(lookup)
+    r = requests.get(query_url, headers=headers)
+    raw = r.json()
+    serializer = RepoSerializer(data=raw)
+    if serializer.is_valid():
+        Repository.objects.all().delete()
+        saved = serializer.save()
+
+
+def get_repofile(lookup):
+    query_url = get_query_url(lookup)
+    r = requests.get(query_url, headers=headers)
+    raw = r.json()
+    serializer = RepoSerializer(data=raw)
+    if serializer.is_valid():
+        Repository.objects.all().delete()
+        saved = serializer.save()
+
+
 def serialize_github_object(slookup, raw):
     # query_url = get_query_url(lookup)
     # r = requests.get(query_url, headers=headers)
@@ -58,38 +120,4 @@ def serialize_github_object(slookup, raw):
     serializer, model = get_serializer_and_model(slookup, raw)
     if serializer.is_valid():
         model.objects.all().delete()
-        saved = serializer.save()
-
-
-def get_repo(lookup):
-    query_url = get_query_url(lookup)
-    r = requests.get(query_url, headers=headers)
-    raw = r.json()
-    serializer = RepoSerializer(data=raw)
-    if serializer.is_valid():
-        Repository.objects.all().delete()
-        saved = serializer.save()
-
-
-def get_branches(lookup):
-    query_url = get_query_url(lookup)
-    r = requests.get(query_url, headers=headers)
-    raw = r.json()
-    return raw
-
-
-def get_branch(lookup):
-    query_url = get_query_url(lookup)
-    r = requests.get(query_url, headers=headers)
-    raw = r.json()
-    return raw
-
-
-def get_repo(lookup):
-    query_url = get_query_url(lookup)
-    r = requests.get(query_url, headers=headers)
-    raw = r.json()
-    serializer = RepoSerializer(data=raw)
-    if serializer.is_valid():
-        Repository.objects.all().delete()
         saved = serializer.save()

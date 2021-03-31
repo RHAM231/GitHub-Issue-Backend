@@ -24,9 +24,14 @@ class RepoSerializer(serializers.ModelSerializer):
 
 
 class RepoFolderSerializer(serializers.ModelSerializer):
+    repository = serializers.PrimaryKeyRelatedField(queryset=Repository.objects.all())
     class Meta:
         model = RepoFolder
-        fields = ['id', 'name', 'path', 'sha', 'url', 'data_type', 'mode', 'repository_url', 'parent_folder']
+        fields = ['id', 'sha', 'url', 'repository']
+
+    # def save(self):
+    #     repository = self.repo_obj
+
 
 
 class RepoFileSerializer(serializers.ModelSerializer):

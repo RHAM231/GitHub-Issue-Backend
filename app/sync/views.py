@@ -7,35 +7,40 @@ from pprint import pprint
 import json
 from consume_api.serializers import TestIssueSerializer, RepoSerializer
 
+from repositories.models import Repository, RepoFolder, RepoFile
+from issues.models import Issue
 
-def get_query_url(lookup, branch=None, sha=None, path=None, issue_id=None):
-    endpoint = "https://api.github.com/repos/RHAM231-IssueTracker/IssueTrackerSandbox"
-    query_dict = {
-        # Rate Limit
-        'rate_limit': "https://api.github.com/rate_limit",
-        # Repositories
-        'get_repo': endpoint,
-        'get_branches': endpoint + '/branches',
-        'get_branch': endpoint + f'/branches/{branch}',
-        # Folders
-        'get_root_repo_tree': endpoint + f'/git/trees/{sha}',
-        'get_folder_tree': endpoint + f'/git/trees/{sha}',
-        # Files
-        'get_file_contents': endpoint + f'/contents/{path}',
-        # Issues
-        'get_repo_issues': endpoint + '/issues',
-        'create_issue': endpoint + '/issues',
-        'get_issue': endpoint + f'/issues/{issue_id}',
-        'update_issue': endpoint + f'/issues/{issue_id}',
-        'close_issue': endpoint + f'/issues/{issue_id}',
-        'open_issue': endpoint + f'/issues/{issue_id}',
-    }
-    url_value = query_dict.get(lookup, None)
-    return url_value
+from . github_client import get_query_url, get_serializer_and_model, get_root_folder
 
-lookups = [
-    'get_repo', 'get_branches', 'get_branch', 'get_root_repo_tree', 'get_folder_tree'
-]
+
+# def get_query_url(lookup, branch=None, sha=None, path=None, issue_id=None):
+#     endpoint = "https://api.github.com/repos/RHAM231-IssueTracker/IssueTrackerSandbox"
+#     query_dict = {
+#         # Rate Limit
+#         'rate_limit': "https://api.github.com/rate_limit",
+#         # Repositories
+#         'get_repo': endpoint,
+#         'get_branches': endpoint + '/branches',
+#         'get_branch': endpoint + f'/branches/{branch}',
+#         # Folders
+#         'get_root_repo_tree': endpoint + f'/git/trees/{sha}',
+#         'get_folder_tree': endpoint + f'/git/trees/{sha}',
+#         # Files
+#         'get_file_contents': endpoint + f'/contents/{path}',
+#         # Issues
+#         'get_repo_issues': endpoint + '/issues',
+#         'create_issue': endpoint + '/issues',
+#         'get_issue': endpoint + f'/issues/{issue_id}',
+#         'update_issue': endpoint + f'/issues/{issue_id}',
+#         'close_issue': endpoint + f'/issues/{issue_id}',
+#         'open_issue': endpoint + f'/issues/{issue_id}',
+#     }
+#     url_value = query_dict.get(lookup, None)
+#     return url_value
+
+# lookups = [
+#     'get_repo', 'get_branches', 'get_branch', 'get_root_repo_tree', 'get_folder_tree'
+# ]
 
 
 def confirm_sync(request):
@@ -62,40 +67,34 @@ def confirm_sync(request):
 
     if request.method == 'POST':
         token = settings.TEST_TOKEN
-        owner = settings.USER
-        repo = 'IssueTrackerSandbox'
-        # query_url = f"https://api.github.com/repos/{owner}/{repo}/issues"
-        lookup = 'get_issue'
-        issue_id = '5'
-        query_url = get_query_url(lookup, issue_id=issue_id)
-        print(query_url)
+        # query_url = get_query_url(lookup, issue_id=issue_id)
         headers = {
             'Authorization': f'token {token}',
-            # 'Accept': 'application/vnd.github.v3+json',
             }
-        data = {
-            # 'state':'open',
-            'title':'TEST Issue2',
-            'body': 'some text',
-            'milestone': 1,
-            'labels': ['bug'],
-            }
+        get_root_folder(headers)
+        # data = {
+        #     # 'state':'open',
+        #     'title':'TEST Issue2',
+        #     'body': 'some text',
+        #     'milestone': 1,
+        #     'labels': ['bug'],
+        #     }
         # payload = json.dumps(data)
         # headers = {'Authorization': f'token {token}', 'Accept': 'application/vnd.github.v3+json'}
         # headers = {'Authorization': f'token {token}', 'Accept': 'application/vnd.github.v3+json'}
         # r = requests.get(query_url, headers=headers, params=params)
         # r = requests.post(query_url, params=data, headers=headers)
-        r = requests.get(query_url, headers=headers)
-        raw = r.json()
-        print('PRINTING RAW')
-        pprint(raw)
-        serializer = TestIssueSerializer(data=raw)
-        print('PRINTING SERIALIZER')
-        print(serializer)
-        if serializer.is_valid():
-            saved = serializer.save()
-            print('PRINTING SAVED')
-            print(saved)
+        # r = requests.get(query_url, headers=headers)
+        # raw = r.json()
+        # print('PRINTING RAW')
+        # pprint(raw)
+        # serializer = TestIssueSerializer(data=raw)
+        # print('PRINTING SERIALIZER')
+        # print(serializer)
+        # if serializer.is_valid():
+        #     saved = serializer.save()
+        #     print('PRINTING SAVED')
+        #     print(saved)
         # pprint(r.json())
 
         # g = Github(token)
