@@ -25,9 +25,16 @@ class RepoSerializer(serializers.ModelSerializer):
 
 class RepoFolderSerializer(serializers.ModelSerializer):
     repository = serializers.PrimaryKeyRelatedField(queryset=Repository.objects.all())
+    # parent_folder = serializers.PrimaryKeyRelatedField(queryset=RepoFolder.objects.all())
     class Meta:
         model = RepoFolder
-        fields = ['id', 'sha', 'url', 'repository', 'repofolder']
+        fields = ['id', 'sha', 'url', 'repository', 'parent_folder']
+    
+    def get_parent(self, obj):
+        if obj.parent_folder is not None:
+            return RepoFolderSerializer(obj.parent_folder).data
+        else:
+            return None
 
     # def save(self):
     #     repository = self.repo_obj
@@ -37,7 +44,7 @@ class RepoFolderSerializer(serializers.ModelSerializer):
 class RepoFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = RepoFile
-        fields = ['id', 'name', 'path', 'sha', 'url', 'data_type', 'content', 'encoding', 'size', 'repository', 'repofolder']
+        fields = ['id', 'name', 'path', 'sha', 'url', 'data_type', 'content', 'encoding', 'size', 'repository', 'parent_folder']
 
 
     # def create(self, validated_data, **kwargs):

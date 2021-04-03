@@ -76,8 +76,8 @@ def get_root_folder(headers):
     query_url_root = get_query_url('get_root_repo_tree', sha=root_folder_sha)
     root_folder = requests.get(query_url_root, headers=headers)
     raw_folder = root_folder.json()
-    y = {"repository":"1"}
-    raw_folder.update(y)
+    injected_json = {"repository":"1", "parent_folder":None}
+    raw_folder.update(injected_json)
     # pprint(raw_folder)
 
     # root_tree = raw_folder['tree']
@@ -94,27 +94,30 @@ def get_root_folder(headers):
 
     # Now save it to our database using DRF serializer
     serializer = RepoFolderSerializer(data=raw_folder)
-    # print(serializer)
     if serializer.is_valid():
-        saved = serializer.save(name='repo_root', path='tbd', data_type='tree', mode='040000', parent_folder=None)
-        # print('PRINTING SAVED')
-        # print(saved)
+        saved = serializer.save(name='repo_root', path='tbd', data_type='tree', mode='040000')
     
     # Call our recursive method
     unpack_repository(raw_folder, headers)
 
 
 def unpack_repository(folder, headers):
+    print()
+    print('CALLING UPACK METHOD')
     tree = folder['tree']
     folder_sha = folder['sha']
-    print()
-    print('PRINTING UPACKING RESULTS')
+    # print()
+    # print('PRINTING UPACKING RESULTS')
+    # print()
+    # print('PRINTING CURRENT TREE')
+    # print(tree)
     for entry in tree:
+        print()
+        print('PRINTING ENTRY TYPE')
+        print(entry['type'])
         if entry['type'] == 'blob':
-            print('blob')
             get_repofile(entry, headers, folder_sha)
         elif entry['type'] == 'tree':
-            print('tree')
             get_repofolder(entry, headers, folder_sha)
 
 
@@ -122,83 +125,40 @@ def get_repofolder(folder_listing, headers, folder_sha):
     current_sha = folder_listing['sha']
     query_url = get_query_url('get_folder_tree', sha=current_sha)
 
-    # print()
-    # print('PRINTING QUERY URL FOR FOLDER')
-    # print(query_url)
-    # print()
-
     r = requests.get(query_url, headers=headers)
     raw_subfolder = r.json()
 
-    # print()
-    # print('PRINTING FOLDER LISTING')
-    # print(folder_listing)
-    # print()
-
-    # print()
-    # print('PRINTING RAW SUBFOLDER')
-    # pprint(raw_subfolder)
-    # print()
-
     serialize_github_object('serialize_folder_tree', raw_subfolder, folder_listing=folder_listing, folder_sha=folder_sha)
 
-    # serializer = RepoSerializer(data=raw)
-    # if serializer.is_valid():
-    #     Repository.objects.all().delete()
-    #     saved = serializer.save()
+    unpack_repository(raw_subfolder, headers)
 
 
 def get_repofile(file_listing, headers, folder_sha):
     # print()
-    # print('PRINTING FILE LISTING')
-    # print(file_listing)
+    # print('PRINTING CURRENT FILE LISTING')
+    # pprint(file_listing)
     path = file_listing['path']
-    # print(path)
-    # print()
     query_url = get_query_url('get_file_contents', path=path)
-    # print('PRINTING QURL')
-    # print(query_url)
-    # print()
     r = requests.get(query_url, headers=headers)
     raw_file = r.json()
-    # pprint(raw_file)
     serialize_github_object('serialize_file_contents', raw_file, file_listing=file_listing, folder_sha=folder_sha)
-    # serializer = RepoSerializer(data=raw_file)
-    # if serializer.is_valid():
-    #     Repository.objects.all().delete()
-    #     saved = serializer.save()
 
 
 def serialize_github_object(slookup, raw, file_listing=None, folder_listing=None, folder_sha=None):
-    # print()
-    # print('PRINTING RAW')
-    # pprint(raw)
-    # print()
-    # print('PRINTING FILE LISTING')
-    # print(file_listing)
-
     parent_folder = RepoFolder.objects.get(sha=folder_sha).pk
     parent_folder_pk = str(parent_folder)
-    injected_json = {"repository":"1", "repofolder":parent_folder_pk}
+    injected_json = {"repository":"1", "parent_folder":parent_folder_pk}
     raw.update(injected_json)
 
-    # print()
-    # print('PRINTING UPDATED RAW')
-    # pprint(raw)
-    # print()
-
     serializer, model = get_serializer_and_model(slookup, raw)
-    # print(serializer)
-    # print(model)
 
     if serializer.is_valid():
         if file_listing:
+            print()
+            print('A FILE LISTING WAS FOUND INSIDE THE SERIALIZER METHOD')
+            print()
             saved = serializer.save(data_type=file_listing['type'])
         elif folder_listing:
-            print()
-            print('PRINTING FOLDER LISTING FROM WITHIN SERIALIZER METHOD')
-            print(folder_listing)
-            print()
             name=folder_listing['path']
             path='tbd'
             data_type=folder_listing['type']

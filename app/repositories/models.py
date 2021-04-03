@@ -92,7 +92,7 @@ class RepoFile(models.Model):
         on_delete=models.CASCADE,
         related_name='file_repo'
         )
-    repofolder = models.ForeignKey(
+    parent_folder = models.ForeignKey(
         RepoFolder,
         max_length=100,
         on_delete=models.CASCADE,
