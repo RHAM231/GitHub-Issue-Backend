@@ -21,6 +21,31 @@ class Repository(models.Model):
         return self.name
 
 
+# class BaseFolder(models.Model):
+#     class Meta:
+#         abstract = True
+    
+#     name = models.CharField(max_length=100)
+#     path = models.CharField(max_length=150)
+#     sha = models.CharField(max_length=40)
+#     url = models.URLField(max_length=250)
+#     data_type = models.CharField(max_length=4, choices=type_choices(), default='blob')
+#     mode = models.CharField(max_length=100)
+
+#     repository = models.ForeignKey(
+#         Repository,
+#         max_length=100,
+#         on_delete=models.CASCADE,
+#         related_name='folder_repo'
+#         )
+
+#     def __str__(self):
+#         return self.name
+    
+
+# class RootFolder(BaseFolder):
+
+
 class RepoFolder(models.Model):
     name = models.CharField(max_length=100)
     path = models.CharField(max_length=150)
@@ -40,7 +65,8 @@ class RepoFolder(models.Model):
         max_length=100,
         on_delete=models.CASCADE,
         related_name='folder_self',
-        blank=True
+        blank=True,
+        null=True
         )
 
     def __str__(self):

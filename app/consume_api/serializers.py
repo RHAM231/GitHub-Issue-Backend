@@ -27,7 +27,7 @@ class RepoFolderSerializer(serializers.ModelSerializer):
     repository = serializers.PrimaryKeyRelatedField(queryset=Repository.objects.all())
     class Meta:
         model = RepoFolder
-        fields = ['id', 'sha', 'url', 'repository']
+        fields = ['id', 'sha', 'url', 'repository', 'repofolder']
 
     # def save(self):
     #     repository = self.repo_obj
@@ -37,7 +37,7 @@ class RepoFolderSerializer(serializers.ModelSerializer):
 class RepoFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = RepoFile
-        fields = ['id', 'name', 'path', 'sha', 'url', 'data_type', 'content', 'encoding', 'size','repository_url', 'repofolder_url']
+        fields = ['id', 'name', 'path', 'sha', 'url', 'data_type', 'content', 'encoding', 'size', 'repository', 'repofolder']
 
 
     # def create(self, validated_data, **kwargs):
