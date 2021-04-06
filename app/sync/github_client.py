@@ -102,6 +102,15 @@ def get_root_folder(headers):
     unpack_repository(raw_folder, headers, '')
 
 
+def last_iteration(iterable):
+    it = iter(iterable)
+    last = next(it)
+    for val in it:
+        yield last, True
+        last = val
+    yield last, False
+
+
 def unpack_repository(folder, headers, current_path):
     print()
     print('CALLING UPACK METHOD')
@@ -109,19 +118,24 @@ def unpack_repository(folder, headers, current_path):
     folder_sha = folder['sha']
     # print()
     # print('PRINTING UPACKING RESULTS')
-    # print()
-    # print('PRINTING CURRENT TREE')
-    # print(tree)
-    for entry in tree:
+    print()
+    print('PRINTING CURRENT PATH')
+    print(current_path)
+    for entry, has_more in last_iteration(tree):
         if entry['type'] == 'blob':
             get_repofile(entry, headers, folder_sha, current_path)
-            # if forloop.last is true:
+            # if has_more == False:
             #     current_path, popped = os.path.split(current_path)
+            #     print()
+            #     print('PRINTING POPPED PATH')
+            #     print(current_path)
+            #     print('PRINTING FILE THAT POPPED THE PATH')
+            #     print(entry['path'])
         elif entry['type'] == 'tree':
-            if current_path == '':
-                current_path = current_path + entry['path']
-            else:
-                current_path = current_path + '/' + entry['path']
+            # if current_path == '':
+            #     current_path = current_path + entry['path']
+            # else:
+            #     current_path = current_path + '/' + entry['path']
             get_repofolder(entry, headers, folder_sha, current_path)
 
 
@@ -134,20 +148,18 @@ def get_repofolder(folder_listing, headers, folder_sha, current_path):
 
     serialize_github_object('serialize_folder_tree', raw_subfolder, folder_listing=folder_listing, folder_sha=folder_sha)
 
+    if current_path == '':
+        current_path = current_path + folder_listing['path']
+    else:
+        current_path = current_path + '/' + folder_listing['path']
     unpack_repository(raw_subfolder, headers, current_path)
 
 
 def get_repofile(file_listing, headers, folder_sha, current_path):
-    print()
-    print('PRINTING CURRENT FILE LISTING')
-    pprint(file_listing)
     if current_path == '':
         path = current_path + file_listing['path']
     else:
         path = current_path + '/' + file_listing['path']
-    print()
-    print("PRINTING PATH")
-    print(path)
     query_url = get_query_url('get_file_contents', path=path)
     r = requests.get(query_url, headers=headers)
     raw_file = r.json()
