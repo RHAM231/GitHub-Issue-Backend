@@ -4,6 +4,7 @@ from issues.models import Issue
 
 import requests
 from pprint import pprint
+import os
 
 
 def get_query_url(lookup, branch=None, sha=None, path=None, issue_id=None):
@@ -88,7 +89,7 @@ def get_root_folder(headers):
     # pprint(root_tree)
     # print()
 
-    # For testing/development purposes, let's flush our model before we save the folder
+    # For testing/development purposes, let's flush our models before we save new objects
     RepoFolder.objects.all().delete()
     RepoFile.objects.all().delete()
 
@@ -98,10 +99,10 @@ def get_root_folder(headers):
         saved = serializer.save(name='repo_root', path='tbd', data_type='tree', mode='040000')
     
     # Call our recursive method
-    unpack_repository(raw_folder, headers)
+    unpack_repository(raw_folder, headers, '')
 
 
-def unpack_repository(folder, headers):
+def unpack_repository(folder, headers, current_path):
     print()
     print('CALLING UPACK METHOD')
     tree = folder['tree']
@@ -112,16 +113,19 @@ def unpack_repository(folder, headers):
     # print('PRINTING CURRENT TREE')
     # print(tree)
     for entry in tree:
-        print()
-        print('PRINTING ENTRY TYPE')
-        print(entry['type'])
         if entry['type'] == 'blob':
-            get_repofile(entry, headers, folder_sha)
+            get_repofile(entry, headers, folder_sha, current_path)
+            # if forloop.last is true:
+            #     current_path, popped = os.path.split(current_path)
         elif entry['type'] == 'tree':
-            get_repofolder(entry, headers, folder_sha)
+            if current_path == '':
+                current_path = current_path + entry['path']
+            else:
+                current_path = current_path + '/' + entry['path']
+            get_repofolder(entry, headers, folder_sha, current_path)
 
 
-def get_repofolder(folder_listing, headers, folder_sha):
+def get_repofolder(folder_listing, headers, folder_sha, current_path):
     current_sha = folder_listing['sha']
     query_url = get_query_url('get_folder_tree', sha=current_sha)
 
@@ -130,14 +134,20 @@ def get_repofolder(folder_listing, headers, folder_sha):
 
     serialize_github_object('serialize_folder_tree', raw_subfolder, folder_listing=folder_listing, folder_sha=folder_sha)
 
-    unpack_repository(raw_subfolder, headers)
+    unpack_repository(raw_subfolder, headers, current_path)
 
 
-def get_repofile(file_listing, headers, folder_sha):
-    # print()
-    # print('PRINTING CURRENT FILE LISTING')
-    # pprint(file_listing)
-    path = file_listing['path']
+def get_repofile(file_listing, headers, folder_sha, current_path):
+    print()
+    print('PRINTING CURRENT FILE LISTING')
+    pprint(file_listing)
+    if current_path == '':
+        path = current_path + file_listing['path']
+    else:
+        path = current_path + '/' + file_listing['path']
+    print()
+    print("PRINTING PATH")
+    print(path)
     query_url = get_query_url('get_file_contents', path=path)
     r = requests.get(query_url, headers=headers)
     raw_file = r.json()
@@ -154,9 +164,6 @@ def serialize_github_object(slookup, raw, file_listing=None, folder_listing=None
 
     if serializer.is_valid():
         if file_listing:
-            print()
-            print('A FILE LISTING WAS FOUND INSIDE THE SERIALIZER METHOD')
-            print()
             saved = serializer.save(data_type=file_listing['type'])
         elif folder_listing:
             name=folder_listing['path']
