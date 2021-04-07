@@ -29,7 +29,7 @@ class TestIssue(models.Model):
     repository = models.ForeignKey(
         Repository,
         max_length=100,
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name='testissue_repo'
         )
 

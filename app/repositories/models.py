@@ -110,4 +110,4 @@ class LineOfCode(models.Model):
     repofile = models.ForeignKey(RepoFile, max_length=100, on_delete=models.CASCADE, related_name='loc')
 
     def __str__(self):
-        return self.line_number
+        return self.content

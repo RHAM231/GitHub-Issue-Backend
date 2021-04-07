@@ -1,11 +1,12 @@
 # Python Imports
 import os
+import base64
 import requests
 from pprint import pprint
 
 # Django Imports: Logic specific to this project
 from issues.models import Issue
-from repositories.models import Repository, RepoFolder, RepoFile
+from repositories.models import Repository, RepoFolder, RepoFile, LineOfCode
 from consume_api.serializers import RepoSerializer, RepoFolderSerializer, RepoFileSerializer, IssueSerializer
 
 
@@ -27,6 +28,8 @@ folders and files.
 
 Finally we define a serialize_github_object_method() for dumping our retrieved json objects to our database while the unpack
 method is running.
+
+We also define a method for decoding and saving all the individual lines of code for each GitHub file we serialize.
 
 We start this entire process by calling the get_repo() method from our views.py file in this app
 '''
@@ -75,10 +78,7 @@ def get_serializer_and_model(slookup, raw):
     serializer_model_dict = {
         # Repositories
         'serialize_repo': (RepoSerializer(data=raw), Repository),
-        'serialize_branches': 'tbd',
-        'serialize_branch': 'tbd',
         # Folders
-        'serialize_root_repo_tree': 'tbd',
         'serialize_folder_tree': (RepoFolderSerializer(data=raw), RepoFolder),
         # Files
         'serialize_file_contents': (RepoFileSerializer(data=raw), RepoFile),
@@ -91,22 +91,37 @@ def get_serializer_and_model(slookup, raw):
 
 
 # Define our get GitHub repository method.
-def get_repo(lookup):
+def get_repo(lookup, headers):
     # Given a lookup, retrieve our query url, get our repo, and convert it to json
     query_url = get_query_url(lookup)
     r = requests.get(query_url, headers=headers)
     raw = r.json()
-    # Now call our serializer method
+    # Pull some additional parameters out of the json that we'll need later
+    repo_url = raw['url']
+    repo_branch = raw['default_branch']
+
+    # For development/testing, purge our database on each new retrieval
+    Repository.objects.all().delete()
+
+    # Now call our serializer method. We'll serialize the repo independently 
+    # from our serialize_github_object() method below because this is an edge case.
     serializer = RepoSerializer(data=raw)
     if serializer.is_valid():
-        Repository.objects.all().delete()
         saved = serializer.save()
+    
+    # Use our json url parameter from above to get the repo's new primary key
+    # from our database
+    repo_pk = str(Repository.objects.get(url=repo_url).pk)
+
+    # Now call our root folder method. Pass our extra parameters so we can continue
+    # getting and serializing github objects.
+    get_root_folder(repo_pk, repo_branch, headers)
 
 
 # Define a method for retrieving the root folder of a GitHub repository
-def get_root_folder(headers):
+def get_root_folder(repo_pk, repo_branch, headers):
     # Get the GitHub project's main branch so we can access the root folder sha
-    query_url_branch = get_query_url('get_branch', branch='main')
+    query_url_branch = get_query_url('get_branch', branch=repo_branch)
     main_branch = requests.get(query_url_branch, headers=headers)
     raw_branch = main_branch.json()
     root_folder_sha = raw_branch['commit']['commit']['tree']['sha']
@@ -115,7 +130,7 @@ def get_root_folder(headers):
     query_url_root = get_query_url('get_root_repo_tree', sha=root_folder_sha)
     root_folder = requests.get(query_url_root, headers=headers)
     raw_folder = root_folder.json()
-    injected_json = {"repository":"1", "parent_folder":None}
+    injected_json = {"repository":repo_pk, "parent_folder":None}
     raw_folder.update(injected_json)
 
     # For testing/development purposes, let's flush our models before we save new objects
@@ -125,15 +140,15 @@ def get_root_folder(headers):
     # Now save our root folder to database using a Django REST serializer
     serializer = RepoFolderSerializer(data=raw_folder)
     if serializer.is_valid():
-        saved = serializer.save(name='repo_root', path='tbd', data_type='tree', mode='040000')
+        saved = serializer.save(name='repo_root', path='', data_type='tree', mode='040000')
     
     # Call our recursive method to begin retrieving and saving the repository folders and files
-    unpack_repository(raw_folder, headers, '')
+    unpack_repository(repo_pk, raw_folder, headers, '')
 
 
 # Define our recursive method for unpacking a GitHub repo. Give it a folder, current path
 # and headers to pass to our get_repofile and get_repofolder methods. 
-def unpack_repository(folder, headers, current_path):
+def unpack_repository(repo_pk, folder, headers, current_path):
     # pull our tree and sha out of our json folder
     tree = folder['tree']
     folder_sha = folder['sha']
@@ -141,15 +156,15 @@ def unpack_repository(folder, headers, current_path):
         # if a tree object is a file, call our get_repofile method, passing headers and current path
         # to it so it can get the file from GitHub. Pass sha so it can serialize the file to database.
         if entry['type'] == 'blob':
-            get_repofile(entry, headers, folder_sha, current_path)
+            get_repofile(repo_pk, entry, headers, folder_sha, current_path)
         # if our object is a folder, call our get_repofolder method instead
         elif entry['type'] == 'tree':
-            get_repofolder(entry, headers, folder_sha, current_path)
+            get_repofolder(repo_pk, entry, headers, folder_sha, current_path)
 
 
 # Define a get folder method to get a single folder from GitHub, serialize it to database, and call our
 # unpack method again if needed to get the folder's contents.
-def get_repofolder(folder_listing, headers, folder_sha, current_path):
+def get_repofolder(repo_pk, folder_listing, headers, folder_sha, current_path):
     # Get our current folder sha from the previous folder tree we got from calling the unpack method
     current_sha = folder_listing['sha']
     # Define our query url using the sha and our get_query_url method defined above
@@ -162,7 +177,7 @@ def get_repofolder(folder_listing, headers, folder_sha, current_path):
     # Dump our new json object into our database by calling our serialize_github_object method,
     # giving it whatever additional parameters it needs to save the object
     serialize_github_object(
-        'serialize_folder_tree', raw_subfolder, 
+        repo_pk, 'serialize_folder_tree', raw_subfolder, path=current_path,
         folder_listing=folder_listing, folder_sha=folder_sha
         )
 
@@ -174,11 +189,11 @@ def get_repofolder(folder_listing, headers, folder_sha, current_path):
     else:
         current_path = current_path + '/' + folder_listing['path']
     # Now call our unpack method again, giving it our current subfolder and our new path.
-    unpack_repository(raw_subfolder, headers, current_path)
+    unpack_repository(repo_pk, raw_subfolder, headers, current_path)
 
 
 # Define a get file method for retrieving and serializing a GitHub file
-def get_repofile(file_listing, headers, folder_sha, current_path):
+def get_repofile(repo_pk, file_listing, headers, folder_sha, current_path):
     # Add our file name to the current path so we can retrieve it from GitHub
     if current_path == '':
         path = current_path + file_listing['path']
@@ -190,19 +205,50 @@ def get_repofile(file_listing, headers, folder_sha, current_path):
     # Retrieve the file from GitHub, convert to json, and then serialize to database with our serialize object method
     r = requests.get(query_url, headers=headers)
     raw_file = r.json()
-    serialize_github_object('serialize_file_contents', raw_file, file_listing=file_listing, folder_sha=folder_sha)
+
+    serialize_github_object(
+        repo_pk, 'serialize_file_contents', raw_file, 
+        file_listing=file_listing, folder_sha=folder_sha
+        )
+    
+    # Now that we've saved our file to database, let's save indivdual lines of code.
+    # Get our file content and lookup parameters
+    file_content = raw_file['content']
+    file_sha = raw_file['sha']
+    file_path = raw_file['path']
+
+    # Get our parent file so we can save lines of code. Lookup by two parameters because GitHub
+    # shas are not always unique.
+    parent_file = RepoFile.objects.get(sha=file_sha, path=file_path)
+    # Call our save lines of code method
+    save_locs(file_content, parent_file)
+    
+
+# Given encoded file content and the parent file from the database, decode and save the content
+# as individual lines of code
+def save_locs(content, parent_file):
+    # Decode our content
+    decoded = base64.b64decode(content)
+    # Get a list of the lines
+    lines_of_code = [item.decode('utf-8') for item in decoded.splitlines()]
+
+    # Save all the lines to database with a foreign key relation to its file
+    for i, line in enumerate(lines_of_code):
+        new_line = LineOfCode(content=line, line_number=i, repofile=parent_file)
+        new_line.save()
 
 
 # Define a method for serializing raw json output from our get methods above
-def serialize_github_object(slookup, raw, file_listing=None, folder_listing=None, folder_sha=None):
+def serialize_github_object(repo_pk, slookup, raw, path=None, file_listing=None, folder_listing=None, folder_sha=None):
     # Get the primary key of our parent folder from our database by its sha. Convert to string.
     parent_folder_pk = str(RepoFolder.objects.get(sha=folder_sha).pk)
+    
     # GitHub's API stores children information in parent objects rather than parent information in children objects. 
     # As a result, we need to inject all parent information into our database objects as additional parameters when
     # we serialize. Normally we use the serializer's save method to do this. But this method doesn't appear to work
     # for foreign key relations. As a workaround, we inject the fk parameters directly into the raw json before call-
     # ing the serializer.
-    injected_json = {"repository":"1", "parent_folder":parent_folder_pk}
+    injected_json = {"repository":repo_pk, "parent_folder":parent_folder_pk}
     raw.update(injected_json)
 
     # Now we can call our serializer. We use our serializer/model lookup method to match the raw json object
@@ -217,7 +263,6 @@ def serialize_github_object(slookup, raw, file_listing=None, folder_listing=None
         elif folder_listing:
             # Save a folder object with additional parameters obtained from its parent GitHub tree
             name=folder_listing['path']
-            path='tbd'
             data_type=folder_listing['type']
             mode=folder_listing['mode']
             saved = serializer.save(name=name, path=path, data_type=data_type, mode=mode)
