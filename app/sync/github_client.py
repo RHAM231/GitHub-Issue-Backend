@@ -224,7 +224,7 @@ def get_repofile(repo_pk, file_listing, headers, folder_sha, current_path):
     save_locs(file_content, parent_file)
     
 
-# Given encoded file content and the parent file from the database, decode and save the content
+# Given encoded file content and the parent file from our database, decode and save the content
 # as individual lines of code
 def save_locs(content, parent_file):
     # Decode our content
