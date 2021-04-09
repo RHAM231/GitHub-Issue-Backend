@@ -10,7 +10,7 @@ from consume_api.serializers import TestIssueSerializer, RepoSerializer
 from repositories.models import Repository, RepoFolder, RepoFile
 from issues.models import Issue
 
-from . github_client import get_query_url, get_serializer_and_model, get_root_folder, get_repo
+from . github_client import get_query_url, get_serializer_and_model, get_root_folder, get_repo, get_repo_issues
 
 
 # def get_query_url(lookup, branch=None, sha=None, path=None, issue_id=None):

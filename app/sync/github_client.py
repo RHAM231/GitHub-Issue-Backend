@@ -115,7 +115,8 @@ def get_repo(lookup, headers):
 
     # Now call our root folder method. Pass our extra parameters so we can continue
     # getting and serializing github objects.
-    get_root_folder(repo_pk, repo_branch, headers)
+    # get_root_folder(repo_pk, repo_branch, headers)
+    get_repo_issues('get_repo_issues', repo_pk, headers)
 
 
 # Define a method for retrieving the root folder of a GitHub repository
@@ -236,6 +237,13 @@ def save_locs(content, parent_file):
     for i, line in enumerate(lines_of_code):
         new_line = LineOfCode(content=line, line_number=i, repofile=parent_file)
         new_line.save()
+
+
+def get_repo_issues(lookup, repo_pk, headers):
+    query_url = get_query_url(lookup)
+    r = requests.get(query_url, headers=headers)
+    raw_issues_list = r.json()
+    pprint(raw_issues_list)
 
 
 # Define a method for serializing raw json output from our get methods above
