@@ -83,7 +83,7 @@ def get_serializer_and_model(slookup, raw):
         # Files
         'serialize_file_contents': (RepoFileSerializer(data=raw), RepoFile),
         # Issues
-        'serialize_repo_issues': (IssueSerializer(data=raw), Issue),
+        'serialize_repo_issue': (IssueSerializer(data=raw), Issue),
     }
     # Return our serializer and model based on lookup
     serializer_and_model = serializer_model_dict.get(slookup, None)
@@ -243,28 +243,44 @@ def get_repo_issues(lookup, repo_pk, headers):
     query_url = get_query_url(lookup)
     r = requests.get(query_url, headers=headers)
     raw_issues_list = r.json()
-    pprint(raw_issues_list)
+    issue_numbers = [issue['number'] for issue in raw_issues_list]
+    issue_numbers.reverse()
+    for number in issue_numbers:
+        get_issue('get_issue', repo_pk, headers, number)
+
+
+def get_issue(lookup, repo_pk, headers, issue_id):
+    query_url = get_query_url(lookup, issue_id=issue_id)
+    r = requests.get(query_url, headers=headers)
+    raw_issue = r.json()
+    serialize_github_object(repo_pk, 'serialize_repo_issue', raw_issue)
 
 
 # Define a method for serializing raw json output from our get methods above
 def serialize_github_object(repo_pk, slookup, raw, path=None, file_listing=None, folder_listing=None, folder_sha=None):
     # Get the primary key of our parent folder from our database by its sha. Convert to string.
-    parent_folder_pk = str(RepoFolder.objects.get(sha=folder_sha).pk)
+    if folder_sha:
+        parent_folder_pk = str(RepoFolder.objects.get(sha=folder_sha).pk)
     
     # GitHub's API stores children information in parent objects rather than parent information in children objects. 
     # As a result, we need to inject all parent information into our database objects as additional parameters when
     # we serialize. Normally we use the serializer's save method to do this. But this method doesn't appear to work
     # for foreign key relations. As a workaround, we inject the fk parameters directly into the raw json before call-
     # ing the serializer.
-    injected_json = {"repository":repo_pk, "parent_folder":parent_folder_pk}
+        injected_json = {"repository":repo_pk, "parent_folder":parent_folder_pk}
+    else:
+        injected_json = {
+            "repository":repo_pk, "associated_folder":None, 
+            "associated_file":None, "associated_loc":None
+            }
     raw.update(injected_json)
 
     # Now we can call our serializer. We use our serializer/model lookup method to match the raw json object
     # with its appropriate serializer and model.
     serializer, model = get_serializer_and_model(slookup, raw)
-    
     # Now we check validity and type, then save with additional parameters
-    if serializer.is_valid():
+    if serializer.is_valid(raise_exception=True):
+        print('valid')
         if file_listing:
             # Save a file object with the extra data_type parameter obtained from its parent GitHub tree
             saved = serializer.save(data_type=file_listing['type'])

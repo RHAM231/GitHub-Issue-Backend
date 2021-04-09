@@ -1,12 +1,19 @@
 from rest_framework import serializers
 from issues.models import Issue, TestIssue
-from repositories.models import Repository, RepoFolder, RepoFile
+from repositories.models import Repository, RepoFolder, RepoFile, LineOfCode
 
 
 class IssueSerializer(serializers.ModelSerializer):
+    associated_folder = serializers.PrimaryKeyRelatedField(queryset=RepoFolder.objects.all())
+    associated_file = serializers.PrimaryKeyRelatedField(queryset=RepoFile.objects.all())
+    associated_loc = serializers.PrimaryKeyRelatedField(queryset=LineOfCode.objects.all())
+    repository = serializers.PrimaryKeyRelatedField(queryset=Repository.objects.all())
     class Meta:
         model = Issue
-        fields = ['id', 'name', 'state', 'body', 'created_at', 'updated_at', 'closed_at', 'number', 'repository']
+        fields = [
+            'id', 'title', 'state', 'body', 'created_at', 'updated_at', 'closed_at', 
+            'number', 'repository', 'associated_folder', 'associated_file', 'associated_loc'
+            ]
 
 
 class TestIssueSerializer(serializers.HyperlinkedModelSerializer):

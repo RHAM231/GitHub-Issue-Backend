@@ -46,41 +46,45 @@ class Issue(models.Model):
     )
 
     # Fields
-    name = models.CharField(max_length=100)
+    title = models.CharField(max_length=100)
     state = models.CharField(max_length=6, choices = STATE_CHOICES, default='open')
     body = models.TextField()
-    created_at = models.DateTimeField(auto_now=False, default=timezone.now)
-    updated_at = models.DateTimeField(auto_now=False, blank=True)
-    closed_at = models.DateTimeField(auto_now=False, blank=True) 
+    created_at = models.DateTimeField(default=timezone.now)
+    updated_at = models.DateTimeField(null=True, blank=True)
+    closed_at = models.DateTimeField(null=True, blank=True) 
     number = models.IntegerField()
+    slug = models.SlugField(max_length = 200)
 
     # Foreignkeys
     repository = models.ForeignKey(
         Repository,
         max_length=100,
-        on_delete=models.PROTECT,
+        on_delete=models.CASCADE,
         related_name='issue_repo'
         )
     associated_folder = models.ForeignKey(
         RepoFolder, 
         max_length=100, 
-        on_delete=models.PROTECT, 
+        on_delete=models.CASCADE, 
         related_name='repofolder', 
-        blank=True
+        blank=True,
+        null=True
         )
     associated_file = models.ForeignKey(
         RepoFile, 
         max_length=100, 
-        on_delete=models.PROTECT, 
+        on_delete=models.CASCADE, 
         related_name='repofile', 
-        blank=True
+        blank=True,
+        null=True
         )
     associated_loc = models.ForeignKey(
         RepoFolder, 
         max_length=100, 
-        on_delete=models.PROTECT, 
+        on_delete=models.CASCADE, 
         related_name='issue_loc', 
-        blank=True
+        blank=True,
+        null=True
         )
     
     # METHODS
@@ -88,7 +92,7 @@ class Issue(models.Model):
     # We'll also define a method for updating slugs if the name changes
     def _generate_slug(self):
         # For larger sites we would want to define a max_length for slugs
-        value = self.name
+        value = self.title
         slug_candidate = slug_original = slugify(value).upper() + '_' + str(1)
         # Count until we find an empty 'slot' for our slug
         for i in itertools.count(1):
@@ -107,7 +111,7 @@ class Issue(models.Model):
     # Then we can compare the old with the new in the model's save method below.
     def __init__(self, *args, **kwargs):
         super (Issue, self).__init__(*args, **kwargs)
-        self.__origianl_name = self.name
+        self.__origianl_title = self.title
 
     # Override the model's save method so we can save and update slugs automatically
     def save(self, *args, **kwargs):
@@ -115,7 +119,7 @@ class Issue(models.Model):
         if not self.pk:
             self._generate_slug()
         # Else if we changed the name, generate a slug
-        elif self.name != self.__original_name:
+        elif self.title != self.__original_title:
             self._generate_slug()
         super().save(*args, **kwargs)
     
@@ -125,4 +129,4 @@ class Issue(models.Model):
 
     # Define which attribute the issue will be listed by in the admin portion of the site
     def __str__(self):
-        return self.name
+        return self.title
