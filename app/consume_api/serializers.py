@@ -4,9 +4,9 @@ from repositories.models import Repository, RepoFolder, RepoFile, LineOfCode
 
 
 class IssueSerializer(serializers.ModelSerializer):
-    associated_folder = serializers.PrimaryKeyRelatedField(queryset=RepoFolder.objects.all())
-    associated_file = serializers.PrimaryKeyRelatedField(queryset=RepoFile.objects.all())
-    associated_loc = serializers.PrimaryKeyRelatedField(queryset=LineOfCode.objects.all())
+    # associated_folder = serializers.PrimaryKeyRelatedField(queryset=RepoFolder.objects.all())
+    # associated_file = serializers.PrimaryKeyRelatedField(queryset=RepoFile.objects.all())
+    # associated_loc = serializers.PrimaryKeyRelatedField(queryset=LineOfCode.objects.all())
     repository = serializers.PrimaryKeyRelatedField(queryset=Repository.objects.all())
     class Meta:
         model = Issue
@@ -14,6 +14,24 @@ class IssueSerializer(serializers.ModelSerializer):
             'id', 'title', 'state', 'body', 'created_at', 'updated_at', 'closed_at', 
             'number', 'repository', 'associated_folder', 'associated_file', 'associated_loc'
             ]
+    
+    def get_folder(self, obj):
+        if obj.associated_folder is not None:
+            return RepoFolderSerializer(obj.associated_folder).data
+        else:
+            return None
+    
+    def get_file(self, obj):
+        if obj.associated_file is not None:
+            return RepoFolderSerializer(obj.associated_file).data
+        else:
+            return None
+    
+    def get_loc(self, obj):
+        if obj.associated_loc is not None:
+            return RepoFolderSerializer(obj.associated_loc).data
+        else:
+            return None
 
 
 class TestIssueSerializer(serializers.HyperlinkedModelSerializer):

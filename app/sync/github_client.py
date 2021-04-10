@@ -275,6 +275,9 @@ def serialize_github_object(repo_pk, slookup, raw, path=None, file_listing=None,
             }
     raw.update(injected_json)
 
+    print('PRINTING JSON')
+    pprint(raw)
+
     # Now we can call our serializer. We use our serializer/model lookup method to match the raw json object
     # with its appropriate serializer and model.
     serializer, model = get_serializer_and_model(slookup, raw)

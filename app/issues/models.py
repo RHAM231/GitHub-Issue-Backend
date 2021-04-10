@@ -48,7 +48,7 @@ class Issue(models.Model):
     # Fields
     title = models.CharField(max_length=100)
     state = models.CharField(max_length=6, choices = STATE_CHOICES, default='open')
-    body = models.TextField()
+    body = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(null=True, blank=True)
     closed_at = models.DateTimeField(null=True, blank=True) 
