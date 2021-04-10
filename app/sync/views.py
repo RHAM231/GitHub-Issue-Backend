@@ -10,7 +10,10 @@ from consume_api.serializers import TestIssueSerializer, RepoSerializer
 from repositories.models import Repository, RepoFolder, RepoFile
 from issues.models import Issue
 
-from . github_client import get_query_url, get_serializer_and_model, get_root_folder, get_repo, get_repo_issues
+from . github_client import (
+    get_query_url, get_serializer_and_model, get_root_folder, 
+    get_repo, get_repo_issues, create_issue, update_issue
+    )
 
 
 # def get_query_url(lookup, branch=None, sha=None, path=None, issue_id=None):
@@ -71,7 +74,9 @@ def confirm_sync(request):
         headers = {
             'Authorization': f'token {token}',
             }
-        get_repo('get_repo', headers)
+        update_issue(token, 6)
+        # create_issue(token, data)
+        # get_repo('get_repo', headers)
         # get_root_folder(headers)
         # data = {
         #     # 'state':'open',

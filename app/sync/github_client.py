@@ -3,6 +3,7 @@ import os
 import base64
 import requests
 from pprint import pprint
+from github import Github, GithubException
 
 # Django Imports: Logic specific to this project
 from issues.models import Issue
@@ -63,8 +64,8 @@ def get_query_url(lookup, branch=None, sha=None, path=None, issue_id=None):
         'create_issue': endpoint + '/issues',
         'get_issue': endpoint + f'/issues/{issue_id}',
         'update_issue': endpoint + f'/issues/{issue_id}',
-        'close_issue': endpoint + f'/issues/{issue_id}',
-        'open_issue': endpoint + f'/issues/{issue_id}',
+        # 'close_issue': endpoint + f'/issues/{issue_id}',
+        # 'open_issue': endpoint + f'/issues/{issue_id}',
     }
     # Return our endpoint based on lookup
     url_value = query_dict.get(lookup, None)
@@ -115,7 +116,7 @@ def get_repo(lookup, headers):
 
     # Now call our root folder method. Pass our extra parameters so we can continue
     # getting and serializing github objects.
-    # get_root_folder(repo_pk, repo_branch, headers)
+    get_root_folder(repo_pk, repo_branch, headers)
     get_repo_issues('get_repo_issues', repo_pk, headers)
 
 
@@ -256,6 +257,33 @@ def get_issue(lookup, repo_pk, headers, issue_id):
     serialize_github_object(repo_pk, 'serialize_repo_issue', raw_issue)
 
 
+def create_issue(token, repo, data):
+    g = Github(token)
+    repo = g.get_repo("RHAM231-IssueTracker/IssueTrackerSandbox")
+    i = repo.create_issue(
+        title="Some Issue",
+        body="Text of the body.",
+        # assignee="MartinHeinz",
+        # labels=[
+        #     repo.get_label("good first issue")
+        # ]
+    )
+
+
+# Add 
+def update_issue(token, issue):
+    g = Github(token)
+    repo = g.get_repo("RHAM231-IssueTracker/IssueTrackerSandbox")
+    db_issue = Issue.objects.get(number=issue)
+    print(db_issue.title)
+    i = repo.get_issue(issue)
+    e = i.edit(
+        title=db_issue.title,
+        state=db_issue.state,
+        body=db_issue.body,
+    )
+
+
 # Define a method for serializing raw json output from our get methods above
 def serialize_github_object(repo_pk, slookup, raw, path=None, file_listing=None, folder_listing=None, folder_sha=None):
     # Get the primary key of our parent folder from our database by its sha. Convert to string.
@@ -274,9 +302,6 @@ def serialize_github_object(repo_pk, slookup, raw, path=None, file_listing=None,
             "associated_file":None, "associated_loc":None
             }
     raw.update(injected_json)
-
-    print('PRINTING JSON')
-    pprint(raw)
 
     # Now we can call our serializer. We use our serializer/model lookup method to match the raw json object
     # with its appropriate serializer and model.
