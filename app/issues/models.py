@@ -41,7 +41,7 @@ class TestIssue(models.Model):
 
 
 
-def get_stamp(path, folder, fname, loc, date, stamp_id):
+def set_stamp(path, folder, fname, loc, date, stamp_id):
     stamp = (
         'Issue Location: ' + path + '\n' +
         'Affected Folder: ' + folder + '\n' +
@@ -59,38 +59,39 @@ def delete_stamp(issue):
     return issue
 
 
-def create_stamp(issue):
-    if issue.body:
-        stamp_id = str(1234567812345678)
-        stamp = 'Stamp Id: ' + stamp_id
-        if stamp in issue.body:
-            print('Stamp exists, do nothing')
-            issue.body = issue.body
+def set_association_atrs(issue):
+    if issue.associated_folder:
+        if issue.associated_folder.path:
+            full_path = str(issue.repository.name) + '/' + str(issue.associated_folder.path)
         else:
-            print('Stamp not present, trying to adding it ... ')
+            full_path = str(issue.repository.name)
+        folder_name = str(issue.associated_folder.name)
+        file_name = 'None'
+        loc = 'None'
 
-            if issue.associated_folder:
-                if issue.associated_folder.path:
-                    full_path = str(issue.repository.name) + '/' + str(issue.associated_folder.path)
-                else:
-                    full_path = str(issue.repository.name)
-                folder_name = str(issue.associated_folder.name)
-                file_name = 'None'
-                loc = 'None'
+        if issue.associated_file:
+            issue.associated_folder = issue.associated_file.parent_folder
+            full_path = str(issue.associated_file.repository.name) + '/' + str(issue.associated_file.path)
+            file_name = str(issue.associated_file.name)
 
-                if issue.associated_file:
-                    issue.associated_folder = issue.associated_file.parent_folder
-                    full_path = str(issue.associated_file.repository.name) + '/' + str(issue.associated_file.path)
-                    file_name = str(issue.associated_file.name)
+            if issue.associated_loc:
+                issue.associated_file = issue.associated_loc.repofile
+                issue.associated_folder = issue.associated_file.parent_folder
+                loc = str(issue.associated_loc.line_number)
 
-                    if issue.associated_loc:
-                        issue.associated_file = issue.associated_loc.repofile
-                        issue.associated_folder = issue.associated_file.parent_folder
-                        loc = str(issue.associated_loc.line_number)
+    return (full_path, folder_name, file_name, loc)
 
-            date = dateformat.format(timezone.now(), 'Y-m-d H:i:s')
-            stamp = get_stamp(full_path, folder_name, file_name, loc, date, stamp_id)
-            issue.body = stamp + issue.body
+
+def create_stamp(issue):
+    stamp_id = str(1234567812345678)
+    stamp = 'Stamp Id: ' + stamp_id
+    date = dateformat.format(timezone.now(), 'Y-m-d H:i:s')
+    path, folder, fname, loc = set_association_atrs(issue)
+    stamp = set_stamp(path, folder, fname, loc, date, stamp_id)
+    if issue.body:
+        issue.body = stamp + issue.body
+    else:
+        issue.body = stamp
     return issue.body
 
 
