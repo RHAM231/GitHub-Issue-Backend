@@ -56,7 +56,8 @@ def set_stamp(path, folder, fname, loc, date, stamp_id):
 
 def delete_stamp(issue):
     issue.body = issue.body.split('\n',7)[7]
-    return issue
+    print(issue.body)
+    return (issue, issue.body)
 
 
 def set_association_atrs(issue):
@@ -82,7 +83,7 @@ def set_association_atrs(issue):
     return (full_path, folder_name, file_name, loc)
 
 
-def create_stamp(issue):
+def create_stamp(issue, body=None):
     stamp_id = str(1234567812345678)
     stamp = 'Stamp Id: ' + stamp_id
     date = dateformat.format(timezone.now(), 'Y-m-d H:i:s')
@@ -96,8 +97,8 @@ def create_stamp(issue):
 
 
 def update_stamp(issue):
-    issue = delete_stamp(issue)
-    body = create_stamp(issue)
+    issue, issue.body = delete_stamp(issue)
+    body = create_stamp(issue, body=issue.body)
     return body
 
 
