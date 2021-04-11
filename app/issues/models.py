@@ -39,6 +39,8 @@ class TestIssue(models.Model):
         super().save(*args, **kwargs)
 
 
+
+
 def get_stamp(path, folder, fname, loc, date, stamp_id):
     stamp = (
         'Issue Location: ' + path + '\n' +
@@ -52,74 +54,76 @@ def get_stamp(path, folder, fname, loc, date, stamp_id):
     return stamp
 
 
-def delete_stamp(body):
-    body = body.split('\n',7)[7]
+def delete_stamp(issue):
+    issue.body = issue.body.split('\n',7)[7]
+    return issue
+
+
+def create_stamp(issue):
+    if issue.body:
+        stamp_id = str(1234567812345678)
+        stamp = 'Stamp Id: ' + stamp_id
+        if stamp in issue.body:
+            print('Stamp exists, do nothing')
+            issue.body = issue.body
+        else:
+            print('Stamp not present, trying to adding it ... ')
+
+            if issue.associated_folder:
+                if issue.associated_folder.path:
+                    full_path = str(issue.repository.name) + '/' + str(issue.associated_folder.path)
+                else:
+                    full_path = str(issue.repository.name)
+                folder_name = str(issue.associated_folder.name)
+                file_name = 'None'
+                loc = 'None'
+
+                if issue.associated_file:
+                    issue.associated_folder = issue.associated_file.parent_folder
+                    full_path = str(issue.associated_file.repository.name) + '/' + str(issue.associated_file.path)
+                    file_name = str(issue.associated_file.name)
+
+                    if issue.associated_loc:
+                        issue.associated_file = issue.associated_loc.repofile
+                        issue.associated_folder = issue.associated_file.parent_folder
+                        loc = str(issue.associated_loc.line_number)
+
+            date = dateformat.format(timezone.now(), 'Y-m-d H:i:s')
+            stamp = get_stamp(full_path, folder_name, file_name, loc, date, stamp_id)
+            issue.body = stamp + issue.body
+    return issue.body
+
+
+def update_stamp(issue):
+    issue = delete_stamp(issue)
+    body = create_stamp(issue)
     return body
 
 
-# def create_stamp(body):
-#     if self.body:
-#         stamp_id = str(1234567812345678)
-#         stamp = 'Stamp Id: ' + stamp_id
-#         if stamp in self.body:
-#             print('Stamp exists, do nothing')
-#             self.body = self.body
-#         else:
-#             print('Stamp not present, trying to adding it ... ')
-
-#             if self.associated_folder:
-#                 if self.associated_folder.path:
-#                     full_path = str(self.repository.name) + '/' + str(self.associated_folder.path)
-#                 else:
-#                     full_path = str(self.repository.name)
-#                 folder_name = str(self.associated_folder.name)
-#                 file_name = 'None'
-#                 loc = 'None'
-
-#                 if self.associated_file:
-#                     self.associated_folder = self.associated_file.parent_folder
-#                     full_path = str(self.associated_file.repository.name) + '/' + str(self.associated_file.path)
-#                     file_name = str(self.associated_file.name)
-
-#                     if self.associated_loc:
-#                         self.associated_file = self.associated_loc.repofile
-#                         self.associated_folder = self.associated_file.parent_folder
-#                         loc = str(self.associated_loc.line_number)
-
-#             date = dateformat.format(timezone.now(), 'Y-m-d H:i:s')
-#             stamp = get_stamp(full_path, folder_name, file_name, loc, date, stamp_id)
-#             self.body = stamp + self.body
-#     return body
-
-
-def update_stamp(body):
-    body = delete_stamp(body)
-    body = create_stamp(body)
-    return body
-
-
-def update_body(old, new, body):
+# if anything changes, determine whether the change was to add, update, or delete a stamp
+# if adding, create as normal (if orignal were all none and if any of the new 3 are not none)
+# if updating, delete the old stamp and create as normal (if any orignal were not none, and any new are not none)
+# if deleting, delete the old stamp (if all 3 new are none)
+def update_body(old, issue):
+    new = [issue.associated_folder, issue.associated_file, issue.associated_loc]
     if old != new:
         old_none = all(atr is None for atr in old)
         new_none = all(atr is None for atr in new)
 
         if old_none == True and new_none == False:
             print('create')
+            issue.body = create_stamp(issue)
         
         elif old_none == False and new_none == False:
             print('update')
-            body = delete_stamp(body)
+            issue.body = update_stamp(issue)
 
         elif old_none == False and new_none == True:
             print('delete')
-            body = delete_stamp(body)
+            issue = delete_stamp(issue)
+            return issue
 
-    return body
-
-
-def test_pass_self(issue):
-    test = issue.repository.file_name
-    return test
+    return issue.body
 
 
 class Issue(models.Model):
@@ -209,96 +213,8 @@ class Issue(models.Model):
         elif self.title != self.__original_title:
             self._generate_slug()
 
-
-
-
-
-        # if anything changes, determine whether the change was to add, update, or delete a stamp
-        # if adding, create as normal (if orignal were all none and if any of the new 3 are not none)
-        # if updating, delete the old stamp and create as normal (if any orignal were not none, and any new are not none)
-        # if deleting, delete the old stamp (if all 3 new are none)
-
-        old_associations = [self.__original_associated_folder, self.__original_associated_file, self.__original_associated_loc]
-        new_associations = [self.associated_folder, self.associated_file, self.associated_loc]
-
-        self.body = update_body(old_associations, new_associations, self.body)
-
-        repo = test_pass_self(self)
-        print(repo)
-
-        # if old_associations != new_associations:
-        #     # print ('change happened')
-
-        #     old_none = all(atr is None for atr in old_associations)
-        #     new_none = all(atr is None for atr in new_associations)
-
-        #     # print(old_none)
-        #     # print(new_none)
-            
-        #     if old_none == True and new_none == False:
-        #         print('create')
-
-        #         if self.body:
-        #             stamp_id = str(1234567812345678)
-        #             stamp = 'Stamp Id: ' + stamp_id
-        #             if stamp in self.body:
-        #                 print('Stamp exists, do nothing')
-        #                 self.body = self.body
-        #             else:
-        #                 print('Stamp not present, trying to adding it ... ')
-
-        #                 if self.associated_folder:
-        #                     if self.associated_folder.path:
-        #                         full_path = str(self.repository.name) + '/' + str(self.associated_folder.path)
-        #                     else:
-        #                         full_path = str(self.repository.name)
-        #                     folder_name = str(self.associated_folder.name)
-        #                     file_name = 'None'
-        #                     loc = 'None'
-
-        #                     if self.associated_file:
-        #                         self.associated_folder = self.associated_file.parent_folder
-        #                         full_path = str(self.associated_file.repository.name) + '/' + str(self.associated_file.path)
-        #                         file_name = str(self.associated_file.name)
-
-        #                         if self.associated_loc:
-        #                             self.associated_file = self.associated_loc.repofile
-        #                             self.associated_folder = self.associated_file.parent_folder
-        #                             loc = str(self.associated_loc.line_number)
-
-        #                 date = dateformat.format(timezone.now(), 'Y-m-d H:i:s')
-
-        #                 stamp = (
-        #                     'Issue Location: ' + full_path + '\n' +
-        #                     'Affected Folder: ' + folder_name + '\n' +
-        #                     'Affected File: ' + file_name + '\n' +
-        #                     'Affected Line of Code: ' + loc + '\n' +
-        #                     'Generated by Issue Tracker: ' + date + '\n' +
-        #                     'Stamp Id: ' + stamp_id + '\n' +
-        #                     '\n'
-        #                 )
-
-        #                 self.body = stamp + self.body
-
-        #     elif old_none == False and new_none == False:
-        #         print('update')
-        #         self.body = self.body.split('\n',7)[7]
-
-
-
-        #     elif old_none == False and new_none == True:
-        #         print('delete')
-        #         self.body = self.body.split('\n',7)[7]
-                
-
-
-
-
-
-
-
-
-
+        old = [self.__original_associated_folder, self.__original_associated_file, self.__original_associated_loc]
+        self.body = update_body(old, self)
         super().save(*args, **kwargs)
     
     # Built in redirect for create view
