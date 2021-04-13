@@ -1,0 +1,106 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container-no-margin pr-3 pl-3">
+  <div class="row mt-5 mb-5"></div>
+  <div class="row mt-5 mb-5"></div>
+
+  <div class="row mt-1 mb-4">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-12 mx-auto">
+      <a href="" class="current-path">Home</a><a class="link-divider">&nbsp/&nbsp</a>
+      <a href="" class="current-path">Projects</a><a class="link-divider">&nbsp/&nbsp</a>
+      <a href="" class="current-path">Project 1</a><a class="link-divider">&nbsp/&nbsp</a>
+      <a href="" class="current-path">Folder</a><a class="link-divider">&nbsp/&nbsp</a>
+      <a class="current-path">File</a><a class="link-divider">&nbsp/&nbsp</a>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-lg-8 col-lg-offset-2 
+                col-md-10 col-md-offset-1 
+                col-sm-12
+                mx-auto">
+      <div class="file-contents-box">
+
+        <div class="row p-custom">
+          <div class="col-12 file-box border-bottom">
+            <div class="row">
+              <div class="mr-auto">
+                <div class="icon-tab">
+                  <i class="fas fa-file"></i>
+                </div>
+                <div class="folder-file-header">
+                  <a class="custom-header">models.py</a>
+                </div>
+              </div>
+              <div class="mr-auto ml-auto">
+                <div class="folder-file-date">
+                  <a class="text-secondary dynamic-hide">Updated December 25, 2021</a>
+                </div>
+              </div>
+              <div class="folder-file-button">
+                <a href="{% url 'issue-list' %}" class="issue-button">Issues</a>
+                <!-- Resize the number text for numbers greater than 99 -->
+                {% if issue_count > 99 %}
+                  <div class="issues-count text-center count-small"><a>{{ issue_count }}</a></div>
+                {% elif issue_count is 0 %}
+                {% else %}
+                  <div class="issues-count text-center"><a>{{ issue_count }}</a></div>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+      
+        <div class="row p-custom">
+          <div class="col-12 file-subheader border-bottom">
+            <div class="row px-3 py-3">
+              <a>47 Lines |&nbsp</a>
+              <a>42 sloc |&nbsp</a>
+              <a>2.22 KB</a>
+            </div>
+          </div>
+        </div>
+      
+        <div class="row p-custom mb-5">
+          <div class="col-12 file-contents">
+            <div class="row table-scroll">
+              <table>
+                <tr>
+                  <td></td>
+                  <td class="index">1</td>
+                  <td class="code-text">from django.shortcuts import render</td>
+                </tr>
+                <tr>
+                  {% if issues_present %}
+                    <td class="issue-present">
+                      <a class="issues-count-btn" href="{% url 'issue-list' %}">{{ issues_present }}</a>
+                    </td>
+                  {% else %}
+                    <td></td>
+                  {% endif %}
+                  <td class="index">2</td>
+                  <td class="code-text code-issue">from django.core.mail import send_mail</td>
+                </tr>
+                <tr>
+                  <td></td>
+                  <td class="index">3</td>
+                  <td class="code-text">from django.template.loader import render_to_string</td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<div class="row mb-4"></div>
+</div>
+{% endblock content %}

@@ -1,0 +1,50 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container-no-margin pr-3 pl-3">
+  <div class="row mt-5 mb-5"></div>
+  <div class="row mt-5 mb-5"></div>
+
+  <div class="row mt-1 mb-4">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 mx-auto">
+      <a href="" class="current-path">Home</a><a class="link-divider">&nbsp/&nbsp</a>
+      <a class="current-path">Projects</a><a class="link-divider">&nbsp/&nbsp</a>
+    </div>
+  </div>
+
+  {% for repo in repositories %}
+    <div class="row mb-4">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 mx-auto">
+        <div class="project-box">
+            <div class="icon-tab">
+            <i class="fas fa-project-diagram"></i>
+            <a class="project-description dynamic-hide-small">{{ repo.description }}</a>
+            <a class="project-date text-secondary dynamic-hide-small">Updated {{ repo.updated_at }}</a>
+            </div>
+            <div class="project-header">
+            <h4><a href="">{{ repo.name }}</a></h4>
+            </div>
+            <div class="row justify-content-end">
+            <div class="project-button">
+                <a href="" class="issue-button">Issues</a>
+                <!-- Resize the number text for numbers greater than 99 -->
+                {% if issue_count > 99 %}
+                <div class="issues-count text-center count-small"><a>{{ repo.issue_count }}</a></div>
+                {% else %}
+                <div class="issues-count text-center"><a>{{ repo.issue_count }}</a></div>
+                {% endif %}
+            </div>
+            </div>
+        </div>
+        </div>
+    </div>
+  {% endfor %}
+
+</div>
+
+
+<div class="row mb-4"></div>
+</div>
+{% endblock content %}

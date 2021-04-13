@@ -1,13 +1,15 @@
 from django.shortcuts import render
+from repositories.models import Repository, RepoFolder, RepoFile
+from issues.models import Issue
 
 
 def home(request):
     context = {
         'title': 'Home',
-        'project_count': 1,
-        'folder_count': 12,
-        'file_count': 37,
-        'issue_count': 63,
+        'project_count': Repository.objects.all().count,
+        'folder_count': RepoFolder.objects.all().count,
+        'file_count': RepoFile.objects.all().count,
+        'issue_count': Issue.objects.all().count,
     }
     return render(request, 'base/home.html', context)
 
