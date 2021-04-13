@@ -100,13 +100,13 @@ def set_association_atrs(issue):
         file_name = 'None'
         loc = 'None'
 
-        # If we also have a file association, set its value and redfine path based on the file
+        # If we have a file association, set its value and re-define path based on the file
         if issue.associated_file:
             issue.associated_folder = issue.associated_file.parent_folder
             full_path = str(issue.associated_file.repository.name) + '/' + str(issue.associated_file.path)
             file_name = str(issue.associated_file.name)
             
-            # If we have also associated our issue with a line of code, set its value for the stamp
+            # If we've associated our issue with a line of code, set its value for the stamp
             # based on its line number
             if issue.associated_loc:
                 issue.associated_file = issue.associated_loc.repofile
@@ -135,7 +135,7 @@ def create_stamp(issue, body=None):
     return issue.body
 
 
-# If we're changind existing associations on our Issue instance, first delete the
+# If we're changing existing associations on our Issue instance, first delete the
 # old stamp, then create a new one
 def update_stamp(issue):
     issue, issue.body = delete_stamp(issue)
@@ -143,7 +143,7 @@ def update_stamp(issue):
     return (issue, body)
 
 
-# Given the old associations and the issue itself check if any associations changed
+# Given the old associations and the issue itself, check if any associations changed,
 # then update the body accordingly
 def update_body(old, issue):
     new = [issue.associated_folder, issue.associated_file, issue.associated_loc]

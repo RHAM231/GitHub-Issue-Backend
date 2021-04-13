@@ -240,6 +240,8 @@ def save_locs(content, parent_file):
         new_line.save()
 
 
+# Given necessary lookup parameters, get all the GitHub issues from a repository
+# and call our get_issue() method for each issue
 def get_repo_issues(lookup, repo_pk, headers):
     query_url = get_query_url(lookup)
     r = requests.get(query_url, headers=headers)
@@ -250,6 +252,8 @@ def get_repo_issues(lookup, repo_pk, headers):
         get_issue('get_issue', repo_pk, headers, number)
 
 
+# Given individual issue parameters, retrieve the single issue from GitHub as
+# a json object and serialize it to the database by calling our serialize method
 def get_issue(lookup, repo_pk, headers, issue_id):
     query_url = get_query_url(lookup, issue_id=issue_id)
     r = requests.get(query_url, headers=headers)
@@ -257,20 +261,18 @@ def get_issue(lookup, repo_pk, headers, issue_id):
     serialize_github_object(repo_pk, 'serialize_repo_issue', raw_issue)
 
 
+# Given data from our frontend issue creation form, use the 3rd party module, 
+# GitHub, to create a new issue on GitHub
 def create_issue(token, repo, data):
     g = Github(token)
     repo = g.get_repo("RHAM231-IssueTracker/IssueTrackerSandbox")
     i = repo.create_issue(
         title="Some Issue",
         body="Text of the body.",
-        # assignee="MartinHeinz",
-        # labels=[
-        #     repo.get_label("good first issue")
-        # ]
     )
 
 
-# Add 
+# Given data from our frontend, edit an existing issue on GitHub
 def update_issue(token, issue):
     g = Github(token)
     repo = g.get_repo("RHAM231-IssueTracker/IssueTrackerSandbox")

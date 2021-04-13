@@ -4,15 +4,15 @@ from . models import (
 )
 
 registeredModels = [
-    # Issue, 
+    Issue, 
     TestIssue
 ]
 admin.site.register(registeredModels)
 
 
-@admin.register(Issue)
-class IssueAdmin(admin.ModelAdmin):
-    fields = ('title', 'state')
+# @admin.register(Issue)
+# class IssueAdmin(admin.ModelAdmin):
+#     fields = ('title', 'state')
     # fieldsets = (
     #     (None, {
     #         'fields': ('title', 'state')
