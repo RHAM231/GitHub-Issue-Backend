@@ -1,0 +1,106 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container-no-margin pr-3 pl-3">
+  <div class="row mt-5 mb-5"></div>
+  <div class="row mt-5 mb-5"></div>
+
+  <div class="row">
+    <div class="col-6 col-offset-3 mx-auto">
+      <h2 class="text-center mb-3">About Issue Tracker</h2>
+    </div>
+  </div>
+
+  <div class="row my-3">
+    <div class="col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                col-sm-12 mx-auto">
+
+      <div class="form-box py-3">
+        <div class="col-10 mx-auto">
+          
+          <div class="row justify-content-center mt-5 mb-3 d-flex">
+            <div class="logo-box text-center">
+              <a href="https://www.djangoproject.com/">
+                <img class="-resize" src="{% static 'images/django.png' %}" 
+                    alt="">
+              </a>
+            </div>
+            <div class="logo-box text-center">
+              <a href="https://github.com/">
+                <img class="-resize" src="{% static 'images/github.jpg' %}" 
+                    alt="">
+              </a>
+            </div>
+            <div class="logo-box text-center">
+              <a href="https://ubuntu.com/">
+                <img class="-resize" src="{% static 'images/ubuntu.png' %}" 
+                    alt="">
+              </a>
+            </div>
+          </div>
+          <div class="row mb-2 border-bottom"></div>
+            <div class="row">
+                {% lorem 67 w %}
+            </div>
+          <div class="row mt-3 mb-2 border-bottom"></div>
+
+
+          
+          <div class="row justify-content-center mt-5 mb-3 d-flex">
+            <a class="text-center" href="https://www.django-rest-framework.org/">
+              <img class="DRF-resize" src="{% static 'images/drf.png' %}" 
+                  alt="">
+            </a>
+          </div>
+          <div class="row mb-2 border-bottom"></div>
+            <div class="row">
+                {% lorem 67 w %}
+            </div>
+          <div class="row mt-3 mb-2 border-bottom"></div>
+
+
+
+          <div class="row justify-content-center mt-5 mb-3 d-flex">
+            <a class="text-center" href="https://www.docker.com/">
+              <img class="docker-resize" src="{% static 'images/docker.png' %}" 
+                  alt="">
+            </a>
+          </div>
+          <div class="row mb-3 border-bottom"></div>
+            <div class="row">
+                {% lorem 67 w %}
+            </div>
+          <div class="row mt-3 mb-2 border-bottom"></div>
+
+
+
+          <div class="row justify-content-center mt-5 mb-3 d-flex">
+            <a class="text-center" href="https://aws.amazon.com/what-is-cloud-computing">
+              <img class="aws-resize" src="https://d0.awsstatic.com/logos/powered-by-aws.png" 
+                  alt="Powered by AWS Cloud Computing">
+            </a>
+          </div>
+          <div class="row mb-2 border-bottom"></div>
+            <div class="row">
+                {% lorem 67 w %}
+            </div>
+          <div class="row mt-3 mb-2 border-bottom"></div>
+
+          <!-- <div class="dummy">
+            <i class="fas fa-bug"></i>
+          </div> -->
+
+          <div class="row mt-4 mb-5"></div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<div class="row mb-4"></div>
+</div>
+{% endblock content %}

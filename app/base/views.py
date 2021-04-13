@@ -10,3 +10,10 @@ def home(request):
         'issue_count': 63,
     }
     return render(request, 'base/home.html', context)
+
+
+def about(request):
+    context = {
+        'title': 'About',
+    }
+    return render(request, 'base/about.html', context)
