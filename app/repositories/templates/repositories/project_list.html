@@ -24,13 +24,13 @@
             <a class="project-date text-secondary dynamic-hide-small">Updated {{ repo.updated_at }}</a>
             </div>
             <div class="project-header">
-            <h4><a href="">{{ repo.name }}</a></h4>
+            <h4><a href="{% url 'project-contents' root_id=repo.id %}">{{ repo.name }}</a></h4>
             </div>
             <div class="row justify-content-end">
             <div class="project-button">
                 <a href="" class="issue-button">Issues</a>
                 <!-- Resize the number text for numbers greater than 99 -->
-                {% if issue_count > 99 %}
+                {% if repo.issue_count > 99 %}
                 <div class="issues-count text-center count-small"><a>{{ repo.issue_count }}</a></div>
                 {% else %}
                 <div class="issues-count text-center"><a>{{ repo.issue_count }}</a></div>

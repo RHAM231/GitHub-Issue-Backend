@@ -32,7 +32,7 @@
                   <i class="fas fa-file"></i>
                 </div>
                 <div class="folder-file-header">
-                  <a class="custom-header">models.py</a>
+                  <a class="custom-header">{{ file.name }}</a>
                 </div>
               </div>
               <div class="mr-auto ml-auto">
@@ -41,7 +41,7 @@
                 </div>
               </div>
               <div class="folder-file-button">
-                <a href="{% url 'issue-list' %}" class="issue-button">Issues</a>
+                <a href="" class="issue-button">Issues</a>
                 <!-- Resize the number text for numbers greater than 99 -->
                 {% if issue_count > 99 %}
                   <div class="issues-count text-center count-small"><a>{{ issue_count }}</a></div>
@@ -57,9 +57,9 @@
         <div class="row p-custom">
           <div class="col-12 file-subheader border-bottom">
             <div class="row px-3 py-3">
-              <a>47 Lines |&nbsp</a>
-              <a>42 sloc |&nbsp</a>
-              <a>2.22 KB</a>
+              <a>{{ line_count }} Lines |&nbsp</a>
+              <a>{{ sloc }} sloc |&nbsp</a>
+              <a>{{ file.size|filesizeformat }}</a>
             </div>
           </div>
         </div>
@@ -76,7 +76,7 @@
                 <tr>
                   {% if issues_present %}
                     <td class="issue-present">
-                      <a class="issues-count-btn" href="{% url 'issue-list' %}">{{ issues_present }}</a>
+                      <a class="issues-count-btn" href="">{{ issues_present }}</a>
                     </td>
                   {% else %}
                     <td></td>
@@ -89,6 +89,13 @@
                   <td class="index">3</td>
                   <td class="code-text">from django.template.loader import render_to_string</td>
                 </tr>
+                {% for line in lines %}
+                <tr>
+                  <td></td>
+                  <td class="index">{{ line.line_number }}</td>
+                  <td class="code-text">{{ line.content }}</td>
+                </tr>
+                {% endfor %}
               </table>
             </div>
           </div>
