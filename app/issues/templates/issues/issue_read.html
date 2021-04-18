@@ -1,0 +1,102 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container-no-margin pr-3 pl-3">
+  <div class="row mt-5 mb-5"></div>
+  <div class="row mt-5 mb-5"></div>
+
+  <div class="row issue-header">
+    <div class="col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                col-sm-12 mx-auto">
+      <h2>Issue Title #1</h2>
+    </div>
+  </div>
+  <div class="row issue-subheader">
+    <div class="col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                col-sm-12 mx-auto d-flex">
+      {% if condition %}
+      <div class="issue-open mr-2">
+        <i class="fas fa-bug"></i>
+        <a>Open</a>
+      </div>
+      {% else %}
+      <div class="issue-closed mr-2">
+        <i class="far fa-check-circle"></i>
+        <a>Closed</a>
+      </div>
+      {% endif %}
+      <b><a>Username</a></b>
+      <a>&nbsp opened this issue time ago | 0 comments</a>
+    </div>
+  </div>
+
+  <form action="/TBD/" method="POST"></form>
+    {% csrf_token %}
+
+    <div class="row mt-4 mb-5">
+      <div class="col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                col-sm-12 mx-auto">
+
+        <div class="form-box py-3">
+          <div class="col-10 mx-auto">
+            
+            <div class="row mt-2 mb-3 d-flex">
+              <div class="user-box">
+                <!-- <img class="user-image" src="{{ model_name.0.field_name.url }}"> -->
+                <img class="user-image" src="{% static 'images/user.jpg' %}">
+              </div>
+              <div class="pl-2">
+                <b><a class="user-title" href="">Username</a></b>
+                <a>| Owner</a>
+              </div>
+              <div class="ml-auto">
+                <a href="{% url 'issue-update' %}" class="edit-issue-button">Edit</a>
+              </div>
+            </div>
+
+            <div class="row mb-2 border-bottom"></div>
+
+            <div class="row my-2">
+              <a>Project: &nbsp</a>
+              <b><a>Test Project</a></b>
+              <a>&nbsp Folder: &nbsp</a>
+              <b><a>base</a></b>
+              <a>&nbsp File: &nbsp</a>
+              <b><a>None</a></b>
+            </div>
+
+            <div class="row mb-2 border-bottom"></div>
+
+            <div class="row mt-3">
+              {{ form.comment.label }}
+            </div>
+            <div class="row">
+                {% lorem 67 w %}
+            </div>
+
+            <div class="row d-flex flex-row-reverse py-3">
+              <a href="{% url 'issue-delete' %}" class="ml-2 delete-button">Delete Issue</a>
+              <!-- <input type="submit" value="Delete Issue" class="ml-2 delete-button"> -->
+              <input type="submit" value="Close Issue" class="mx-2 close-button">
+            </div>
+        
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+  </form>
+
+</div>
+
+
+<div class="row mb-4"></div>
+</div>
+{% endblock content %}

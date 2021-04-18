@@ -1,0 +1,103 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container-no-margin pr-3 pl-3">
+  <div class="row mt-5 mb-5"></div>
+  <div class="row mt-5 mb-5"></div>
+
+  <div class="row">
+    <div class="col-6 col-offset-3 mx-auto">
+      <h2 class="text-center border-bottom mb-2">Project / Folder / File: Issues</h2>
+    </div>
+  </div>
+
+
+
+  <form action="/TBD/" method="GET"></form>
+    {% csrf_token %}
+    <div class="row mt-4 mb-5">
+      <div class="col-md-10 col-md-offset-1 col-sm-12 mx-auto">
+        <div class="issues-header">
+          <div class="row mx-0 border-bottom header-top">
+            <div class="col-12 my-auto mx-auto d-flex flex-wrap">
+              <div class="form-filter">{{ form.filters }}</div>
+              <div class="search-glass">
+                <i class="fas fa-search"></i>
+              </div>
+              <div class="form-search">{{ form.search }}</div>
+              <div class="line-break"></div>
+              <div class="row header-btn-container float-right">
+                <a href="{% url 'issue-create' %}" class="new-issue-button">New Issue</a>
+              </div>
+            </div>
+            <!-- <div class="col-2 my-auto">
+              <div class="float-right">
+                <div class="">
+                  <a href="{% url 'issue-list' %}" class="new-issue-button">New Issue</a>
+                </div>
+              </div>
+            </div> -->
+          </div>
+          <div class="row mx-0 header-bottom">
+            <div class="col-md-4 col-sm-12 d-flex vertical-align" style="white-space: nowrap;">
+              <a class="pl-3 pr-2">{{ form.select_all }}</a>
+              <i class="pr-2 fas fa-bug"></i>
+              <a>{{ form.open_closed.0 }}</a>
+              <i class="pr-2 pl-2 far fa-check-circle"></i>
+              <a>{{ form.open_closed.1 }}</a>
+            </div>
+            <div class="col-md-8 col-sm-12">
+              <div class="issue-dropdown-filters">
+                <a>{{ form.author }}{{ form.projects }}{{ form.sort }}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="issues-container py-3">
+
+          <div class="col-12">
+
+            <div class="issue-row py-auto my-3">
+              <div class="d-flex col-12 px-0">
+                <div class="issue-tab">
+                  <a class="check-center pl-3 pr-2">{{ form.select_all }}</a>
+                  <i class="fas fa-bug"></i>
+                </div>
+                <b><a class="pl-2" href="{% url 'issue-read' %}">Issue # 1</a></b>
+              </div>
+              <div class="col-12 px-0">
+                <a class="pl-5 sub-date">#1 Opened 7 days ago by User</a>
+              </div>
+            </div>
+
+            <div class="issue-row py-auto my-3">
+              <div class="d-flex col-12 px-0">
+                <div class="issue-tab">
+                  <a class="check-center pl-3 pr-2">{{ form.select_all }}</a>
+                  <i class="fas fa-bug"></i>
+                </div>
+                <b><a class="pl-2" href="{% url 'issue-read' %}">Issue # 1</a></b>
+              </div>
+              <div class="col-12 px-0">
+                <a class="pl-5 sub-date">#1 Opened 7 days ago by User</a>
+              </div>
+            </div>
+
+          </div>
+
+
+        </div>
+
+        <div class="issues-footer py-3 mb-3">
+
+        </div>
+
+      </div>
+    </div>
+  </form>
+
+<div class="row mb-4"></div>
+</div>
+{% endblock content %}

@@ -1,0 +1,56 @@
+{% extends "base/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="container-no-margin pr-3 pl-3">
+  <div class="row mt-5 mb-5"></div>
+  <div class="row mt-5 mb-5"></div>
+
+  <form action="/TBD/" method="POST">
+    {% csrf_token %}
+
+    <div class="row mt-4 mb-5">
+      <div class="col-lg-6 col-lg-offset-3 
+                  col-md-8 col-md-offset-2 
+                  col-sm-10 col-sm-offset-1 
+                  mx-auto">
+
+        <div class="form-box py-3">
+          <div class="col-lg-10 mx-auto">
+            
+            <div class="row justify-content-center mt-2 mb-4 d-flex">
+              <div class="delete-icon">
+                <i class="fas fa-trash"></i>
+              </div>
+            </div>
+
+            <div class="row justify-content-center my-2">
+              <a>Are you sure you want to delete</a>
+            </div>
+            <div class="row justify-content-center my-2">
+              <a><b>issue name</b>?</a>
+            </div>
+            <div class="row justify-content-center mt-2">
+              <a>This action cannot be undone.</a>
+            </div>
+
+            <div class="row d-flex justify-content-center py-3">
+              <input type="submit" value="Delete" class="mx-2 form-button-cancel">
+            </div>
+        
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+
+  </form>
+
+</div>
+
+
+<div class="row mb-4"></div>
+</div>
+{% endblock content %}

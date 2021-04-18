@@ -68,32 +68,19 @@
           <div class="col-12 file-contents">
             <div class="row table-scroll">
               <table>
-                <tr>
-                  <td></td>
-                  <td class="index">1</td>
-                  <td class="code-text">from django.shortcuts import render</td>
-                </tr>
-                <tr>
-                  {% if issues_present %}
-                    <td class="issue-present">
-                      <a class="issues-count-btn" href="">{{ issues_present }}</a>
-                    </td>
-                  {% else %}
-                    <td></td>
-                  {% endif %}
-                  <td class="index">2</td>
-                  <td class="code-text code-issue">from django.core.mail import send_mail</td>
-                </tr>
-                <tr>
-                  <td></td>
-                  <td class="index">3</td>
-                  <td class="code-text">from django.template.loader import render_to_string</td>
-                </tr>
                 {% for line in lines %}
                 <tr>
-                  <td></td>
-                  <td class="index">{{ line.line_number }}</td>
-                  <td class="code-text">{{ line.content }}</td>
+                  {% if line.issue_count %}
+                    <td class="issue-present">
+                      <a class="issues-count-btn" href="">{{ line.issue_count }}</a>
+                    </td>
+                    <td class="index">{{ line.line_number }}</td>
+                    <td class="code-text code-issue">{{ line.content }}</td>
+                  {% else %}
+                    <td></td>
+                    <td class="index">{{ line.line_number }}</td>
+                    <td class="code-text">{{ line.content }}</td>
+                  {% endif %}
                 </tr>
                 {% endfor %}
               </table>

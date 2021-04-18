@@ -76,7 +76,7 @@ class FileDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Files'
-        lines = LineOfCode.objects.all().filter(repofile=self.kwargs['file_id'])
+        lines = LineOfCode.objects.all().filter(repofile=self.kwargs['file_id']).annotate(issue_count=Count('issue_loc'))
         context['lines'] = lines
         context['line_count'] = lines.count()
         context['sloc'] = LineOfCode.objects.all().filter(repofile=self.kwargs['file_id']).exclude(content='').count()
