@@ -23,7 +23,7 @@ urlpatterns = [
     path('consume_api/', include('consume_api.urls')),
     # path('api-auth/', include('rest_framework.urls')),
 
-    # path('issues/', include('issues.urls')),
-    path('repositories/', include('repositories.urls')),
+    path('Issues/', include('issues.urls')),
+    path('Repositories/', include('repositories.urls')),
     # path('users/', include('users.urls')),
 ]

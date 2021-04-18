@@ -16,76 +16,53 @@
     </div>
   </div>
 
-  {% for folder in folder_contents %}
-    <div class="row mb-3">
-      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 mx-auto">
-        <div class="folder-file-box">
-          <div class="row justify-content-end">
-            <div class="mr-auto pl-custom">
-              <div class="icon-tab-folder-file">
-                <i class="fas fa-folder"></i>
+  {% for key, queryset in folders_and_files.items %}
+    {% for instance in queryset %}
+      <div class="row mb-3">
+        <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 mx-auto">
+          <div class="folder-file-box">
+            <div class="row justify-content-end">
+              <div class="mr-auto pl-custom">
+                <div class="icon-tab-folder-file">
+                  {% if key == 'folders' %}
+                    <i class="fas fa-folder"></i>
+                  {% elif key == 'files' %}
+                    <i class="fas fa-file"></i>
+                  {% endif %}
+                </div>
+                <div class="folder-file-header">
+                  {% if key == 'folders' %}
+                    <a class="custom-header" href="{% url 'folder-contents' folder_id=instance.id %}">
+                  {% elif key == 'files' %}
+                    <a class="custom-header" href="{% url 'file-contents' file_id=instance.id %}">
+                  {% endif %}
+                    {{ instance.name }}
+                    </a>
+                </div>
               </div>
-              <div class="folder-file-header">
-                <a class="custom-header" href="{% url 'folder-contents' folder_id=folder.id %}">{{ folder.name }}</a>
+              <div class="mr-auto ml-auto">
+                <div class="folder-file-date">
+                  <a class="text-secondary dynamic-hide">Last Updated Not in Model</a>
+                </div>
               </div>
-            </div>
-            <div class="mr-auto ml-auto">
-              <div class="folder-file-date">
-                <a class="text-secondary dynamic-hide">Last Updated Not in Model</a>
+              <div class="folder-file-button">
+                <a href="" class="issue-button">Issues</a>
+                <!-- Resize the number text for numbers greater than 99 -->
+                {% if instance.issue_count > 99 %}
+                  <div class="issues-count text-center count-small"><a>{{ instance.issue_count }}</a></div>
+                {% elif instance.issue_count is 0 %}
+                {% else %}
+                  <div class="issues-count text-center"><a>{{ instance.issue_count }}</a></div>
+                {% endif %}
               </div>
-            </div>
-            <div class="folder-file-button">
-              <a href="" class="issue-button">Issues</a>
-              <!-- Resize the number text for numbers greater than 99 -->
-              {% if folder.issue_count > 99 %}
-                <div class="issues-count text-center count-small"><a>{{ folder.issue_count }}</a></div>
-              {% elif folder.issue_count is 0 %}
-              {% else %}
-                <div class="issues-count text-center"><a>{{ folder.issue_count }}</a></div>
-              {% endif %}
             </div>
           </div>
         </div>
       </div>
-    </div>
-  {% endfor %}
-
-  {% for file in files %}
-    <div class="row mb-3">
-      <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 mx-auto">
-        <div class="folder-file-box">
-          <div class="row justify-content-end">
-            <div class="mr-auto pl-custom">
-              <div class="icon-tab-folder-file">
-                <i class="fas fa-file"></i>
-              </div>
-              <div class="folder-file-header">
-                <a class="custom-header" href="{% url 'file-contents' file_id=file.id %}">{{ file.name }}</a>
-              </div>
-            </div>
-            <div class="mr-auto ml-auto">
-              <div class="folder-file-date">
-                <a class="text-secondary dynamic-hide">Last Updated Not in Model</a>
-              </div>
-            </div>
-            <div class="folder-file-button">
-              <a href="" class="issue-button">Issues</a>
-              <!-- Resize the number text for numbers greater than 99 -->
-              {% if file.issue_count > 99 %}
-                <div class="issues-count text-center count-small"><a>{{ file.issue_count }}</a></div>
-              {% elif file.issue_count is 0 %}
-              {% else %}
-                <div class="issues-count text-center"><a>{{ file.issue_count }}</a></div>
-              {% endif %}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    {% endfor %}
   {% endfor %}
 
 </div>
-
 
 <div class="row mb-4"></div>
 </div>

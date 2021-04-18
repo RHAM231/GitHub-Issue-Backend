@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.views.generic import (
-    ListView, DeleteView, DetailView, UpdateView
+    ListView, DetailView
 )
 from . models import Repository, RepoFolder, RepoFile, LineOfCode
 from django.db.models import Count
@@ -21,11 +21,11 @@ class RepositoryListView(ListView):
 
 class RepoContentsListView(ListView):
     model = RepoFolder
-    template_name = 'repositories/project_contents.html'
-    context_object_name = 'repo_contents'
+    template_name = 'repositories/folder_contents.html'
+    context_object_name = 'folder_contents'
 
     def get_queryset(self):
-        repo_id = self.kwargs['root_id']
+        repo_id = self.kwargs['repo_id']
         repo = Repository.objects.get(id=repo_id)
         root_folder_name = repo.name + '_root'
         root_folder = RepoFolder.objects.get(name='repo_root', repository=repo_id, parent_folder=None)
@@ -36,7 +36,11 @@ class RepoContentsListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Projects'
-        context['files'] = RepoFile.objects.all().filter(parent_folder=self.root.id).annotate(issue_count=Count('repofile'))
+        files = RepoFile.objects.all().filter(parent_folder=self.root.id).annotate(issue_count=Count('repofile'))
+        context['folders_and_files'] = {
+            'folders': context['folder_contents'],
+            'files': files
+            }
         return context
 
 
@@ -55,7 +59,11 @@ class FolderContentsListView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Projects'
-        context['files'] = RepoFile.objects.all().filter(parent_folder=self.folder).annotate(issue_count=Count('repofile'))
+        files = RepoFile.objects.all().filter(parent_folder=self.folder).annotate(issue_count=Count('repofile'))
+        context['folders_and_files'] = {
+            'folders': context['folder_contents'],
+            'files': files
+            }
         return context
 
 

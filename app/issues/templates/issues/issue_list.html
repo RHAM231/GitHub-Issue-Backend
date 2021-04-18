@@ -7,11 +7,11 @@
   <div class="row mt-5 mb-5"></div>
   <div class="row mt-5 mb-5"></div>
 
-  <div class="row">
+  <!-- <div class="row">
     <div class="col-6 col-offset-3 mx-auto">
       <h2 class="text-center border-bottom mb-2">Project / Folder / File: Issues</h2>
     </div>
-  </div>
+  </div> -->
 
 
 
@@ -29,7 +29,7 @@
               <div class="form-search">{{ form.search }}</div>
               <div class="line-break"></div>
               <div class="row header-btn-container float-right">
-                <a href="{% url 'issue-create' %}" class="new-issue-button">New Issue</a>
+                <a href="" class="new-issue-button">New Issue</a>
               </div>
             </div>
             <!-- <div class="col-2 my-auto">
@@ -59,31 +59,20 @@
 
           <div class="col-12">
 
-            <div class="issue-row py-auto my-3">
-              <div class="d-flex col-12 px-0">
-                <div class="issue-tab">
-                  <a class="check-center pl-3 pr-2">{{ form.select_all }}</a>
-                  <i class="fas fa-bug"></i>
+            {% for issue in issues %}
+                <div class="issue-row py-auto my-3">
+                <div class="d-flex col-12 px-0">
+                    <div class="issue-tab">
+                    <a class="check-center pl-3 pr-2">{{ form.select_all }}</a>
+                    <i class="fas fa-bug"></i>
+                    </div>
+                    <b><a class="pl-2" href="{% url 'issue-read' issue_slug=issue.slug">{{ issue.title }}</a></b>
                 </div>
-                <b><a class="pl-2" href="{% url 'issue-read' %}">Issue # 1</a></b>
-              </div>
-              <div class="col-12 px-0">
-                <a class="pl-5 sub-date">#1 Opened 7 days ago by User</a>
-              </div>
-            </div>
-
-            <div class="issue-row py-auto my-3">
-              <div class="d-flex col-12 px-0">
-                <div class="issue-tab">
-                  <a class="check-center pl-3 pr-2">{{ form.select_all }}</a>
-                  <i class="fas fa-bug"></i>
+                <div class="col-12 px-0">
+                    <a class="pl-5 sub-date">Opened {{ issue.created_at }}</a>
                 </div>
-                <b><a class="pl-2" href="{% url 'issue-read' %}">Issue # 1</a></b>
-              </div>
-              <div class="col-12 px-0">
-                <a class="pl-5 sub-date">#1 Opened 7 days ago by User</a>
-              </div>
-            </div>
+                </div>
+            {% endfor %}
 
           </div>
 
