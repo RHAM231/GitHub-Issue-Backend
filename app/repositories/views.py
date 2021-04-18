@@ -3,6 +3,7 @@ from django.views.generic import (
     ListView, DetailView
 )
 from . models import Repository, RepoFolder, RepoFile, LineOfCode
+from issues.models import Issue
 from django.db.models import Count
 
 
@@ -30,18 +31,24 @@ class RepoContentsListView(ListView):
         root_folder_name = repo.name + '_root'
         root_folder = RepoFolder.objects.get(name='repo_root', repository=repo_id, parent_folder=None)
         self.root = root_folder
-        queryset = RepoFolder.objects.all().filter(parent_folder=root_folder.id).annotate(issue_count=Count('repofolder'))
+        queryset = RepoFolder.objects.filter(parent_folder=root_folder.id).annotate(issue_count=Count('repofolder'))
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Projects'
-        files = RepoFile.objects.all().filter(parent_folder=self.root.id).annotate(issue_count=Count('repofile'))
+        files = RepoFile.objects.filter(parent_folder=self.root.id).annotate(issue_count=Count('repofile'))
         context['folders_and_files'] = {
             'folders': context['folder_contents'],
             'files': files
             }
         return context
+
+
+def get_issue_count(parent_id):
+    LineOfCode.objects.filter
+    issue_count = 1
+    return issue_count
 
 
 class FolderContentsListView(ListView):
@@ -52,14 +59,19 @@ class FolderContentsListView(ListView):
     def get_queryset(self):
         folder_id = self.kwargs['folder_id']
         self.folder = folder_id
-        queryset = RepoFolder.objects.all().filter(parent_folder=folder_id).annotate(issue_count=Count('repofolder'))
+
+        count = get_issue_count(332)
+        print(count)
+
+
+        queryset = RepoFolder.objects.filter(parent_folder=folder_id).annotate(issue_count=Count('repofolder'))
         print(queryset)
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Projects'
-        files = RepoFile.objects.all().filter(parent_folder=self.folder).annotate(issue_count=Count('repofile'))
+        files = RepoFile.objects.filter(parent_folder=self.folder).annotate(issue_count=Count('repofile'))
         context['folders_and_files'] = {
             'folders': context['folder_contents'],
             'files': files
@@ -84,8 +96,9 @@ class FileDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Files'
-        lines = LineOfCode.objects.all().filter(repofile=self.kwargs['file_id']).annotate(issue_count=Count('issue_loc'))
+        context['issues'] = Issue.objects.filter(associated_file=self.kwargs['file_id']).count
+        lines = LineOfCode.objects.filter(repofile=self.kwargs['file_id']).annotate(issue_count=Count('issue_loc'))
         context['lines'] = lines
         context['line_count'] = lines.count()
-        context['sloc'] = LineOfCode.objects.all().filter(repofile=self.kwargs['file_id']).exclude(content='').count()
+        context['sloc'] = LineOfCode.objects.filter(repofile=self.kwargs['file_id']).exclude(content='').count()
         return context

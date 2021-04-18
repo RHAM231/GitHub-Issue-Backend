@@ -43,11 +43,11 @@
               <div class="folder-file-button">
                 <a href="" class="issue-button">Issues</a>
                 <!-- Resize the number text for numbers greater than 99 -->
-                {% if issue_count > 99 %}
-                  <div class="issues-count text-center count-small"><a>{{ issue_count }}</a></div>
-                {% elif issue_count is 0 %}
+                {% if issues > 99 %}
+                  <div class="issues-count text-center count-small"><a>{{ issues }}</a></div>
+                {% elif issues is 0 %}
                 {% else %}
-                  <div class="issues-count text-center"><a>{{ issue_count }}</a></div>
+                  <div class="issues-count text-center"><a>{{ issues }}</a></div>
                 {% endif %}
               </div>
             </div>
