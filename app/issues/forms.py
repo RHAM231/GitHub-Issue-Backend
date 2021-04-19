@@ -4,9 +4,9 @@ from django.contrib.auth.forms import UserCreationForm
 
 
 FILTER_CHOICES = [
-    ('title', 'Filters'),
-    ('open_issues', 'Open Issues'),
-    ('closed_issues', 'Closed Issues'),
+    # ('title', 'Filters'),
+    ('Open', 'Open'),
+    ('Closed', 'Closed'),
     ('your_issues', 'Your Issues'),
 ]
 

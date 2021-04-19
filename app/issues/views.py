@@ -4,7 +4,8 @@ from django.views.generic import (
 )
 from . models import Issue
 from . forms import IssueSearchForm
-
+from django.db.models import Q
+import io
 
 # def issue_create(request):
 #     form = IssueCreateForm()
@@ -27,21 +28,58 @@ class IssueDetailView(DetailView):
     model = Issue
     template_name = 'issues/issue_read.html'
     context_object_name = 'issue'
+    # pk_url_kwarg = 'issue_id'
     slug_url_kwarg = 'issue_slug'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Issues'
+
+        issue = context['issue']
+        issue_body = issue._meta.get_field('body')
+        body_value = issue_body.value_from_object(issue)
+        if issue.associated_folder is not None:
+            issue_path = body_value.splitlines()[0].replace('Issue Location: ', '')
+            body_value = body_value.split('\n',7)[7]
+        else:
+            issue_path = None
+        context['issue_body'] = body_value
+        context['issue_path'] = issue_path
         return context
 
 
-# def issue_update(request):
-#     form = IssueCreateForm()
-#     context = {
-#         'form': form,
-#         'title': 'Issues',
-#     }
-#     return render(request, 'base/issue_update.html', context)
+class IssueUpdateView(UpdateView):
+    model = Issue
+    template_name = 'issues/issue_update.html'
+    context_object_name = 'issue'
+    slug_url_kwarg = 'issue_slug'
+    fields = ['title', 'associated_folder', 'associated_file', 'associated_loc', 'body']
+
+    def form_valid(self, form):
+        # form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    # def test_func(self)
+    #     issue = self.get_object()
+    #     if self.request.user == issue.author:
+    #         return True
+    #     return False
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Issues'
+
+        issue = context['issue']
+        issue_body = issue._meta.get_field('body')
+        body_value = issue_body.value_from_object(issue)
+        if issue.associated_folder is not None:
+            issue_path = body_value.splitlines()[0].replace('Issue Location: ', '')
+            body_value = body_value.split('\n',7)[7]
+        else:
+            issue_path = None
+        context['issue_body'] = body_value
+        context['issue_path'] = issue_path
+        return context
 
 
 # def issue_delete(request):
@@ -64,13 +102,27 @@ class IssueListView(ListView):
     model = Issue
     template_name = 'issues/issue_list.html'
     context_object_name = 'issues'
+    # paginate_by = 5
     form_class = IssueSearchForm
 
     def get_queryset(self):
+        form = self.form_class(self.request.GET)
+        if form.is_valid():
+            # condition1 = Q(state=form.cleaned_data['search'])
+            condition2 = Q(state=form.cleaned_data['filters'])
+            # condition3 = Q(field=form.cleaned_data['author'])
+            # condition4 = Q(repository=form.cleaned_data['projects'])
+            # condition5 = Q(field=form.cleaned_data['sort'])
+            # conditions = condition1 & condition2 & condition3 & condition4 & condition5
+            conditions = condition2
+            print(conditions)
+            queryset = Issue.objects.filter(conditions)
+            print(queryset)
         queryset = Issue.objects.all()
         return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Issues'
+        context['form'] = IssueSearchForm()
         return context

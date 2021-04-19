@@ -11,14 +11,14 @@
     <div class="col-lg-8 col-lg-offset-2
                 col-md-10 col-md-offset-1
                 col-sm-12 mx-auto">
-      <h2>Issue Title #1</h2>
+      <h2>{{ issue.title }}</h2>
     </div>
   </div>
   <div class="row issue-subheader">
     <div class="col-lg-8 col-lg-offset-2
                 col-md-10 col-md-offset-1
                 col-sm-12 mx-auto d-flex">
-      {% if condition %}
+      {% if issue.state == 'open' %}
       <div class="issue-open mr-2">
         <i class="fas fa-bug"></i>
         <a>Open</a>
@@ -30,7 +30,7 @@
       </div>
       {% endif %}
       <b><a>Username</a></b>
-      <a>&nbsp opened this issue time ago | 0 comments</a>
+      <a>&nbsp opened this issue {{ issue.created_at }} | 0 comments</a>
     </div>
   </div>
 
@@ -55,19 +55,25 @@
                 <a>| Owner</a>
               </div>
               <div class="ml-auto">
-                <a href="" class="edit-issue-button">Edit</a>
+                <a href="{% url 'issue-update' issue_slug=issue.slug %}" class="edit-issue-button">Edit</a>
               </div>
             </div>
 
             <div class="row mb-2 border-bottom"></div>
 
             <div class="row my-2">
-              <a>Project: &nbsp</a>
-              <b><a>Test Project</a></b>
+              <a>Repo: &nbsp</a>
+              <b><a>{{ issue.repository }}</a></b>
               <a>&nbsp Folder: &nbsp</a>
-              <b><a>base</a></b>
+              <b><a>{{ issue.associated_folder }}</a></b>
               <a>&nbsp File: &nbsp</a>
-              <b><a>None</a></b>
+              <b><a>{{ issue.associated_file }}</a></b>
+              <a>&nbsp Line: &nbsp</a>
+              <b><a>{{ issue.associated_loc }}</a></b>
+            </div>
+            <div class="row my-2">
+              <a>Path: &nbsp</a>
+              <b><a>{{ issue_path }}</a></b>
             </div>
 
             <div class="row mb-2 border-bottom"></div>
@@ -76,7 +82,7 @@
               {{ form.comment.label }}
             </div>
             <div class="row">
-                {% lorem 67 w %}
+                {{ issue_body }}
             </div>
 
             <div class="row d-flex flex-row-reverse py-3">
