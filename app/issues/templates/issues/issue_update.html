@@ -40,7 +40,7 @@
             </div>
             <div class="row my-2 d-flex">
               {% for field in form %}
-                {% if '_associate' in field.name %}
+                {% if 'associated_' in field.name %}
                   <a class="associate-tag">{{ field }}</a>
                 {% endif %}
               {% endfor %}

@@ -1125,7 +1125,7 @@ body, html {
 }
 
 // Style the title form and description form fields
-#id_title, #id_comment{
+#id_title, #id_body{
   border-radius: 7px;
   width: 100%;
   border: 1px solid;
@@ -1135,7 +1135,7 @@ body, html {
 }
 
 // Give the form fields a blue border on focus
-#id_title:focus, #id_comment:focus{
+#id_title:focus, #id_body:focus{
   border-color: #3c4ef1;
   outline: none;
 }
@@ -1155,17 +1155,17 @@ body, html {
 }
 
 // Style the individual dropdown fields
-#id_project_associate{
+#id_associated_folder{
   border-radius: 7px 0px 0px 7px;
 }
 
-#id_folder_associate{
+#id_associated_file{
   border-right: 1px solid;
   border-left: 1px solid;
   border-color: #cecece;
 }
 
-#id_file_associate{
+#id_associated_loc{
   border-radius: 0px 7px 7px 0px;
 }
 
