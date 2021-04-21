@@ -76,15 +76,10 @@ def set_stamp(path, folder, fname, loc, date, stamp_id):
     return stamp
 
 
-# Given our issue, delete it's current stamp, checking for the edge case where
-# we have a stamp only, without an issue description
+# Given our issue, delete it's current stamp
 def delete_stamp(issue):
-    nlines = issue.body.count('\n')
-    if nlines <= 6:
-        body = ''
-    else:
-        body = issue.body.split('\n',7)[7]
-    return (issue, body)
+    stamp = None
+    return (issue, stamp)
 
 
 # Define a method for setting our stamp attributes based on what associations are present
@@ -119,7 +114,7 @@ def set_association_atrs(issue):
 
 # If we're adding associations to an issue that previously had none, set the stamp attributes
 # and create it
-def create_stamp(issue, body=None):
+def create_stamp(issue):
     stamp_id = str(1234567812345678)
     # Set the date for when the stamp was generated
     date = dateformat.format(timezone.now(), 'Y-m-d H:i:s')
@@ -127,49 +122,47 @@ def create_stamp(issue, body=None):
     path, folder, fname, loc = set_association_atrs(issue)
     # Now set our stamp with the parameters
     stamp = set_stamp(path, folder, fname, loc, date, stamp_id)
-    # Append the stamp to the issue body, checking for the edge case of empty bodies
-    if body:
-        issue.body = stamp + body
-    else:
-        issue.body = stamp
-    return issue.body
+    # Populate our model field with our new stamp we set in the set_stamp method
+    issue.stamp = stamp
+    return issue.stamp
 
 
 # If we're changing existing associations on our Issue instance, first delete the
 # old stamp, then create a new one
 def update_stamp(issue):
-    issue, issue.body = delete_stamp(issue)
-    body = create_stamp(issue, body=issue.body)
-    return (issue, body)
+    issue, issue.stamp = delete_stamp(issue)
+    # body = create_stamp(issue, body=issue.body)
+    stamp = create_stamp(issue)
+    return (issue, stamp)
 
 
 # Given the old associations and the issue itself, check if any associations changed,
-# then update the body accordingly
-def update_body(old, issue):
+# then update the stamp accordingly
+def check_associations(old, issue):
     new = [issue.associated_folder, issue.associated_file, issue.associated_loc]
     # Check for changes
     if old != new:
-        # Check if all the old value were empty and if all the new values will be empty
+        # Check if all the old values were empty and if all the new values will be empty
         old_none = all(atr is None for atr in old)
         new_none = all(atr is None for atr in new)
 
         # If we're adding an association when there were none before, call the create stamp method
         if old_none == True and new_none == False:
             print('create')
-            issue.body = create_stamp(issue)
+            issue.stamp = create_stamp(issue)
         
         # If we're updating existing associations, call our update stamp method
         elif old_none == False and new_none == False:
             print('update')
-            issue, issue.body = update_stamp(issue)
+            issue, issue.stamp = update_stamp(issue)
 
         # If we're removing all associations, call our delete stamp method
         elif old_none == False and new_none == True:
             print('delete')
-            issue, issue.body = delete_stamp(issue)
-            return issue.body
-    # Return our new issue body to Issue's save method so we can update the field
-    return issue.body
+            issue, issue.stamp = delete_stamp(issue)
+            return issue.stamp
+    # Return our new issue stamp to Issue's save method so we can update the field
+    return issue.stamp
 
 
 # Define our Issue model for the database
@@ -189,6 +182,7 @@ class Issue(models.Model):
     closed_at = models.DateTimeField(null=True, blank=True) 
     number = models.IntegerField()
     slug = models.SlugField(max_length = 200)
+    stamp = models.TextField(null=True, blank=True, editable=False)
 
     # Foreignkeys
     repository = models.ForeignKey(
@@ -263,7 +257,7 @@ class Issue(models.Model):
         # If we're changing the associated files, folders or lines of codes, let's
         # update the body with our custom stamp methods defined above
         old = [self.__original_associated_folder, self.__original_associated_file, self.__original_associated_loc]
-        self.body = update_body(old, self)
+        self.stamp = check_associations(old, self)
         super().save(*args, **kwargs)
     
     # Built in redirect for create view

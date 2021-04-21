@@ -36,14 +36,14 @@ class IssueDetailView(DetailView):
         context['title'] = 'Issues'
 
         issue = context['issue']
-        issue_body = issue._meta.get_field('body')
-        body_value = issue_body.value_from_object(issue)
+        stamp = issue._meta.get_field('stamp')
+        stamp_value = stamp.value_from_object(issue)
         if issue.associated_folder is not None:
-            issue_path = body_value.splitlines()[0].replace('Issue Location: ', '')
-            body_value = body_value.split('\n',7)[7]
+            issue_path = stamp_value.splitlines()[0].replace('Issue Location: ', '')
+            # stamp_value = stamp_value.split('\n',7)[7]
         else:
             issue_path = None
-        context['issue_body'] = body_value
+        # context['issue_stamp'] = stamp_value
         context['issue_path'] = issue_path
         return context
 
@@ -70,14 +70,14 @@ class IssueUpdateView(UpdateView):
         context['title'] = 'Issues'
 
         issue = context['issue']
-        issue_body = issue._meta.get_field('body')
-        body_value = issue_body.value_from_object(issue)
+        stamp = issue._meta.get_field('stamp')
+        stamp_value = stamp.value_from_object(issue)
         if issue.associated_folder is not None:
-            issue_path = body_value.splitlines()[0].replace('Issue Location: ', '')
-            body_value = body_value.split('\n',7)[7]
+            issue_path = stamp_value.splitlines()[0].replace('Issue Location: ', '')
+            # stamp_value = stamp_value.split('\n',7)[7]
         else:
             issue_path = None
-        context['issue_body'] = body_value
+        # context['issue_stamp'] = stamp_value
         context['issue_path'] = issue_path
         return context
 
