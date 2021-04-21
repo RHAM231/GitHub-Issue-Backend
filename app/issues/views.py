@@ -1,9 +1,9 @@
 from django.shortcuts import render
 from django.views.generic import (
-    ListView, DeleteView, DetailView, UpdateView
+    ListView, DeleteView, DetailView, UpdateView, CreateView
 )
 from . models import Issue
-from . forms import IssueSearchForm
+from . forms import IssueSearchForm, IssueEntryForm
 from django.db.models import Q
 import io
 
@@ -14,6 +14,18 @@ import io
 #         'title': 'Issues',
 #     }
 #     return render(request, 'base/issue_create.html', context)
+
+
+class IssueCreateView(CreateView):
+    model = Issue
+    template_name = 'issues/issue_create.html'
+    slug_url_kwarg = 'issue_slug'
+    form_class = IssueEntryForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Issues'
+        return context
 
 
 # def issue_read(request):
@@ -53,11 +65,12 @@ class IssueUpdateView(UpdateView):
     template_name = 'issues/issue_update.html'
     context_object_name = 'issue'
     slug_url_kwarg = 'issue_slug'
-    fields = ['title', 'associated_folder', 'associated_file', 'associated_loc', 'body']
+    form_class = IssueEntryForm
+    # fields = ['title', 'associated_folder', 'associated_file', 'associated_loc', 'body']
 
     def form_valid(self, form):
         # form.instance.author = self.request.user
-        return super().form_valid(form)
+        return super(IssueUpdateView, self).form_valid(form)
 
     # def test_func(self)
     #     issue = self.get_object()

@@ -1,6 +1,8 @@
 from django import forms
+from django.forms import ModelForm
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
+from . models import Issue
 
 
 FILTER_CHOICES = [
@@ -81,3 +83,17 @@ class IssueSearchForm(forms.Form):
         widget=forms.Select(
             attrs={'class':'filter-field'},
             choices=SORT_CHOICES))
+
+
+class IssueEntryForm(ModelForm):
+    class Meta:
+        model = Issue
+        fields = ['title', 'body', 'associated_folder', 'associated_file', 'associated_loc']
+        association_fields = fields[2:4]
+
+    def __init__(self, *args, **kwargs):
+        super(IssueEntryForm, self).__init__(*args, **kwargs)
+
+        for field in self.fields:
+            if field.startswith('associated_'):
+                field.widget.attrs = {'class': 'associate-field'}

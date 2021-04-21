@@ -262,7 +262,7 @@ class Issue(models.Model):
     
     # Built in redirect for create view
     def get_absolute_url(self):
-        return reverse('issue-detail', kwargs={'issue_slug': self.slug})
+        return reverse('issue-read', kwargs={'issue_slug': self.slug})
 
     # Define which attribute the issue will be listed by in the admin portion of the site
     def __str__(self):
