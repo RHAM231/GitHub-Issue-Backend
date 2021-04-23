@@ -7,109 +7,6 @@ from . forms import IssueSearchForm, IssueEntryForm
 from django.db.models import Q
 import io
 
-# def issue_create(request):
-#     form = IssueCreateForm()
-#     context = {
-#         'form': form,
-#         'title': 'Issues',
-#     }
-#     return render(request, 'base/issue_create.html', context)
-
-
-class IssueCreateView(CreateView):
-    model = Issue
-    template_name = 'issues/issue_create.html'
-    slug_url_kwarg = 'issue_slug'
-    form_class = IssueEntryForm
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Issues'
-        return context
-
-
-# def issue_read(request):
-#     context = {
-#         'condition': True,
-#         'title': 'Issues',
-#     }
-#     return render(request, 'base/issue_read.html', context)
-
-
-class IssueDetailView(DetailView):
-    model = Issue
-    template_name = 'issues/issue_read.html'
-    context_object_name = 'issue'
-    # pk_url_kwarg = 'issue_id'
-    slug_url_kwarg = 'issue_slug'
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Issues'
-
-        issue = context['issue']
-        stamp = issue._meta.get_field('stamp')
-        stamp_value = stamp.value_from_object(issue)
-        if issue.associated_folder is not None:
-            issue_path = stamp_value.splitlines()[0].replace('Issue Location: ', '')
-            # stamp_value = stamp_value.split('\n',7)[7]
-        else:
-            issue_path = None
-        # context['issue_stamp'] = stamp_value
-        context['issue_path'] = issue_path
-        return context
-
-
-class IssueUpdateView(UpdateView):
-    model = Issue
-    template_name = 'issues/issue_update.html'
-    context_object_name = 'issue'
-    slug_url_kwarg = 'issue_slug'
-    form_class = IssueEntryForm
-    # fields = ['title', 'associated_folder', 'associated_file', 'associated_loc', 'body']
-
-    def form_valid(self, form):
-        # form.instance.author = self.request.user
-        return super(IssueUpdateView, self).form_valid(form)
-
-    # def test_func(self)
-    #     issue = self.get_object()
-    #     if self.request.user == issue.author:
-    #         return True
-    #     return False
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Issues'
-
-        issue = context['issue']
-        stamp = issue._meta.get_field('stamp')
-        stamp_value = stamp.value_from_object(issue)
-        if issue.associated_folder is not None:
-            issue_path = stamp_value.splitlines()[0].replace('Issue Location: ', '')
-            # stamp_value = stamp_value.split('\n',7)[7]
-        else:
-            issue_path = None
-        # context['issue_stamp'] = stamp_value
-        context['issue_path'] = issue_path
-        return context
-
-
-# def issue_delete(request):
-#     context = {
-#         'title': 'Issues',
-#     }
-#     return render(request, 'base/issue_delete.html', context)
-
-
-# def issue_list(request):
-#     # form = IssueSearchForm()
-#     context = {
-#         'form': form,
-#         'title': 'Issues',
-#     }
-#     return render(request, 'base/issue_list.html', context)
-
 
 class IssueListView(ListView):
     model = Issue
@@ -139,3 +36,96 @@ class IssueListView(ListView):
         context['title'] = 'Issues'
         context['form'] = IssueSearchForm()
         return context
+
+
+class IssueDetailView(DetailView):
+    model = Issue
+    template_name = 'issues/issue_read.html'
+    context_object_name = 'issue'
+    # pk_url_kwarg = 'issue_id'
+    slug_url_kwarg = 'issue_slug'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Issues'
+
+        issue = context['issue']
+        stamp = issue._meta.get_field('stamp')
+        stamp_value = stamp.value_from_object(issue)
+        if issue.associated_folder is not None:
+            issue_path = stamp_value.splitlines()[0].replace('Issue Location: ', '')
+            # stamp_value = stamp_value.split('\n',7)[7]
+        else:
+            issue_path = None
+        # context['issue_stamp'] = stamp_value
+        context['issue_path'] = issue_path
+        return context
+
+
+class IssueCreateView(CreateView):
+    model = Issue
+    template_name = 'issues/issue_form.html'
+    slug_url_kwarg = 'issue_slug'
+    form_class = IssueEntryForm
+
+    def form_valid(self, form):
+        # form.instance.author = self.request.user
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Issues'
+        context['create'] = 'create'
+        return context
+
+
+class IssueUpdateView(UpdateView):
+    model = Issue
+    template_name = 'issues/issue_form.html'
+    context_object_name = 'issue'
+    slug_url_kwarg = 'issue_slug'
+    form_class = IssueEntryForm
+    # fields = ['title', 'associated_folder', 'associated_file', 'associated_loc', 'body']
+
+    def form_valid(self, form):
+        # form.instance.author = self.request.user
+        return super(IssueUpdateView, self).form_valid(form)
+
+    # def test_func(self)
+    #     issue = self.get_object()
+    #     if self.request.user == issue.author:
+    #         return True
+    #     return False
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Issues'
+        context['update'] = 'update'
+
+        issue = context['issue']
+        stamp = issue._meta.get_field('stamp')
+        stamp_value = stamp.value_from_object(issue)
+        if issue.associated_folder is not None:
+            issue_path = stamp_value.splitlines()[0].replace('Issue Location: ', '')
+            # stamp_value = stamp_value.split('\n',7)[7]
+        else:
+            issue_path = None
+        # context['issue_stamp'] = stamp_value
+        context['issue_path'] = issue_path
+        return context
+
+
+# def issue_delete(request):
+#     context = {
+#         'title': 'Issues',
+#     }
+#     return render(request, 'base/issue_delete.html', context)
+
+
+# def issue_list(request):
+#     # form = IssueSearchForm()
+#     context = {
+#         'form': form,
+#         'title': 'Issues',
+#     }
+#     return render(request, 'base/issue_list.html', context)

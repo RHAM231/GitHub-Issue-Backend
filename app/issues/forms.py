@@ -88,12 +88,18 @@ class IssueSearchForm(forms.Form):
 class IssueEntryForm(ModelForm):
     class Meta:
         model = Issue
-        fields = ['title', 'body', 'associated_folder', 'associated_file', 'associated_loc']
-        association_fields = fields[2:4]
+        fields = ['title', 'body', 'repository', 'associated_folder', 'associated_file', 'associated_loc']
 
     def __init__(self, *args, **kwargs):
         super(IssueEntryForm, self).__init__(*args, **kwargs)
 
-        for field in self.fields:
-            if field.startswith('associated_'):
+        self.fields['associated_folder'].label = 'Folder'
+        self.fields['associated_file'].label = 'File'
+        self.fields['associated_loc'].label = 'Line of Code'
+
+        for visible in self.visible_fields():
+            visible.field.widget.attrs['class'] = 'issue-form-field'
+
+        for key, field in self.fields.items():
+            if key.startswith('associated_'):
                 field.widget.attrs = {'class': 'associate-field'}

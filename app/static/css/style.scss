@@ -1125,7 +1125,7 @@ body, html {
 }
 
 // Style the title form and description form fields
-#id_title, #id_body{
+.issue-form-field{
   border-radius: 7px;
   width: 100%;
   border: 1px solid;
@@ -1135,9 +1135,13 @@ body, html {
 }
 
 // Give the form fields a blue border on focus
-#id_title:focus, #id_body:focus{
+.issue-form-field:focus{
   border-color: #3c4ef1;
   outline: none;
+}
+
+#id_repository{
+  height: 36px;
 }
 
 // Make the issue associate dropdowns take up the full screen width
