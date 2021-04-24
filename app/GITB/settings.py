@@ -137,7 +137,7 @@ LOGIN_REDIRECT_URL = 'home'
 LOGIN_URL = 'login'
 TEST = config('test', default='')
 TEST_TOKEN = config('TEST_TOKEN', default='')
-USER = config('USER', default='')
+GH_USER = config('USER', default='')
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',

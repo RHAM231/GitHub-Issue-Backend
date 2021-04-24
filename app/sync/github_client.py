@@ -12,7 +12,7 @@ from consume_api.serializers import RepoSerializer, RepoFolderSerializer, RepoFi
 
 
 #################################################################################################################################
-# INTRODUCTION
+# SUMMARY
 #################################################################################################################################
 
 '''
@@ -263,26 +263,38 @@ def get_issue(lookup, repo_pk, headers, issue_id):
 
 # Given data from our frontend issue creation form, use the 3rd party module, 
 # GitHub, to create a new issue on GitHub
-def create_issue(token, repo, data):
+def create_issue(token, user, data, stamp, issue_id):
+    # Set attributes we will use to get the repo and create the issue
     g = Github(token)
-    repo = g.get_repo("RHAM231-IssueTracker/IssueTrackerSandbox")
+    user_repo = user + '/' + data['repository'].name
+    if stamp:
+        body = stamp + data['body']
+    else:
+        body = data['body']
+
+    # Use the Python GitHub package to create our issue on GitHub
+    repo = g.get_repo(user_repo)
     i = repo.create_issue(
-        title="Some Issue",
-        body="Text of the body.",
+        title=data['title'],
+        body=body,
     )
+    # Grab the returned issue number from GitHub and update our own database instance
+    # with it
+    Issue.objects.filter(id=issue_id).update(number=i.number)
 
 
 # Given data from our frontend, edit an existing issue on GitHub
-def update_issue(token, issue):
+def update_issue(token, user, data, issue_number):
     g = Github(token)
-    repo = g.get_repo("RHAM231-IssueTracker/IssueTrackerSandbox")
-    db_issue = Issue.objects.get(number=issue)
+    user_repo = user + '/' + data['repository'].name
+    repo = g.get_repo(user_repo)
+    # db_issue = Issue.objects.get(number=issue_number)
     print(db_issue.title)
-    i = repo.get_issue(issue)
+    i = repo.get_issue(issue_number)
     e = i.edit(
-        title=db_issue.title,
-        state=db_issue.state,
-        body=db_issue.body,
+        title=data['title'],
+        # state=db_issue.state,
+        body=data['body'],
     )
 
 

@@ -14,7 +14,7 @@ from repositories.models import RepoFile, RepoFolder, Repository, LineOfCode
 
 
 #################################################################################################################################
-# INTRODUCTION
+# SUMMARY
 #################################################################################################################################
 
 '''
@@ -29,7 +29,6 @@ custom CRUD methods for working with stamps and tie these into our Issue model b
 If adding or updating Issue associations, we will generate a stamp and append it to the top of the issue body. If deleting, we 
 will remove the stamp.
 '''
-
 
 #################################################################################################################################
 # BEGIN SCRIPT
@@ -180,7 +179,7 @@ class Issue(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(null=True, blank=True)
     closed_at = models.DateTimeField(null=True, blank=True) 
-    number = models.IntegerField()
+    number = models.IntegerField(null=True, blank=True)
     slug = models.SlugField(max_length = 200)
     stamp = models.TextField(null=True, blank=True, editable=False)
 
