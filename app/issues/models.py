@@ -59,7 +59,6 @@ class TestIssue(models.Model):
         super().save(*args, **kwargs)
 
 
-
 # Given all the necessary stamp parameters, set our stamp and return it to our
 # create stamp method below
 def set_stamp(path, folder, fname, loc, date, stamp_id):

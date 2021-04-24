@@ -42,9 +42,6 @@
     </div>
   </div>
 
-  <form action="/TBD/" method="POST"></form>
-    {% csrf_token %}
-
     <div class="row mt-4 mb-5">
       <div class="col-lg-8 col-lg-offset-2
                 col-md-10 col-md-offset-1
@@ -96,7 +93,11 @@
             <div class="row d-flex flex-row-reverse py-3">
               <a href="" class="ml-2 delete-button">Delete Issue</a>
               <!-- <input type="submit" value="Delete Issue" class="ml-2 delete-button"> -->
-              <input type="submit" value="Close Issue" class="mx-2 close-button">
+              <form method="POST">
+                {% csrf_token %}
+                {{ form }}
+                <input type="submit" value="Close Issue" class="mx-2 close-button">
+              </form>
             </div>
         
           </div>
@@ -104,9 +105,6 @@
 
       </div>
     </div>
-
-
-  </form>
 
 </div>
 

@@ -103,3 +103,9 @@ class IssueEntryForm(ModelForm):
         for key, field in self.fields.items():
             if key.startswith('associated_'):
                 field.widget.attrs = {'class': 'associate-field'}
+
+
+class OpenCloseIssueForm(ModelForm):
+    class Meta:
+        model = Issue
+        fields = ['state']

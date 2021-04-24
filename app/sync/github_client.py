@@ -288,8 +288,6 @@ def update_issue(token, user, data, issue_number):
     g = Github(token)
     user_repo = user + '/' + data['repository'].name
     repo = g.get_repo(user_repo)
-    # db_issue = Issue.objects.get(number=issue_number)
-    print(db_issue.title)
     i = repo.get_issue(issue_number)
     e = i.edit(
         title=data['title'],

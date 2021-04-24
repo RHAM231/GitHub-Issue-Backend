@@ -5,14 +5,15 @@ import io
 from django.db.models import Q
 from django.conf import settings
 from django.shortcuts import render
+from django.views.generic.edit import FormMixin
 from django.views.generic import (
     ListView, DeleteView, DetailView, UpdateView, CreateView
 )
 
 # Django Imports: Logic specific to this project
 from . models import Issue
-from . forms import IssueSearchForm, IssueEntryForm
 from sync.github_client import create_issue, update_issue
+from . forms import IssueSearchForm, IssueEntryForm, OpenCloseIssueForm
 
 
 #################################################################################################################################
@@ -68,12 +69,27 @@ class IssueListView(ListView):
         return context
 
 
-class IssueDetailView(DetailView):
+class IssueDetailView(FormMixin, DetailView):
     model = Issue
     template_name = 'issues/issue_read.html'
     context_object_name = 'issue'
-    # pk_url_kwarg = 'issue_id'
     slug_url_kwarg = 'issue_slug'
+    form_class = OpenCloseIssueForm
+
+    def form_valid(self, form):
+        form.save()
+        return super(IssueDetailView, self).form_valid(form)
+
+    # def get_success_url(self):
+    #     return reverse('issue-read', kwargs={'slug': self.object.slug})
+
+    # def post(self, request, *args, **kwargs):
+    #     self.object = self.get_object()
+    #     form = self.get_form()
+    #     if form.is_valid():
+    #         return self.form_valid(form)
+    #     else:
+    #         return self.form_invalid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -84,11 +100,11 @@ class IssueDetailView(DetailView):
         stamp_value = stamp.value_from_object(issue)
         if issue.associated_folder is not None:
             issue_path = stamp_value.splitlines()[0].replace('Issue Location: ', '')
-            # stamp_value = stamp_value.split('\n',7)[7]
         else:
             issue_path = None
-        # context['issue_stamp'] = stamp_value
+
         context['issue_path'] = issue_path
+        context['form'] = OpenCloseIssueForm()
         return context
 
 
@@ -135,11 +151,15 @@ class IssueCreateView(CreateView):
 
 
 class IssueUpdateView(UpdateView):
+    # Set our standard values for the create view
     model = Issue
     template_name = 'issues/issue_form.html'
     context_object_name = 'issue'
     slug_url_kwarg = 'issue_slug'
     form_class = IssueEntryForm
+
+    # Pull our GitHub login info from settings.py to pass to our 
+    # create_issue method below
     token = settings.TEST_TOKEN
     gh_user = settings.GH_USER
 
