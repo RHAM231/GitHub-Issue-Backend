@@ -5,7 +5,14 @@ import io
 from django.db.models import Q
 from django.conf import settings
 from django.shortcuts import render
-from django.views.generic.edit import FormMixin
+# from django.views.generic.edit import FormMixin
+
+# from django.http import HttpResponseForbidden
+from django.views import View
+from django.urls import reverse
+from django.views.generic import FormView
+from django.views.generic.detail import SingleObjectMixin
+
 from django.views.generic import (
     ListView, DeleteView, DetailView, UpdateView, CreateView
 )
@@ -69,27 +76,46 @@ class IssueListView(ListView):
         return context
 
 
-class IssueDetailView(FormMixin, DetailView):
+class OpenCloseIssueView(UpdateView):
+    template_name = 'issues/issue_read.html'
+    form_class = OpenCloseIssueForm
+    model = Issue
+    slug_url_kwarg = 'issue_slug'
+
+    def form_valid(self, form):
+
+        # self.object = form.save(commit=False)
+
+        if self.object.state == 'open':
+            self.object.state = 'closed'
+        elif self.object.state == 'closed':
+            self.object.state = 'open'
+
+        self.object.save()
+
+        # return render(self.template_name, self.get_context_data())
+
+        # if self.object.state == 'open':
+        #     self.object.state = 'closed'
+        # elif self.object.state == 'closed':
+        #     self.object.state = 'open'
+        # form.save(self.object.state)
+        return super(OpenCloseIssueView, self).form_valid(form)
+
+
+    # def post(self, request, *args, **kwargs):
+    #     self.object = self.get_object()
+    #     return super().post(request, *args, **kwargs)
+
+    def get_success_url(self):
+        return reverse('issue-read', kwargs={'issue_slug': self.object.slug})
+
+
+class IssueDetailView(DetailView):
     model = Issue
     template_name = 'issues/issue_read.html'
     context_object_name = 'issue'
     slug_url_kwarg = 'issue_slug'
-    form_class = OpenCloseIssueForm
-
-    def form_valid(self, form):
-        form.save()
-        return super(IssueDetailView, self).form_valid(form)
-
-    # def get_success_url(self):
-    #     return reverse('issue-read', kwargs={'slug': self.object.slug})
-
-    # def post(self, request, *args, **kwargs):
-    #     self.object = self.get_object()
-    #     form = self.get_form()
-    #     if form.is_valid():
-    #         return self.form_valid(form)
-    #     else:
-    #         return self.form_invalid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -104,8 +130,19 @@ class IssueDetailView(FormMixin, DetailView):
             issue_path = None
 
         context['issue_path'] = issue_path
-        context['form'] = OpenCloseIssueForm()
+        context['form'] = OpenCloseIssueForm(initial={'state': self.object.state })
         return context
+
+
+class IssueView(View):
+
+    def get(self, request, *args, **kwargs):
+        view = IssueDetailView.as_view()
+        return view(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        view = OpenCloseIssueView.as_view()
+        return view(request, *args, **kwargs)
 
 
 class IssueCreateView(CreateView):
