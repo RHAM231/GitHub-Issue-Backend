@@ -109,3 +109,4 @@ class OpenCloseIssueForm(ModelForm):
     class Meta:
         model = Issue
         fields = ['state']
+        widgets = {'state': forms.HiddenInput()}

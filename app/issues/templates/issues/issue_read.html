@@ -69,7 +69,9 @@
             <div class="row my-2">
               <a>Repo: &nbsp</a>
               <b><a>{{ issue.repository }}</a></b>
-              <a>&nbsp Folder: &nbsp</a>
+            </div>
+            <div class="row my-2">
+              <a>Folder: &nbsp</a>
               <b><a>{{ issue.associated_folder }}</a></b>
               <a>&nbsp File: &nbsp</a>
               <b><a>{{ issue.associated_file }}</a></b>
@@ -89,6 +91,8 @@
             <div class="row">
                 {{ issue.body }}
             </div>
+            
+            <div class="row mt-3 mb-2 border-bottom"></div>
 
             <div class="row d-flex flex-row-reverse py-3">
               <a href="" class="ml-2 delete-button">Delete Issue</a>
@@ -96,7 +100,11 @@
               <form method="POST">
                 {% csrf_token %}
                 {{ form }}
-                <input type="submit" value="Close Issue" class="mx-2 close-button">
+                {% if issue.state == 'open' %}
+                  <input type="submit" value="Close Issue" class="mx-2 close-button">
+                {% else %}
+                  <input type="submit" value="Open Issue" class="mx-2 close-button">
+                {% endif %}
               </form>
             </div>
         

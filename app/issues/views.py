@@ -46,6 +46,7 @@ with the newly created GitHub issue number.
 #################################################################################################################################
 
 
+# Define a view to list all our issues
 class IssueListView(ListView):
     model = Issue
     template_name = 'issues/issue_list.html'
@@ -76,41 +77,19 @@ class IssueListView(ListView):
         return context
 
 
-class OpenCloseIssueView(UpdateView):
-    template_name = 'issues/issue_read.html'
-    form_class = OpenCloseIssueForm
-    model = Issue
-    slug_url_kwarg = 'issue_slug'
+# Define a generic view to display a single issue. Reroute to either a detail view or
+# an update view depending on whether we're using get or post.
+class IssueView(View):
+    def get(self, request, *args, **kwargs):
+        view = IssueDetailView.as_view()
+        return view(request, *args, **kwargs)
 
-    def form_valid(self, form):
-
-        # self.object = form.save(commit=False)
-
-        if self.object.state == 'open':
-            self.object.state = 'closed'
-        elif self.object.state == 'closed':
-            self.object.state = 'open'
-
-        self.object.save()
-
-        # return render(self.template_name, self.get_context_data())
-
-        # if self.object.state == 'open':
-        #     self.object.state = 'closed'
-        # elif self.object.state == 'closed':
-        #     self.object.state = 'open'
-        # form.save(self.object.state)
-        return super(OpenCloseIssueView, self).form_valid(form)
+    def post(self, request, *args, **kwargs):
+        view = OpenCloseIssueView.as_view()
+        return view(request, *args, **kwargs)
 
 
-    # def post(self, request, *args, **kwargs):
-    #     self.object = self.get_object()
-    #     return super().post(request, *args, **kwargs)
-
-    def get_success_url(self):
-        return reverse('issue-read', kwargs={'issue_slug': self.object.slug})
-
-
+# If using get, just display the issue with it's parameters and the update form in context
 class IssueDetailView(DetailView):
     model = Issue
     template_name = 'issues/issue_read.html'
@@ -121,9 +100,11 @@ class IssueDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Issues'
 
+        # Get our stamp text to display as additional data
         issue = context['issue']
         stamp = issue._meta.get_field('stamp')
         stamp_value = stamp.value_from_object(issue)
+        # Create a stamp path parameter from the stamp info to add to context
         if issue.associated_folder is not None:
             issue_path = stamp_value.splitlines()[0].replace('Issue Location: ', '')
         else:
@@ -134,15 +115,26 @@ class IssueDetailView(DetailView):
         return context
 
 
-class IssueView(View):
+# If using post, check whether the issue is open or closed, update it, and 
+# then return the issue's detail view
+class OpenCloseIssueView(UpdateView):
+    template_name = 'issues/issue_read.html'
+    form_class = OpenCloseIssueForm
+    model = Issue
+    slug_url_kwarg = 'issue_slug'
 
-    def get(self, request, *args, **kwargs):
-        view = IssueDetailView.as_view()
-        return view(request, *args, **kwargs)
+    # If the issue is closed, open it. If open, close it.
+    def form_valid(self, form):
+        if self.object.state == 'open':
+            self.object.state = 'closed'
+        elif self.object.state == 'closed':
+            self.object.state = 'open'
+        self.object.save()
+        return super(OpenCloseIssueView, self).form_valid(form)
 
-    def post(self, request, *args, **kwargs):
-        view = OpenCloseIssueView.as_view()
-        return view(request, *args, **kwargs)
+    # Redirect to our detail view
+    def get_success_url(self):
+        return reverse('issue-read', kwargs={'issue_slug': self.object.slug})
 
 
 class IssueCreateView(CreateView):
@@ -152,8 +144,7 @@ class IssueCreateView(CreateView):
     slug_url_kwarg = 'issue_slug'
     form_class = IssueEntryForm
 
-    # Pull our GitHub login info from settings.py to pass to our 
-    # create_issue method below
+    # Pull our GitHub login info from settings.py to pass to our create_issue method below
     token = settings.TEST_TOKEN
     gh_user = settings.GH_USER
 
@@ -195,8 +186,7 @@ class IssueUpdateView(UpdateView):
     slug_url_kwarg = 'issue_slug'
     form_class = IssueEntryForm
 
-    # Pull our GitHub login info from settings.py to pass to our 
-    # create_issue method below
+    # Pull our GitHub login info from settings.py to pass to our create_issue method below
     token = settings.TEST_TOKEN
     gh_user = settings.GH_USER
 
@@ -215,12 +205,6 @@ class IssueUpdateView(UpdateView):
         context['update'] = 'update'
         return context
 
-
-# def issue_delete(request):
-#     context = {
-#         'title': 'Issues',
-#     }
-#     return render(request, 'base/issue_delete.html', context)
 
 #################################################################################################################################
 # END

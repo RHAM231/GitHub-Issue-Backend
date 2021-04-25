@@ -75,7 +75,7 @@
 
             {% if update %}
               <div class="row d-flex justify-content-center py-3">
-                <input type="submit" value="Cancel" class="mx-2 form-button-cancel">
+                <a class="mx-2 form-button-cancel" href="{% url 'issue-read' object.slug %}">Cancel</a>
                 <input type="submit" value="Update Issue" class="mx-2 form-button">
               </div>
             {% endif %}

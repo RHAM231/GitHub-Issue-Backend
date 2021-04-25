@@ -357,6 +357,8 @@ body, html {
 
 .form-button-cancel {
   color: #b90000;
+  text-align: center;
+  line-height: 40px;
 }
 
 .delete-button {
