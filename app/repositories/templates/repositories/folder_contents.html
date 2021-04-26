@@ -32,9 +32,13 @@
                 </div>
                 <div class="folder-file-header">
                   {% if key == 'folders' %}
-                    <a class="custom-header" href="{% url 'folder-contents' instance.path instance.id %}">
+                    {% if instance.path == '' %}
+                      <a class="custom-header" href="{% url 'root-contents' instance.id %}">
+                    {% else %}
+                      <a class="custom-header" href="{% url 'folder-contents' instance.path instance.id %}">
+                    {% endif %}
                   {% elif key == 'files' %}
-                    <a class="custom-header" href="{% url 'file-contents' instance.path instance.id %}">
+                    <a class="custom-header" href="{% url 'file-contents' path=instance.path file_id=instance.id %}">
                   {% endif %}
                     {{ instance.name }}
                     </a>
