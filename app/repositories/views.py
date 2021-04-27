@@ -27,6 +27,7 @@ class RepoContentsListView(ListView):
 
     def get_queryset(self):
         repo_id = self.kwargs['repo_id']
+        print(repo_id)
         repo = Repository.objects.get(id=repo_id)
         root_folder_name = repo.name + '_root'
         root_folder = RepoFolder.objects.get(name='repo_root', repository=repo_id, parent_folder=None)
@@ -60,6 +61,7 @@ class FolderContentsListView(ListView):
         folder_id = self.kwargs['folder_id']
         self.folder = folder_id
 
+        print('PRINTED FROM FOLDER VIEW')
         count = get_issue_count(332)
         print(count)
 
@@ -92,6 +94,14 @@ class FileDetailView(DetailView):
     template_name = 'repositories/file_contents.html'
     context_object_name = 'file'
     pk_url_kwarg = 'file_id'
+    print('test')
+
+    def get_queryset(self):
+        print('PRINTING file_id')
+        print(self.kwargs['file_id'])
+        queryset = RepoFile.objects.get(pk=self.kwargs['file_id'])
+        print(queryset)
+        return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

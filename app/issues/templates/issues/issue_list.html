@@ -42,17 +42,17 @@
           </div>
           <div class="row mx-0 header-bottom">
             <div class="col-md-4 col-sm-12 d-flex vertical-align" style="white-space: nowrap;">
-              <a class="pl-3 pr-2">{{ form.select_all }}</a>
+              <!-- <a class="pl-3 pr-2">{{ form.select_all }}</a> -->
               <i class="pr-2 fas fa-bug"></i>
               <a>{{ form.open_closed.0 }}</a>
               <i class="pr-2 pl-2 far fa-check-circle"></i>
               <a>{{ form.open_closed.1 }}</a>
             </div>
-            <div class="col-md-8 col-sm-12">
+            <!-- <div class="col-md-8 col-sm-12">
               <div class="issue-dropdown-filters">
                 <a>{{ form.author }}{{ form.projects }}{{ form.sort }}</a>
               </div>
-            </div>
+            </div> -->
           </div>
         </div>
         <div class="issues-container py-3">
@@ -63,8 +63,8 @@
                 <div class="issue-row py-auto my-3">
                 <div class="d-flex col-12 px-0">
                     <div class="issue-tab">
-                    <a class="check-center pl-3 pr-2">{{ form.select_all }}</a>
-                    <i class="fas fa-bug"></i>
+                    <!-- <a class="check-center pl-3 pr-2">{{ form.select_all }}</a> -->
+                      <i class="fas fa-bug"></i>
                     </div>
                     <b><a class="pl-2" href="{% url 'issue-read' issue_slug=issue.slug %}">{{ issue.title }}</a></b>
                 </div>

@@ -51,7 +51,7 @@ class IssueListView(ListView):
     model = Issue
     template_name = 'issues/issue_list.html'
     context_object_name = 'issues'
-    # paginate_by = 5
+    paginate_by = 5
     form_class = IssueSearchForm
 
     def get_queryset(self):

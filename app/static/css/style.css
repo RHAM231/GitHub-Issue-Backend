@@ -984,6 +984,7 @@ body, html {
   position: relative;
   background: #3c4ef1;
   border-radius: 5px 5px 5px 5px;
+  text-align: center;
 }
 
 .issue-tab > i, .issue-tab > a {
