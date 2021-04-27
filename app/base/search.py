@@ -8,27 +8,29 @@ from issues import models as issue_models
 def get_search_models(value):
     initial_models = ['list models here']
 
-
-
-    model_classes = dict([(name, cls) for name, cls in models.__dict__.items() if isinstance(cls, type)])
-    filter_classes = ()
-    for key in filter_classes:
-        model_classes.pop(key, None)
-    models = list(model_classes.values())
+    print(issue_models)
 
 
 
-    model_names = [model.__name__ for model in initial_models]
-    model_dict = dict(zip(model_names, initial_models))
-    if value:
-        for name in model_names:
-            if value in model_names:
-                search_models = [model_dict[value]]
-            else:
-                search_models = []
-    else:
-        search_models = initial_models
-    return search_models
+    # model_classes = dict([(name, cls) for name, cls in initial_models.__dict__.items() if isinstance(cls, type)])
+    # filter_classes = ()
+    # for key in filter_classes:
+    #     model_classes.pop(key, None)
+    # models = list(model_classes.values())
+
+
+
+    # model_names = [model.__name__ for model in initial_models]
+    # model_dict = dict(zip(model_names, initial_models))
+    # if value:
+    #     for name in model_names:
+    #         if value in model_names:
+    #             search_models = [model_dict[value]]
+    #         else:
+    #             search_models = []
+    # else:
+    #     search_models = initial_models
+    # return search_models
 
 
 def get_search_results(form):

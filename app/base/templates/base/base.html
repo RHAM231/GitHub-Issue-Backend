@@ -93,7 +93,7 @@ See views.py under the projects app
       </ul>
       <ul class="navbar-nav ml-auto">
         <li class="nav-item nav-search">
-          <form class="pr-4 border-right" action="" method="get">
+          <form class="pr-4 border-right" action="{% url 'search-results' %}" method="get">
             <a class="px-2">Search Site:</a>
             {{ ms_search_form.master_search }}
             <button class="button-search my-2 my-sm-0" type="submit">Search</button>

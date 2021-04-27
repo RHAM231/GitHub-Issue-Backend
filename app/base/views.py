@@ -14,6 +14,13 @@ def home(request):
     return render(request, 'base/home.html', context)
 
 
+def search_results(request):
+    context = {
+        'title': 'Search Results'
+    }
+    return render(request, 'base/search_results.html', context)
+
+
 def about(request):
     context = {
         'title': 'About',
