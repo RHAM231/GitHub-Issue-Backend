@@ -50,39 +50,49 @@ class IssueSearchForm(forms.Form):
     search = forms.CharField(
         required=False,
         widget=forms.TextInput(
-            attrs={'placeholder':'is:issue is:open', 'class': 'issue-search'}
+            attrs={'placeholder':'Search title, author, date, etc.', 'class': 'issue-search'}
         ))
+    open_filter = forms.CharField(
+        required=False,
+    )
+    closed_filter = forms.CharField(
+        required=False,
+    )
         
-    filters = forms.CharField(
-        required=False, 
-        widget=forms.Select(
-            attrs={'class':'filter-field'},
-            choices=FILTER_CHOICES))
+    # filters = forms.CharField(
+    #     required=False, 
+    #     widget=forms.Select(
+    #         attrs={'class':'filter-field'},
+    #         choices=FILTER_CHOICES))
 
-    select_all = forms.BooleanField(
-        required=False)
+    # select_all = forms.BooleanField(
+    #     required=False)
 
-    open_closed = forms.ChoiceField(
-        choices=OPEN_CLOSED_CHOICES, 
-        widget=forms.RadioSelect(attrs={'class':'test'}))
+    # open_closed = forms.ChoiceField(
+    #     choices=OPEN_CLOSED_CHOICES, 
+    #     widget=forms.RadioSelect(attrs={'class':'test'}))
 
-    author = forms.CharField(
-        required=False, 
-        widget=forms.Select(
-            attrs={'class':'filter-field'},
-            choices=AUTHOR_CHOICES))
+    # author = forms.CharField(
+    #     required=False, 
+    #     widget=forms.Select(
+    #         attrs={'class':'filter-field'},
+    #         choices=AUTHOR_CHOICES))
 
-    projects = forms.CharField(
-        required=False, 
-        widget=forms.Select(
-            attrs={'class':'filter-field'},
-            choices=PROJECT_CHOICES))
+    # projects = forms.CharField(
+    #     required=False, 
+    #     widget=forms.Select(
+    #         attrs={'class':'filter-field'},
+    #         choices=PROJECT_CHOICES))
 
-    sort = forms.CharField(
-        required=False, 
-        widget=forms.Select(
-            attrs={'class':'filter-field'},
-            choices=SORT_CHOICES))
+    # sort = forms.CharField(
+    #     required=False, 
+    #     widget=forms.Select(
+    #         attrs={'class':'filter-field'},
+    #         choices=SORT_CHOICES))
+
+
+class IssueStateFilterForm(forms.Form):
+    btn = forms.CharField()
 
 
 class IssueEntryForm(ModelForm):

@@ -11,6 +11,7 @@ from django.shortcuts import render
 from django.views import View
 from django.urls import reverse
 from django.views.generic import FormView
+from django.views.generic.edit import FormMixin
 from django.views.generic.detail import SingleObjectMixin
 
 from django.views.generic import (
@@ -20,7 +21,7 @@ from django.views.generic import (
 # Django Imports: Logic specific to this project
 from . models import Issue
 from sync.github_client import create_issue, update_issue
-from . forms import IssueSearchForm, IssueEntryForm, OpenCloseIssueForm
+from . forms import IssueSearchForm, IssueEntryForm, OpenCloseIssueForm, IssueStateFilterForm
 
 
 #################################################################################################################################
@@ -47,27 +48,32 @@ with the newly created GitHub issue number.
 
 
 # Define a view to list all our issues
-class IssueListView(ListView):
+class IssueListView(FormMixin, ListView):
     model = Issue
     template_name = 'issues/issue_list.html'
     context_object_name = 'issues'
     paginate_by = 5
     form_class = IssueSearchForm
 
-    def get_queryset(self):
+    def get_queryset(self, **kwargs):
         form = self.form_class(self.request.GET)
-        if form.is_valid():
-            # condition1 = Q(state=form.cleaned_data['search'])
-            condition2 = Q(state=form.cleaned_data['filters'])
-            # condition3 = Q(field=form.cleaned_data['author'])
-            # condition4 = Q(repository=form.cleaned_data['projects'])
-            # condition5 = Q(field=form.cleaned_data['sort'])
-            # conditions = condition1 & condition2 & condition3 & condition4 & condition5
-            conditions = condition2
-            print(conditions)
-            queryset = Issue.objects.filter(conditions)
-            print(queryset)
-        queryset = Issue.objects.all()
+        if self.request.GET and form.is_valid():
+            condition1 = Q(title__icontains=form.cleaned_data['search'])
+            condition2 = Q(created_at__icontains=form.cleaned_data['search'])
+            condition3 = Q(body__icontains=form.cleaned_data['search'])
+            conditions = condition1 & condition2 & condition3
+            # queryset = Issue.objects.filter(state='open').order_by('created_at')
+            if 'open' in self.request.GET:
+                print('open was clicked')
+                queryset = Issue.objects.filter(conditions, state='open').order_by('created_at')
+            elif 'closed' in self.request.GET:
+                print('closed was clicked')
+                queryset = Issue.objects.filter(conditions, state='closed').order_by('created_at')
+            else:
+                print('search was clicked')
+                queryset = Issue.objects.filter(conditions, state='open').order_by('created_at')
+        else:
+            queryset = Issue.objects.all().order_by('created_at')
         return queryset
 
     def get_context_data(self, **kwargs):

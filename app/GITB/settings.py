@@ -73,6 +73,12 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'base.context_processors.Master_Search_Form',
             ],
+
+            # Registers a custom filters.py file in the base app.
+            # Gives access to custom template tags.
+            'libraries':{
+                'filters': 'base.filters',
+            }
         },
     },
 ]

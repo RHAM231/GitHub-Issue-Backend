@@ -94,7 +94,6 @@ class FileDetailView(DetailView):
     template_name = 'repositories/file_contents.html'
     context_object_name = 'file'
     pk_url_kwarg = 'file_id'
-    print('test')
 
     def get_queryset(self):
         print('PRINTING file_id')

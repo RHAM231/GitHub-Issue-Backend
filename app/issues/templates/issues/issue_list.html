@@ -1,4 +1,5 @@
 {% extends "base/base.html" %}
+{% load filters %}
 {% load static %}
 
 {% block content %}
@@ -15,17 +16,19 @@
 
 
 
-  <form action="/TBD/" method="GET"></form>
-    {% csrf_token %}
+  <form method="GET">
     <div class="row mt-4 mb-5">
       <div class="col-md-10 col-md-offset-1 col-sm-12 mx-auto">
         <div class="issues-header">
           <div class="row mx-0 border-bottom header-top">
             <div class="col-12 my-auto mx-auto d-flex flex-wrap">
-              <div class="form-filter">{{ form.filters }}</div>
-              <div class="search-glass">
+              <!-- <div class="form-filter">{{ form.filters }}</div> -->
+              <!-- <div class="search-glass">
                 <i class="fas fa-search"></i>
-              </div>
+              </div> -->
+              <button class="search-glass" type="submit">
+                <i class="fas fa-search"></i>
+              </button>
               <div class="form-search">{{ form.search }}</div>
               <div class="line-break"></div>
               <div class="row header-btn-container float-right">
@@ -43,10 +46,18 @@
           <div class="row mx-0 header-bottom">
             <div class="col-md-4 col-sm-12 d-flex vertical-align" style="white-space: nowrap;">
               <!-- <a class="pl-3 pr-2">{{ form.select_all }}</a> -->
-              <i class="pr-2 fas fa-bug"></i>
-              <a>{{ form.open_closed.0 }}</a>
+              <!-- <i class="pr-2 fas fa-bug"></i> -->
+              <a>{{ form.open_filter }}</a>
+              <button class="state-btn" type="submit" name="open">
+                <i class="pr-2 fas fa-bug"></i>
+                Open
+              </button>
               <i class="pr-2 pl-2 far fa-check-circle"></i>
-              <a>{{ form.open_closed.1 }}</a>
+              <a>{{ form.closed_filter }}</a>
+              <button class="state-btn" type="submit" name="closed">
+                <i class="pr-2 pl-2 far fa-check-circle"></i>
+                Closed
+              </button>
             </div>
             <!-- <div class="col-md-8 col-sm-12">
               <div class="issue-dropdown-filters">
@@ -79,8 +90,28 @@
 
         </div>
 
-        <div class="issues-footer py-3 mb-3">
+        <div class="issues-footer py-3 pl-3 mb-3">
+          {% if is_paginated %}
 
+            {% if page_obj.has_previous %}
+              <a class="btn btn-outline-primary mb-4" href="?{% url_replace page=1 %}">First</a>
+              <a class="btn btn-outline-primary mb-4" href="?{% url_replace page=page_obj.previous_page_number %}">Previous</a>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+              {% if page_obj.number == num %}
+                <a class="btn btn-primary mb-4" href="?{% url_replace page=num %}">{{ num }}</a>
+              {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <a class="btn btn-outline-primary mb-4" href="?{% url_replace page=num %}">{{ num }}</a>
+              {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+              <a class="btn btn-outline-primary mb-4" href="?{% url_replace page=page_obj.next_page_number %}">Next</a>
+              <a class="btn btn-outline-primary mb-4" href="?{% url_replace page=page_obj.paginator.num_pages %}">Last</a>
+            {% endif %}
+
+          {% endif %}
         </div>
 
       </div>

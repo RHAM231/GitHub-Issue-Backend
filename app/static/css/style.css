@@ -938,7 +938,7 @@ body, html {
 }
 
 .form-search {
-  width: calc(100% - 260px);
+  width: calc(100% - 200px);
 }
 
 .line-break {
@@ -965,7 +965,7 @@ body, html {
   }
 
   .form-search {
-    width: calc(100% - 130px);
+    width: calc(100% - 72px);
   }
 }
 .header-bottom > div {
@@ -973,11 +973,6 @@ body, html {
   height: 60px;
 }
 
-@media (max-width: 767px) {
-  .header-bottom {
-    height: 120px;
-  }
-}
 .issue-tab {
   width: 75px;
   height: 30px;
@@ -994,15 +989,25 @@ body, html {
 
 .search-glass {
   height: 40px;
-  width: 30px;
-  background: #e7e9ec;
-  color: #777777;
+  width: 70px;
+  background: #3c4ef1;
+  color: #ffffff;
   position: relative;
+  border-radius: 7px 0px 0px 7px;
+  border: none;
+}
+
+.search-glass:hover {
+  background: #18b5c0;
+}
+
+.search-glass:focus {
+  outline: none;
 }
 
 .search-glass > i {
   top: 50%;
-  left: 70%;
+  left: 50%;
 }
 
 .vertical-align > a, .vertical-align > i {
@@ -1106,7 +1111,7 @@ body, html {
 
 .issues-footer {
   background: #ffffff;
-  height: 40px;
+  height: 80px;
   border-radius: 0px 0px 10px 10px;
   box-shadow: 0 5px 9px 0 rgba(0, 0, 0, 0.2), 0 4px 12px 0 rgba(0, 0, 0, 0.19);
 }
