@@ -35,10 +35,10 @@
                     {% if instance.path == '' %}
                       <a class="custom-header" href="{% url 'root-contents' instance.id %}">
                     {% else %}
-                      <a class="custom-header" href="{% url 'folder-contents' instance.path instance.id %}">
+                      <a class="custom-header" href="{% url 'folder-contents' folder_path=instance.path folder_id=instance.id %}">
                     {% endif %}
                   {% elif key == 'files' %}
-                    <a class="custom-header" href="{% url 'file-contents' file_id=instance.id %}">
+                    <a class="custom-header" href="{% url 'file-contents' file_path=instance.path file_id=instance.id %}">
                   {% endif %}
                     {{ instance.name }}
                     </a>

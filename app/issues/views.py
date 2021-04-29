@@ -66,12 +66,15 @@ class IssueListView(FormMixin, ListView):
             if 'open' in self.request.GET:
                 print('open was clicked')
                 queryset = Issue.objects.filter(conditions, state='open').order_by('created_at')
+                state = 'open'
             elif 'closed' in self.request.GET:
                 print('closed was clicked')
                 queryset = Issue.objects.filter(conditions, state='closed').order_by('created_at')
+                state = 'closed'
             else:
                 print('search was clicked')
                 queryset = Issue.objects.filter(conditions, state='open').order_by('created_at')
+            print(state)
         else:
             queryset = Issue.objects.all().order_by('created_at')
         return queryset

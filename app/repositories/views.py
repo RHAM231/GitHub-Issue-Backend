@@ -95,12 +95,12 @@ class FileDetailView(DetailView):
     context_object_name = 'file'
     pk_url_kwarg = 'file_id'
 
-    def get_queryset(self):
-        print('PRINTING file_id')
-        print(self.kwargs['file_id'])
-        queryset = RepoFile.objects.get(pk=self.kwargs['file_id'])
-        print(queryset)
-        return queryset
+    # def get_queryset(self):
+    #     print('PRINTING file_id')
+    #     print(self.kwargs['file_id'])
+    #     queryset = RepoFile.objects.get(pk=self.kwargs['file_id'])
+    #     print(queryset)
+    #     return queryset
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

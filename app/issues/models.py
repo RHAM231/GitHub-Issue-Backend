@@ -179,7 +179,7 @@ class Issue(models.Model):
     updated_at = models.DateTimeField(null=True, blank=True)
     closed_at = models.DateTimeField(null=True, blank=True) 
     number = models.IntegerField(null=True, blank=True)
-    slug = models.SlugField(max_length = 200)
+    slug = models.SlugField(max_length = 200, unique=True)
     stamp = models.TextField(null=True, blank=True, editable=False)
 
     # Foreignkeys
@@ -220,7 +220,7 @@ class Issue(models.Model):
     def _generate_slug(self):
         # For larger sites we would want to define a max_length for slugs
         value = self.title
-        slug_candidate = slug_original = slugify(value).upper() + '_' + str(1)
+        slug_candidate = slug_original = slugify(value).title() + '_' + str(1)
         # Count until we find an empty 'slot' for our slug
         for i in itertools.count(1):
             if not Issue.objects.filter(slug=slug_candidate).exists():
