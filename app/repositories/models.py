@@ -1,4 +1,6 @@
+# from issues.methods import generate_slug
 from django.db import models
+
 
 
 def type_choices():
@@ -16,34 +18,27 @@ class Repository(models.Model):
     open_issues_count = models.IntegerField()
     updated_at = models.DateTimeField(auto_now=False)
     url = models.URLField(max_length=200)
+    slug = models.SlugField(max_length = 200, unique=True)
+
+    # Methods
+    # Override the model's initialization method so we can check for changes in values
+    # we want to save with custom methods
+    def __init__(self, *args, **kwargs):
+        super (Repository, self).__init__(*args, **kwargs)
+        self.__original_name = self.name
+
+    # Override the model's save method so we can include custom save methods
+    def save(self, *args, **kwargs):
+        # If we're creating the object for the first time, generate a slug
+        if not self.pk:
+            self.slug = generate_slug(self, Repository)
+        # Else if we changed the name, generate a slug
+        elif self.name != self.__original_name:
+            self.slug = generate_slug(self, Repository)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name
-
-
-# class BaseFolder(models.Model):
-#     class Meta:
-#         abstract = True
-    
-#     name = models.CharField(max_length=100)
-#     path = models.CharField(max_length=150)
-#     sha = models.CharField(max_length=40)
-#     url = models.URLField(max_length=250)
-#     data_type = models.CharField(max_length=4, choices=type_choices(), default='blob')
-#     mode = models.CharField(max_length=100)
-
-#     repository = models.ForeignKey(
-#         Repository,
-#         max_length=100,
-#         on_delete=models.CASCADE,
-#         related_name='folder_repo'
-#         )
-
-#     def __str__(self):
-#         return self.name
-    
-
-# class RootFolder(BaseFolder):
 
 
 class RepoFolder(models.Model):

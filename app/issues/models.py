@@ -10,6 +10,7 @@ from django.db import models
 
 # Django Imports: Logic specific to this project
 from users.models import CustomUser
+from . methods import generate_slug
 from repositories.models import RepoFile, RepoFolder, Repository, LineOfCode
 
 
@@ -163,6 +164,32 @@ def check_associations(old, issue):
     return issue.stamp
 
 
+# # Let's create unique slugs for each model object from the object name using itertools.
+# # We'll also define a method for updating slugs if the name changes.
+# def generate_slug(instance, model):
+#     # Check which model we're using
+#     if hasattr(instance, 'name'):
+#         value = instance.name
+#     else:
+#         value = instance.title
+
+#     slug_candidate = slug_original = slugify(value).title() + '_' + str(1)
+#     # Count until we find an empty 'slot' for our slug
+#     for i in itertools.count(1):
+#         if not model.objects.filter(slug=slug_candidate).exists():
+#             break
+#         slug_candidate = '{}_{}'.format(slugify(value).title(), str(i))
+#     # If we're creating the first object, set slug to default value above
+#     if i == 1:
+#         slug_new = slug_original
+#     # Otherwise, set it based on itertools.count()
+#     else:
+#         slug_new = slug_candidate
+#     # For larger sites we would want to define a max_length for slugs
+#     instance.slug = slug_new
+#     return instance.slug
+
+
 # Define our Issue model for the database
 class Issue(models.Model):
     # Choices
@@ -182,7 +209,7 @@ class Issue(models.Model):
     slug = models.SlugField(max_length = 200, unique=True)
     stamp = models.TextField(null=True, blank=True, editable=False)
 
-    # Foreignkeys
+    # Foreign keys
     repository = models.ForeignKey(
         Repository,
         max_length=100,
@@ -214,26 +241,7 @@ class Issue(models.Model):
         null=True
         )
     
-    # METHODS
-    # Let's create unique slugs for each issue from the issue name using itertools.
-    # We'll also define a method for updating slugs if the name changes.
-    def _generate_slug(self):
-        # For larger sites we would want to define a max_length for slugs
-        value = self.title
-        slug_candidate = slug_original = slugify(value).title() + '_' + str(1)
-        # Count until we find an empty 'slot' for our slug
-        for i in itertools.count(1):
-            if not Issue.objects.filter(slug=slug_candidate).exists():
-                break
-            slug_candidate = '{}_{}'.format(slugify(value).title(), str(i))
-        # If we're creating the first issue, set slug to default value above
-        if i == 1:
-            slug_new = slug_original
-        # Otherwise, set it based on itertools.count()
-        else:
-            slug_new = slug_candidate
-        self.slug = slug_new
-    
+    # Methods
     # Override the model's initialization method so we can check for changes in values
     # we want to save with custom methods
     def __init__(self, *args, **kwargs):
@@ -245,12 +253,14 @@ class Issue(models.Model):
 
     # Override the model's save method so we can include custom save methods
     def save(self, *args, **kwargs):
-        # If we're creating the issue for the first time, generate a slug
+        # If we're creating the object for the first time, generate a slug
         if not self.pk:
-            self._generate_slug()
+            # self._get_slug()
+            self.slug = generate_slug(self, Issue)
         # Else if we changed the name, generate a slug
         elif self.title != self.__original_title:
-            self._generate_slug()
+            # self._get_slug()
+            self.slug = generate_slug(self, Issue)
 
         # If we're changing the associated files, folders or lines of codes, let's
         # update the body with our custom stamp methods defined above
