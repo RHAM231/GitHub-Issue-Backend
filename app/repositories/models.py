@@ -1,4 +1,4 @@
-# from issues.methods import generate_slug
+from issues import models as issues_models
 from django.db import models
 
 
@@ -31,10 +31,10 @@ class Repository(models.Model):
     def save(self, *args, **kwargs):
         # If we're creating the object for the first time, generate a slug
         if not self.pk:
-            self.slug = generate_slug(self, Repository)
+            self.slug = issues_models.generate_slug(self, Repository)
         # Else if we changed the name, generate a slug
         elif self.name != self.__original_name:
-            self.slug = generate_slug(self, Repository)
+            self.slug = issues_models.generate_slug(self, Repository)
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -43,11 +43,13 @@ class Repository(models.Model):
 
 class RepoFolder(models.Model):
     name = models.CharField(max_length=100)
-    path = models.CharField(max_length=150)
+    path = models.CharField(max_length=150, null=True, blank=True)
     sha = models.CharField(max_length=40)
     url = models.URLField(max_length=250)
     data_type = models.CharField(max_length=4, choices=type_choices(), default='blob')
     mode = models.CharField(max_length=100)
+    issuetracker_url_path = models.CharField(max_length=150)
+    slug = models.SlugField(max_length = 200)
 
     repository = models.ForeignKey(
         Repository,
@@ -63,6 +65,27 @@ class RepoFolder(models.Model):
         blank=True,
         null=True
         )
+    
+    def __init__(self, *args, **kwargs):
+        super (RepoFolder, self).__init__(*args, **kwargs)
+        self.__original_name = self.name
+
+    # Override the model's save method so we can include custom save methods
+    def save(self, *args, **kwargs):
+        if self.path:
+            self.issuetracker_url_path = self.repository.name + '/' + self.path
+        else:
+            self.issuetracker_url_path = self.repository.name
+        
+        # If we're creating the object for the first time, generate a slug
+        if not self.pk:
+            self.slug = issues_models.generate_slug(self, RepoFolder)
+        # Else if we changed the name, generate a slug
+        elif self.name != self.__original_name:
+            self.slug = issues_models.generate_slug(self, RepoFolder)
+
+        super().save(*args, **kwargs)
+
 
     def __str__(self):
         return self.name
@@ -80,6 +103,8 @@ class RepoFile(models.Model):
     size = models.CharField(max_length=10)
     sha = models.CharField(max_length=40)
     url = models.URLField(max_length=250)
+    issuetracker_url_path = models.CharField(max_length=150)
+    slug = models.SlugField(max_length = 200)
 
     repository = models.ForeignKey(
         Repository,
@@ -94,6 +119,26 @@ class RepoFile(models.Model):
         related_name='folder_repo',
         blank=True
         )
+
+    def __init__(self, *args, **kwargs):
+        super (RepoFile, self).__init__(*args, **kwargs)
+        self.__original_name = self.name
+
+    # Override the model's save method so we can include custom save methods
+    def save(self, *args, **kwargs):
+        if self.path:
+            self.issuetracker_url_path = (self.repository.name + '/' + self.path).rsplit('/', 1)[0]
+        else:
+            self.issuetracker_url_path = self.repository.name
+
+        # If we're creating the object for the first time, generate a slug
+        if not self.pk:
+            self.slug = issues_models.generate_slug(self, RepoFile)
+        # Else if we changed the name, generate a slug
+        elif self.name != self.__original_name:
+            self.slug = issues_models.generate_slug(self, RepoFile)
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name

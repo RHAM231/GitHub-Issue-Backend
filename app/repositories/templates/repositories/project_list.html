@@ -38,7 +38,7 @@
             <a class="project-date text-secondary dynamic-hide-small">Updated {{ repo.updated_at }}</a>
             </div>
             <div class="project-header">
-            <h4><a href="{% url 'project-contents' repo_id=repo.id %}">{{ repo.name }}</a></h4>
+            <h4><a href="{% url 'project-contents' repo_slug=repo.slug %}">{{ repo.name }}</a></h4>
             </div>
             <div class="row justify-content-end">
             <div class="project-button">

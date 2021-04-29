@@ -35,19 +35,34 @@ def get_current_path(request):
         # it from the item. This will be our link names that appear on the frontend. Pass link_names to 
         # final_dict below.
         link_names = [i.replace(i, i.split('_')[0]) if '_' in i else i for i in url_list]
+        print('PRINTING LINK NAMES')
+        print(link_names)
+        print()
 
         # Call our expand method to get all the paths
         expanded_url_list = expand_path(url_list)
+        print('PRINTING expanded url list')
+        print(expanded_url_list)
+        print()
 
         # Call our list to path conversion method
         paths = list_to_path(expanded_url_list)
+        print('PRINTING paths')
+        print(paths)
+        print()
 
         # Call our path to namespace conversion method. This returns the
         # actual template link names used to lookup the correct path in urls.py
         namespaces = path_to_namespace(paths)
+        print('PRINTING NAMESPACES')
+        print(namespaces)
+        print()
 
         # Pass link titles and namespaces as a dictionary to context
         final_dict = dict(zip(link_names, namespaces))
+        print('PRINTING FINAL DICT')
+        print(final_dict)
+        print()
 
         return {
             'current_path': final_dict

@@ -26,11 +26,11 @@ class RepoContentsListView(ListView):
     context_object_name = 'folder_contents'
 
     def get_queryset(self):
-        repo_id = self.kwargs['repo_id']
-        print(repo_id)
-        repo = Repository.objects.get(id=repo_id)
+        repo_slug = self.kwargs['repo_slug']
+        print(repo_slug)
+        repo = Repository.objects.get(slug=repo_slug)
         root_folder_name = repo.name + '_root'
-        root_folder = RepoFolder.objects.get(name='repo_root', repository=repo_id, parent_folder=None)
+        root_folder = RepoFolder.objects.get(name='repo_root', repository=repo.id, parent_folder=None)
         self.root = root_folder
         queryset = RepoFolder.objects.filter(parent_folder=root_folder.id).annotate(issue_count=Count('repofolder'))
         return queryset
