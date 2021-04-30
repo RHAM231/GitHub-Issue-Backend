@@ -61,7 +61,10 @@ def get_current_path(request):
         # Pass link titles and namespaces as a dictionary to context
         final_dict = dict(zip(link_names, namespaces))
         print('PRINTING FINAL DICT')
-        print(final_dict)
+        print('{')
+        for key, value in final_dict.items():
+            print(key, value)
+        print('}')
         print()
 
         return {

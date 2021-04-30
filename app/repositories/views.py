@@ -58,15 +58,16 @@ class FolderContentsListView(ListView):
     context_object_name = 'folder_contents'
 
     def get_queryset(self):
-        folder_id = self.kwargs['folder_id']
-        self.folder = folder_id
+        parent_folder = RepoFolder.objects.get(slug=self.kwargs['folder_slug'])
+        # folder_id = self.kwargs['folder_id']
+        self.folder = parent_folder
 
         print('PRINTED FROM FOLDER VIEW')
         count = get_issue_count(332)
         print(count)
 
 
-        queryset = RepoFolder.objects.filter(parent_folder=folder_id).annotate(issue_count=Count('repofolder'))
+        queryset = RepoFolder.objects.filter(parent_folder=parent_folder).annotate(issue_count=Count('repofolder'))
         print(queryset)
         return queryset
 
@@ -93,7 +94,7 @@ class FileDetailView(DetailView):
     model = RepoFile
     template_name = 'repositories/file_contents.html'
     context_object_name = 'file'
-    pk_url_kwarg = 'file_id'
+    slug_url_kwarg = 'file_slug'
 
     # def get_queryset(self):
     #     print('PRINTING file_id')
@@ -105,9 +106,10 @@ class FileDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Files'
-        context['issues'] = Issue.objects.filter(associated_file=self.kwargs['file_id']).count
-        lines = LineOfCode.objects.filter(repofile=self.kwargs['file_id']).annotate(issue_count=Count('issue_loc'))
+        repofile = RepoFile.objects.get(slug=self.kwargs['file_slug'])
+        context['issues'] = Issue.objects.filter(associated_file=repofile.id).count
+        lines = LineOfCode.objects.filter(repofile=repofile.id).annotate(issue_count=Count('issue_loc'))
         context['lines'] = lines
         context['line_count'] = lines.count()
-        context['sloc'] = LineOfCode.objects.filter(repofile=self.kwargs['file_id']).exclude(content='').count()
+        context['sloc'] = LineOfCode.objects.filter(repofile=repofile.id).exclude(content='').count()
         return context

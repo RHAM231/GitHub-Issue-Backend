@@ -12,8 +12,8 @@ urlpatterns = [
     # path('sync-success', views.sync_success, name='sync-success'),
     path('', RepositoryListView.as_view(), name='project-list'),
     path('<slug:repo_slug>/', RepoContentsListView.as_view(), name='project-contents'),
-    path('<int:folder_id>/', FolderContentsListView.as_view(), name='root-contents'),
+    path('<slug:folder_slug>/', FolderContentsListView.as_view(), name='root-contents'),
     # path('Repository/<path:file_path>/<int:file_id>/', FileDetailView.as_view(), name='file-contents'),
-    path('<path:folder_path>/<int:folder_id>/Folders/', FolderContentsListView.as_view(), name='folder-contents'),
-    path('<path:file_path>/<int:file_id>/Files/', FileDetailView.as_view(), name='file-contents'),
+    path('<path:folder_path>/<slug:folder_slug>/Folders/', FolderContentsListView.as_view(), name='folder-contents'),
+    path('<path:file_path>/<slug:file_slug>/Files/', FileDetailView.as_view(), name='file-contents'),
 ]
