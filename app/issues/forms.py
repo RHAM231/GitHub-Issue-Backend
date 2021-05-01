@@ -50,7 +50,7 @@ class IssueSearchForm(forms.Form):
     search = forms.CharField(
         required=False,
         widget=forms.TextInput(
-            attrs={'placeholder':'Search title, author, date, etc.', 'class': 'issue-search'}
+            attrs={'placeholder':'Search title, body, date, etc.', 'class': 'issue-search'}
         ))
     open_filter = forms.CharField(
         required=False,

@@ -7,16 +7,8 @@
   <div class="row mt-5 mb-5"></div>
   <div class="row mt-5 mb-5"></div>
 
-  <div class="row mt-1 mb-4">
+  <!-- <div class="row mt-1 mb-4">
     <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 mx-auto">
-      <a href="" class="current-path">Home</a><a class="link-divider">&nbsp/&nbsp</a>
-      <a class="current-path">Repositories</a><a class="link-divider">&nbsp/&nbsp</a>
-    </div>
-  </div>
-
-  <div class="row mt-1 mb-4">
-    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 mx-auto">
-      
       {% for key, value in current_path.items %}
         {% if forloop.last %}
           <a class="current-path">{{ key }}</a><a class="link-divider">&nbsp/&nbsp</a>
@@ -24,34 +16,33 @@
           <a href="{% url value %}" class="current-path">{{ key }}</a><a class="link-divider">&nbsp/&nbsp</a>
         {% endif %}
       {% endfor %}
-
     </div>
-  </div>
+  </div> -->
 
   {% for repo in repositories %}
     <div class="row mb-4">
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 mx-auto">
-        <div class="project-box">
+          <div class="project-box">
             <div class="icon-tab">
-            <i class="fas fa-project-diagram"></i>
-            <a class="project-description dynamic-hide-small">{{ repo.description }}</a>
-            <a class="project-date text-secondary dynamic-hide-small">Updated {{ repo.updated_at }}</a>
+              <i class="fas fa-project-diagram"></i>
+              <a class="project-description dynamic-hide-small">{{ repo.description }}</a>
+              <a class="project-date text-secondary dynamic-hide-small">Updated {{ repo.updated_at }}</a>
             </div>
             <div class="project-header">
-            <h4><a href="{% url 'project-contents' repo_slug=repo.slug %}">{{ repo.name }}</a></h4>
+              <h4><a href="{% url 'project-contents' repo_slug=repo.slug %}">{{ repo.name }}</a></h4>
             </div>
             <div class="row justify-content-end">
-            <div class="project-button">
-                <a href="" class="issue-button">Issues</a>
-                <!-- Resize the number text for numbers greater than 99 -->
-                {% if repo.issue_count > 99 %}
-                <div class="issues-count text-center count-small"><a>{{ repo.issue_count }}</a></div>
-                {% else %}
-                <div class="issues-count text-center"><a>{{ repo.issue_count }}</a></div>
-                {% endif %}
+              <div class="project-button">
+                  <a href="{% url 'issue-list' %}" class="issue-button">Issues</a>
+                  <!-- Resize the number text for numbers greater than 99 -->
+                  {% if repo.issue_count > 99 %}
+                    <div class="issues-count text-center count-small"><a>{{ repo.issue_count }}</a></div>
+                  {% else %}
+                    <div class="issues-count text-center"><a>{{ repo.issue_count }}</a></div>
+                  {% endif %}
+              </div>
             </div>
-            </div>
-        </div>
+          </div>
         </div>
     </div>
   {% endfor %}

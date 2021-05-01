@@ -55,30 +55,22 @@ class IssueListView(FormMixin, ListView):
     paginate_by = 5
     form_class = IssueSearchForm
 
+    # Override ListView's get_queryset() method to add simple search to our view
     def get_queryset(self, **kwargs):
         form = self.form_class(self.request.GET)
+        # If we have form data, use it to define a queryset
         if self.request.GET and form.is_valid():
             condition1 = Q(title__icontains=form.cleaned_data['search'])
             condition2 = Q(created_at__icontains=form.cleaned_data['search'])
             condition3 = Q(body__icontains=form.cleaned_data['search'])
-            conditions = condition1 & condition2 & condition3
-            # queryset = Issue.objects.filter(state='open').order_by('created_at')
-            if 'open' in self.request.GET:
-                print('open was clicked')
-                queryset = Issue.objects.filter(conditions, state='open').order_by('created_at')
-                state = 'open'
-            elif 'closed' in self.request.GET:
-                print('closed was clicked')
-                queryset = Issue.objects.filter(conditions, state='closed').order_by('created_at')
-                state = 'closed'
-            else:
-                print('search was clicked')
-                queryset = Issue.objects.filter(conditions, state='open').order_by('created_at')
-            print(state)
+            conditions = condition1 | condition2 | condition3
+            queryset = Issue.objects.filter(conditions).order_by('created_at')
+        # If we're visiting the page for the first time, return all our issues
         else:
             queryset = Issue.objects.all().order_by('created_at')
         return queryset
 
+    # Add a page title and our search form
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Issues'

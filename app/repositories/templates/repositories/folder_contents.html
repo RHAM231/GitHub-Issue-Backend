@@ -7,18 +7,8 @@
   <div class="row mt-5 mb-5"></div>
   <div class="row mt-5 mb-5"></div>
 
-  <div class="row mt-1 mb-4">
-    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 mx-auto">
-      <a href="" class="current-path">Home</a><a class="link-divider">&nbsp/&nbsp</a>
-      <a href="" class="current-path">Projects</a><a class="link-divider">&nbsp/&nbsp</a>
-      <a href="" class="current-path">Project 1</a><a class="link-divider">&nbsp/&nbsp</a>
-      <a class="current-path">Folder</a><a class="link-divider">&nbsp/&nbsp</a>
-    </div>
-  </div>
-
-  <div class="row mt-1 mb-4">
-    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 mx-auto">
-      
+  <!-- <div class="row mt-1 mb-4">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 mx-auto">      
       {% for key, value in current_path.items %}
         {% if forloop.last %}
           <a class="current-path">{{ key }}</a><a class="link-divider">&nbsp/&nbsp</a>
@@ -28,9 +18,8 @@
           <a href="{% url value.0 value.1 %}" class="current-path">{{ key }}</a><a class="link-divider">&nbsp/&nbsp</a>
         {% endif %}
       {% endfor %}
-
     </div>
-  </div>
+  </div> -->
 
   {% for key, queryset in folders_and_files.items %}
     {% for instance in queryset %}
@@ -66,7 +55,7 @@
                 </div>
               </div>
               <div class="folder-file-button">
-                <a href="" class="issue-button">Issues</a>
+                <a href="{% url 'issue-list' %}" class="issue-button">Issues</a>
                 <!-- Resize the number text for numbers greater than 99 -->
                 {% if instance.issue_count > 99 %}
                   <div class="issues-count text-center count-small"><a>{{ instance.issue_count }}</a></div>

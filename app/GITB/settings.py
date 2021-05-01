@@ -72,7 +72,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'base.context_processors.Master_Search_Form',
-                'base.context_processors.get_current_path',
+                # 'base.context_processors.get_current_path',
             ],
 
             # Registers a custom filters.py file in the base app.
