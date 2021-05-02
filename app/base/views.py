@@ -3,7 +3,7 @@ from repositories.models import Repository, RepoFolder, RepoFile
 from issues.models import Issue
 from . forms import MasterSearchForm
 from django.views.generic.edit import FormView
-from . search import get_search_results
+from . search import get_structured_search_results
 
 
 def home(request):
@@ -37,9 +37,11 @@ class SearchResultsView(FormView):
 
         form = self.form_class(self.request.GET)
         if self.request.GET and form.is_valid():
-            context['test'] = get_search_results(form)
-            print(context['test'])
-
+            issues, repos, folders, files = get_structured_search_results(form)
+            context['issues'] = issues
+            context['repos'] = repos
+            context['folders'] = folders
+            context['files'] = files
         return context
 
 

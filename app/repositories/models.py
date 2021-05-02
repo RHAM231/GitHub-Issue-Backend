@@ -1,6 +1,6 @@
 from issues import models as issues_models
 from django.db import models
-
+from django.utils import timezone
 
 
 def type_choices():
@@ -16,6 +16,7 @@ class Repository(models.Model):
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=255)
     open_issues_count = models.IntegerField()
+    created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=False)
     url = models.URLField(max_length=200)
     slug = models.SlugField(max_length = 200, unique=True)
@@ -46,6 +47,7 @@ class RepoFolder(models.Model):
     path = models.CharField(max_length=150, null=True, blank=True)
     sha = models.CharField(max_length=40)
     url = models.URLField(max_length=250)
+    created_at = models.DateTimeField(default=timezone.now)
     data_type = models.CharField(max_length=4, choices=type_choices(), default='blob')
     mode = models.CharField(max_length=100)
     issuetracker_url_path = models.CharField(max_length=150)
@@ -103,6 +105,7 @@ class RepoFile(models.Model):
     size = models.CharField(max_length=10)
     sha = models.CharField(max_length=40)
     url = models.URLField(max_length=250)
+    created_at = models.DateTimeField(default=timezone.now)
     issuetracker_url_path = models.CharField(max_length=150)
     slug = models.SlugField(max_length = 200)
 
