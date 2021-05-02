@@ -338,7 +338,7 @@ body, html {
   height: 40px;
 }
 
-.button-position-abs, .results-tile-description, .results-tile-title, .results-tile > i, .folder-file-button > .issues-count, .folder-file-button > a, .project-button > .issues-count, .project-button > a {
+.button-position-abs, .description-text-box, .repo-title-text-box, .title-text-box, .results-tile > i, .folder-file-button > .issues-count, .folder-file-button > a, .project-button > .issues-count, .project-button > a {
   position: absolute;
   transform: translate(-50%, -50%);
 }
@@ -613,18 +613,31 @@ body, html {
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.05), 0 6px 20px 0 rgba(0, 0, 0, 0.05);
 }
 
+.title-text-box {
+  width: 250px;
+  top: 40%;
+  left: 60%;
+}
+
+.repo-title-text-box {
+  width: 250px;
+  top: 50%;
+  left: 60%;
+}
+
+.description-text-box {
+  top: 80%;
+  left: 60%;
+}
+
 .results-tile-title {
   font-size: 18px;
-  top: 50%;
-  left: 37%;
 }
 
 .results-tile-description {
   font-size: 14px;
   white-space: nowrap;
   color: #5e5e5e;
-  top: 50%;
-  left: 72%;
 }
 
 .results-tile:hover {

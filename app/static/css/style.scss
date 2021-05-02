@@ -804,22 +804,44 @@ body, html {
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.05), 0 6px 20px 0 rgba(0,0,0,0.05);
 }
 
+// 
+.title-text-box{
+  @extend .button-position-abs;
+  width: 250px;
+  top: 40%;
+  left: 60%;
+}
+
+.repo-title-text-box{
+  @extend .button-position-abs;
+  width: 250px;
+  top: 50%;
+  left: 60%;
+}
+
+// 
+.description-text-box{
+  @extend .button-position-abs;
+  top: 80%;
+  left: 60%;
+}
+
 // Styles and positions the title text within the tile
 .results-tile-title{
-  @extend .button-position-abs;
+  // @extend .button-position-abs;
   font-size: 18px;
-  top: 50%;
-  left: 37%;
+  // top: 50%;
+  // left: 37%;
 }
 
 // Styles and positions the description text within the tile
 .results-tile-description{
-  @extend .button-position-abs;
+  // @extend .button-position-abs;
   font-size: 14px;
   white-space: nowrap;
   color: #5e5e5e;
-  top: 50%;
-  left: 72%;
+  // top: 50%;
+  // left: 72%;
 }
 
 // Enlarge the search result tiles on hover

@@ -29,9 +29,13 @@
           <div class="results-tile-container">
             <a class="button-spacer" href="{% url 'issue-read' issue_slug=instance.slug %}">
               <input class="hide-button" type="button" name="" id="{{ instance.slug }}">
-              <label class="results-tile" for="issue_id">
-                <span class="results-tile-title">{{ instance.title }}</span>
-                <span class="results-tile-description">Repo: {{ instance.repository.name }}</span>
+              <label class="results-tile" for="{{ instance.slug }}">
+                <div class="title-text-box">
+                  <span class="results-tile-title">{{ instance.title }}</span>
+                </div>
+                <div class="description-text-box">
+                  <span class="results-tile-description">Repo: {{ instance.repository.name }}</span>
+                </div>
                 <div class="icon-background-color"></div>
                 <i class="fas fa-bug"></i>
               </label>
@@ -62,8 +66,10 @@
         <div class="results-tile-container">
           <a class="button-spacer" href="{% url 'project-contents' repo_slug=instance.slug %}">
             <input class="hide-button" type="button" name="" id="{{ instance.slug }}">
-            <label class="results-tile" for="issue_id">
-              <span class="results-tile-title">{{ instance.name }}</span>
+            <label class="results-tile" for="{{ instance.slug }}">
+              <div class="repo-title-text-box">
+                <span class="results-tile-title">{{ instance.name }}</span>
+              </div>
               <div class="icon-background-color"></div>
               <i class="fas fa-project-diagram"></i>
             </label>
@@ -96,9 +102,13 @@
                 href="{% url 'folder-contents' folder_path=instance.issuetracker_url_path folder_slug=instance.slug %}">
           {% endif %}
             <input class="hide-button" type="button" name="" id="{{ instance.slug }}">
-            <label class="results-tile" for="issue_id">
-              <span class="results-tile-title">{{ instance.name }}</span>
-              <span class="results-tile-description">Repo: {{ instance.repository.name }}</span>
+            <label class="results-tile" for="{{ instance.slug }}">
+              <div class="title-text-box">
+                <span class="results-tile-title">{{ instance.name }}</span>
+              </div>
+              <div class="description-text-box">
+                <span class="results-tile-description">Repo: {{ instance.repository.name }}</span>
+              </div>
               <div class="icon-background-color"></div>
               <i class="fas fa-folder"></i>
             </label>
@@ -127,9 +137,13 @@
           <a class="button-spacer" 
               href="{% url 'file-contents' file_path=instance.issuetracker_url_path file_slug=instance.slug %}">
             <input class="hide-button" type="button" name="" id="{{ instance.slug }}">
-            <label class="results-tile" for="issue_id">
-              <span class="results-tile-title">{{ instance.name }}</span>
-              <span class="results-tile-description">Repo: {{ instance.repository.name }}</span>
+            <label class="results-tile" for="{{ instance.slug }}">
+              <div class="title-text-box">
+                <span class="results-tile-title">{{ instance.name }}</span>
+              </div>
+              <div class="description-text-box">
+                <span class="results-tile-description">Repo: {{ instance.repository.name }}</span>
+              </div>
               <div class="icon-background-color"></div>
               <i class="fas fa-file"></i>
             </label>

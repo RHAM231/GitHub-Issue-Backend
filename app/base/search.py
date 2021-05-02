@@ -3,6 +3,7 @@ from django.db.models import Q
 
 from repositories import models as repo_models
 from issues import models as issue_models
+from django.conf import settings
 
 
 def get_search_models(modules):
@@ -18,27 +19,29 @@ def get_search_models(modules):
 
 
 def get_search_results(form):
+    db_engine = settings.DATABASES['default']['ENGINE']
     modules = [repo_models, issue_models]
-    # search_models = get_search_models(modules)
-    search_models = [issue_models.Issue, repo_models.Repository]
+    search_models = get_search_models(modules)
     lookups = []
 
     # Define a list of fields we want to search by
     field_names = ['name', 'title', 'state', 'body']
     for model in search_models:
         fields = [x for x in model._meta.get_fields() if x.name in field_names]
-        print()
-        print(fields)
-        print()
 
         search_queries = []
         for field in fields:
-            search_text = "__icontains"
+            
+            # For development Sqlite database
+            if db_engine == 'django.db.backends.sqlite3':
+                search_text = "__icontains"
+
+            # For production Postgres database
+            elif db_engine == 'django.db.backends.postgresql':
+                search_text = "__search"
+
             q_object = Q(**{field.name + search_text : form.cleaned_data['master_search']})
             search_queries.append(q_object)
-        print()
-        print(search_queries)
-        print()
         
         q_object = Q()
         for query in search_queries:
