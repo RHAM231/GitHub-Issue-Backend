@@ -100,7 +100,11 @@ See views.py under the projects app
           </form>
         </li>
         <li class="nav-item">
-          <a href="" class="login-out-link">Logout</a>
+          {% if user.is_authenticated %}
+            <a href="{% url 'logout' %}" class="login-out-link">Logout</a>
+          {% else %}
+            <a href="" class="login-out-link">Guest</a>
+          {% endif %}
         </li>
       </ul>
     </div>

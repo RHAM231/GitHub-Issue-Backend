@@ -20,6 +20,7 @@ from django.views.generic import (
 
 # Django Imports: Logic specific to this project
 from . models import Issue
+from users.models import Profile
 from sync.github_client import create_issue, update_issue
 from . forms import IssueSearchForm, IssueEntryForm, OpenCloseIssueForm, IssueStateFilterForm
 
@@ -64,10 +65,10 @@ class IssueListView(FormMixin, ListView):
             condition2 = Q(created_at__icontains=form.cleaned_data['search'])
             condition3 = Q(body__icontains=form.cleaned_data['search'])
             conditions = condition1 | condition2 | condition3
-            queryset = Issue.objects.filter(conditions).order_by('created_at')
+            queryset = Issue.objects.filter(conditions).order_by('-created_at')
         # If we're visiting the page for the first time, return all our issues
         else:
-            queryset = Issue.objects.all().order_by('created_at')
+            queryset = Issue.objects.all().order_by('-created_at')
         return queryset
 
     # Add a page title and our search form
@@ -154,6 +155,13 @@ class IssueCreateView(CreateView):
     def form_valid(self, form):
         # form.instance.author = self.request.user
         # First save the valid form data to create the new object in our database
+
+        if self.request.user.__class__.__name__ == "AnonymousUser":
+            profile = Profile.objects.get(name='Guest')
+        else:
+            profile = Profile.objects.get(user=self.request.user)
+        form.instance.author = profile
+
         response = super(IssueCreateView, self).form_valid(form)
 
         # Grab some data from our new instance as well as the form data
@@ -173,9 +181,17 @@ class IssueCreateView(CreateView):
     # Add additonal parameters to the template
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+
         context['title'] = 'Issues'
         # Tell the template we need the create button for the form
         context['create'] = 'create'
+
+        if self.request.user.__class__.__name__ == "AnonymousUser":
+            profile = Profile.objects.get(name='Guest')
+        else:
+            profile = Profile.objects.get(user=self.request.user)
+
+        context['profile'] = profile
         return context
 
 

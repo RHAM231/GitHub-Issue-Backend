@@ -1,0 +1,28 @@
+{% extends "base/base.html" %}
+{% block content %}
+
+<div class="container-no-margin pr-3 pl-3">
+    <div class="row mt-5 mb-5"></div>
+    <div class="row mt-5 mb-5"></div>
+
+    <div class="col-lg-8 col-lg-offset-2
+                col-md-10 col-md-offset-1
+                col-sm-12 mx-auto">
+
+        <div class="text-center">
+            <h2>You have been successfully logged out</h2>
+        </div>
+        <div class="border-top text-center pt-3">
+            <small class="text-muted">
+                <a href="{% url 'login' %}">Log In Again</a>
+            </small>
+        </div>
+
+    </div>
+
+
+</div>
+<div class="row my-5"></div>
+</div>
+
+{% endblock content %}

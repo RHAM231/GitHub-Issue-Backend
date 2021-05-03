@@ -102,9 +102,9 @@
                 {% csrf_token %}
                 {{ form }}
                 {% if issue.state == 'open' %}
-                  <input type="submit" value="Close Issue" class="mx-2 close-button">
+                  <input type="submit" value="Close Issue" class="close-button">
                 {% else %}
-                  <input type="submit" value="Open Issue" class="mx-2 close-button">
+                  <input type="submit" value="Open Issue" class="close-button">
                 {% endif %}
               </form>
             </div>

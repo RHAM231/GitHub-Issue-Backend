@@ -22,14 +22,13 @@
             
             <div class="row mt-2 mb-4 d-flex">
               <div class="user-box">
-                <!-- <img class="user-image" src="{{ model_name.0.field_name.url }}"> -->
-                <img class="user-image" src="{% static 'images/user.jpg' %}">
+                <img class="user-image" src="{{ profile.image.url }}">
               </div>
               <div class="pl-2">
-                <b><a class="user-title" href="">Username</a></b>
+                <b><a class="user-title" href="">{{ profile.name }}</a></b>
               </div>
             </div>
-
+            
             <div class="issue-title-label row my-1">
               <a>{{ form.title.label }}</a>
             </div>

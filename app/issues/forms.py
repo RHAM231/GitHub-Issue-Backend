@@ -98,7 +98,10 @@ class IssueStateFilterForm(forms.Form):
 class IssueEntryForm(ModelForm):
     class Meta:
         model = Issue
-        fields = ['title', 'body', 'repository', 'associated_folder', 'associated_file', 'associated_loc']
+        fields = [
+            'title', 'body', 'repository', 'associated_folder', 
+            'associated_file', 'associated_loc'
+            ]
 
     def __init__(self, *args, **kwargs):
         super(IssueEntryForm, self).__init__(*args, **kwargs)

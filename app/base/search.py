@@ -52,7 +52,7 @@ def get_search_results(form):
     db_engine = settings.DATABASES['default']['ENGINE']
     # Define our modules and exclusions so we can pass them to our get_search_models method above
     modules = [repo_models, issue_models]
-    exclusions = ('CustomUser', 'LineOfCode', 'TestIssue')
+    exclusions = ('CustomUser', 'LineOfCode', 'TestIssue', 'Profile')
     # Get our search models
     search_models = get_search_models(modules, exclusions)
     lookups = []
