@@ -37,7 +37,7 @@
         <a>Closed</a>
       </div>
       {% endif %}
-      <b><a>Username</a></b>
+      <b><a>{{ issue.author.name }}</a></b>
       <a>&nbsp opened this issue {{ issue.created_at }}</a>
     </div>
   </div>
@@ -52,11 +52,12 @@
             
             <div class="row mt-2 mb-3 d-flex">
               <div class="user-box">
-                <!-- <img class="user-image" src="{{ model_name.0.field_name.url }}"> -->
-                <img class="user-image" src="{% static 'images/user.jpg' %}">
+                <img class="user-image" src="{{ issue.author.image.url }}">
+                <!-- <img class="user-image" src="{{ Profile.2.image.url }}">
+                <img class="user-image" src="{% static 'images/user.jpg' %}"> -->
               </div>
               <div class="pl-2">
-                <b><a class="user-title" href="">Username</a></b>
+                <b><a class="user-title" href="">{{ issue.author.name }}</a></b>
                 <a>| Owner</a>
               </div>
               <div class="ml-auto">

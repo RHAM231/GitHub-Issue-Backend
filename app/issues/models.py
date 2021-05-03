@@ -9,7 +9,7 @@ from django.template.defaultfilters import slugify
 from django.db import models
 
 # Django Imports: Logic specific to this project
-from users.models import CustomUser
+from users.models import CustomUser, Profile
 from repositories.models import RepoFile, RepoFolder, Repository, LineOfCode
 
 
@@ -211,6 +211,12 @@ class Issue(models.Model):
     stamp = models.TextField(null=True, blank=True, editable=False)
 
     # Foreign keys
+    author = models.ForeignKey(
+       Profile,
+       max_length=100,
+       on_delete=models.CASCADE,
+       related_name='issue_author'
+    )
     repository = models.ForeignKey(
         Repository,
         max_length=100,
