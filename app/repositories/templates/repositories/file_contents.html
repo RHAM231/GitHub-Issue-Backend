@@ -7,6 +7,12 @@
   <div class="row mt-5 mb-5"></div>
   <div class="row mt-5 mb-5"></div>
 
+  <div class="row mt-1 mb-4">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 mx-auto">
+      <a href="{% url 'project-list' %}" class="current-path">Repositories</a>
+    </div>
+  </div>
+
   <div class="row">
     <div class="col-lg-8 col-lg-offset-2 
                 col-md-10 col-md-offset-1 
@@ -27,7 +33,7 @@
               </div>
               <div class="mr-auto ml-auto">
                 <div class="folder-file-date">
-                  <a class="text-secondary dynamic-hide">Updated December 25, 2021</a>
+                  <a class="text-secondary dynamic-hide">Created {{ file.created_at }}</a>
                 </div>
               </div>
               <div class="folder-file-button">

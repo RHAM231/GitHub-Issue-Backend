@@ -7,17 +7,11 @@
   <div class="row mt-5 mb-5"></div>
   <div class="row mt-5 mb-5"></div>
 
-  <!-- <div class="row mt-1 mb-4">
+  <div class="row mt-1 mb-4">
     <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 mx-auto">
-      {% for key, value in current_path.items %}
-        {% if forloop.last %}
-          <a class="current-path">{{ key }}</a><a class="link-divider">&nbsp/&nbsp</a>
-        {% else %}
-          <a href="{% url value %}" class="current-path">{{ key }}</a><a class="link-divider">&nbsp/&nbsp</a>
-        {% endif %}
-      {% endfor %}
+      <a href="{% url 'home' %}" class="current-path">Home</a>
     </div>
-  </div> -->
+  </div>
 
   {% for repo in repositories %}
     <div class="row mb-4">

@@ -7,20 +7,16 @@
   <div class="row mt-5 mb-5"></div>
   <div class="row mt-5 mb-5"></div>
 
-  <!-- <div class="row mt-1 mb-4">
-    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 mx-auto">      
-      {% for key, value in current_path.items %}
-        {% if forloop.last %}
-          <a class="current-path">{{ key }}</a><a class="link-divider">&nbsp/&nbsp</a>
-        {% elif forloop.first %}
-          <a href="{% url value %}" class="current-path">{{ key }}</a><a class="link-divider">&nbsp/&nbsp</a>
-        {% else %}
-          <a href="{% url value.0 value.1 %}" class="current-path">{{ key }}</a><a class="link-divider">&nbsp/&nbsp</a>
-        {% endif %}
-      {% endfor %}
+  <div class="row mt-1 mb-4">
+    <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 mx-auto">
+      <a href="{% url 'project-list' %}" class="current-path">Repositories</a>
     </div>
-  </div> -->
+  </div>
 
+  <!-- 
+    Given a dictionary of context objects with both folders and files, display all the items,
+    using the dictionary key to check object type.
+   -->
   {% for key, queryset in folders_and_files.items %}
     {% for instance in queryset %}
       <div class="row mb-3">
@@ -29,6 +25,7 @@
             <div class="row justify-content-end">
               <div class="mr-auto pl-custom">
                 <div class="icon-tab-folder-file">
+                  <!-- Change the icon depending on object type -->
                   {% if key == 'folders' %}
                     <i class="fas fa-folder"></i>
                   {% elif key == 'files' %}
@@ -36,6 +33,7 @@
                   {% endif %}
                 </div>
                 <div class="folder-file-header">
+                  <!-- Change the url pattern based on object type -->
                   {% if key == 'folders' %}
                     {% if instance.path == '' %}
                       <a class="custom-header" href="{% url 'root-contents' instance.slug %}">
@@ -51,7 +49,7 @@
               </div>
               <div class="mr-auto ml-auto">
                 <div class="folder-file-date">
-                  <a class="text-secondary dynamic-hide">Last Updated Not in Model</a>
+                  <a class="text-secondary dynamic-hide">Created {{ instance.created_at }}</a>
                 </div>
               </div>
               <div class="folder-file-button">
