@@ -7,7 +7,7 @@
   <div class="row mt-5 mb-5"></div>
   <div class="row mt-5 mb-5"></div>
 
-  <form method="POST">
+  <form method="POST" id="github-import-form">
     {% csrf_token %}
     <div class="row mt-4 mb-5">
       <div class="col-lg-6 col-lg-offset-3 
@@ -46,8 +46,17 @@
             <!-- <div class="row my-3 d-flex justify-content-center">
               <a href="" class="button-sync text-center">Confirm Synchronization</a>
             </div> -->
-            <div class="row my-3 d-flex justify-content-center">
+            <div id="sync-btn" class="row my-3 d-flex justify-content-center">
               <button class="button-sync text-center" type="submit">Confirm Synchronization</button>
+            </div>
+
+            <div id="spinner-box" class="row mb-3 d-flex justify-content-center">
+              <div class="spinner-border text-primary" role="status"></div>
+            </div>
+
+            <div id="load-msg" class="row d-flex justify-content-center">
+              <h5>Importing repository from GitHub ...</h3>
+              <a>(This will take about x seconds)</a>
             </div>
         
           </div>
