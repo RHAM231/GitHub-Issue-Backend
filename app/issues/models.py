@@ -163,8 +163,8 @@ def check_associations(old, issue):
     return issue.stamp
 
 
-# # Let's create unique slugs for each model object from the object name using itertools.
-# # We'll also define a method for updating slugs if the name changes.
+# Let's create unique slugs for each model object from the object name using itertools.
+# We'll also define a method for updating slugs if the name changes.
 def generate_slug(instance, model):
     # Check which model we're using
     if hasattr(instance, 'name'):

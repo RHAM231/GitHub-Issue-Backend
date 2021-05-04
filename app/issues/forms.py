@@ -58,37 +58,6 @@ class IssueSearchForm(forms.Form):
     closed_filter = forms.CharField(
         required=False,
     )
-        
-    # filters = forms.CharField(
-    #     required=False, 
-    #     widget=forms.Select(
-    #         attrs={'class':'filter-field'},
-    #         choices=FILTER_CHOICES))
-
-    # select_all = forms.BooleanField(
-    #     required=False)
-
-    # open_closed = forms.ChoiceField(
-    #     choices=OPEN_CLOSED_CHOICES, 
-    #     widget=forms.RadioSelect(attrs={'class':'test'}))
-
-    # author = forms.CharField(
-    #     required=False, 
-    #     widget=forms.Select(
-    #         attrs={'class':'filter-field'},
-    #         choices=AUTHOR_CHOICES))
-
-    # projects = forms.CharField(
-    #     required=False, 
-    #     widget=forms.Select(
-    #         attrs={'class':'filter-field'},
-    #         choices=PROJECT_CHOICES))
-
-    # sort = forms.CharField(
-    #     required=False, 
-    #     widget=forms.Select(
-    #         attrs={'class':'filter-field'},
-    #         choices=SORT_CHOICES))
 
 
 class IssueStateFilterForm(forms.Form):

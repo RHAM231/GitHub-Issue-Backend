@@ -1,33 +1,31 @@
-from django.http import Http404
+# Django REST Imports: Logic from the Django REST Framework
 from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
 from rest_framework import mixins
 from rest_framework import generics
 
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from rest_framework.reverse import reverse
-from rest_framework import renderers
-
+# Django Imports: Logic specific to this project
+from issues.models import Issue, TestIssue
+from repositories.models import Repository, RepoFolder, RepoFile
 from consume_api.serializers import (
     IssueSerializer, TestIssueSerializer, RepoSerializer,
     RepoFolderSerializer, RepoFileSerializer,
     )
 
-from repositories.models import Repository, RepoFolder, RepoFile
-from issues.models import Issue, TestIssue
+
+#################################################################################################################################
+# SUMMARY
+#################################################################################################################################
+
+'''
+
+'''
+
+#################################################################################################################################
+# BEGIN VIEWS
+#################################################################################################################################
 
 
-# @api_view(['GET'])
-# def api_root(request, format=None):
-#     # Reverse and Response are specific to DRF
-#     return Response({
-#         'issues': reverse('issue-list', request=request, format=format),
-#         # 'snippets': reverse('snippet-list', request=request, format=format)
-#     })
-
-
+# 
 class IssueList(APIView):
     """
     List all issues, or create a new issue.
@@ -45,6 +43,7 @@ class IssueList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# 
 class IssueDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
                     mixins.DestroyModelMixin,
@@ -92,6 +91,7 @@ class RepoFileDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = RepoSerializer
 
 
+# 
 class TestIssueList(APIView):
     """
     List all test issues, or create a new test issue.
@@ -109,6 +109,7 @@ class TestIssueList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+# 
 class TestIssueDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
                     mixins.DestroyModelMixin,
@@ -124,3 +125,8 @@ class TestIssueDetail(mixins.RetrieveModelMixin,
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
+
+
+#################################################################################################################################
+# END
+#################################################################################################################################

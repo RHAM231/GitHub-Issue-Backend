@@ -1,21 +1,10 @@
 from django.contrib import admin
 from . models import (
-    Issue, TestIssue
+    Issue
 )
 
-registeredModels = [
-    # Issue, 
-    TestIssue
-]
-admin.site.register(registeredModels)
 
-
+# Use custom registration to make the stamp field read-only
 @admin.register(Issue)
 class IssueAdmin(admin.ModelAdmin):
-    # fields = ('title', 'state')
-    # fieldsets = (
-    #     (None, {
-    #         'fields': ('title', 'state')
-    #     })
-    # )
     readonly_fields = ('stamp',)

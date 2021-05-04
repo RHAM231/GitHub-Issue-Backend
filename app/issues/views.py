@@ -3,19 +3,17 @@ import io
 
 # Django Imports: Logic from the Django Framework
 from django.db.models import Q
+from django.urls import reverse
 from django.conf import settings
 from django.shortcuts import render
-# from django.views.generic.edit import FormMixin
 
-# from django.http import HttpResponseForbidden
+# Django Imports: Generic Views
 from django.views import View
-from django.urls import reverse
 from django.views.generic import FormView
 from django.views.generic.edit import FormMixin
 from django.views.generic.detail import SingleObjectMixin
-
 from django.views.generic import (
-    ListView, DeleteView, DetailView, UpdateView, CreateView
+    ListView, DetailView, UpdateView, CreateView
 )
 
 # Django Imports: Logic specific to this project

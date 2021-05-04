@@ -1,7 +1,7 @@
 from . forms import MasterSearchForm
 
 
-# 
+# Adds our navbar search form to context so we can access it from every page
 def Master_Search_Form(request):
     form_class = MasterSearchForm
     ms_search_form = form_class()

@@ -1,6 +1,22 @@
+# Django REST Imports: Logic from the Django REST Framework
 from rest_framework import serializers
+
+# Django Imports: Logic specific to this project
 from issues.models import Issue, TestIssue
 from repositories.models import Repository, RepoFolder, RepoFile, LineOfCode
+
+
+#################################################################################################################################
+# SUMMARY
+#################################################################################################################################
+
+'''
+
+'''
+
+#################################################################################################################################
+# BEGIN SERIALIZERS
+#################################################################################################################################
 
 
 class IssueSerializer(serializers.ModelSerializer):
@@ -69,7 +85,10 @@ class RepoFolderSerializer(serializers.ModelSerializer):
 class RepoFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = RepoFile
-        fields = ['id', 'name', 'path', 'sha', 'url', 'data_type', 'content', 'encoding', 'size', 'repository', 'parent_folder']
+        fields = [
+            'id', 'name', 'path', 'sha', 'url', 'data_type', 'content', 
+            'encoding', 'size', 'repository', 'parent_folder'
+            ]
 
 
     # def create(self, validated_data, **kwargs):
@@ -109,3 +128,8 @@ class RepoFileSerializer(serializers.ModelSerializer):
 #         instance.repository = validated_data.get('repository', instance.name) #FIXME
 #         instance.save()
 #         return instance
+
+
+#################################################################################################################################
+# END
+#################################################################################################################################

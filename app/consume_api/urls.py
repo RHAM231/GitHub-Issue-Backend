@@ -3,6 +3,7 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from consume_api import views
 
 
+# Define our urls for our REST portion that interfaces with GitHub
 urlpatterns = [
     # Issues
     path('issues_real/', views.IssueList.as_view()),
