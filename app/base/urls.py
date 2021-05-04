@@ -5,9 +5,9 @@ from . views import (
 )
 
 
+# Define our urls for the base app
 urlpatterns = [
     path('', views.home, name='home'),
     path('about', views.about, name='about'),
-    # path('search-index', views.search_results, name='search-results'),
     path('SearchResults', SearchResultsView.as_view(), name='search-results'),
 ]
