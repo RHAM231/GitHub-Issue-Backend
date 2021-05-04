@@ -64,8 +64,6 @@ def get_query_url(lookup, branch=None, sha=None, path=None, issue_id=None):
         'create_issue': endpoint + '/issues',
         'get_issue': endpoint + f'/issues/{issue_id}',
         'update_issue': endpoint + f'/issues/{issue_id}',
-        # 'close_issue': endpoint + f'/issues/{issue_id}',
-        # 'open_issue': endpoint + f'/issues/{issue_id}',
     }
     # Return our endpoint based on lookup
     url_value = query_dict.get(lookup, None)
@@ -278,8 +276,8 @@ def create_issue(token, user, data, stamp, issue_id):
         title=data['title'],
         body=body,
     )
-    # Grab the returned issue number from GitHub and update our own database instance
-    # with it
+    # Grab the returned issue number from GitHub and update our 
+    # own database instance with it
     Issue.objects.filter(id=issue_id).update(number=i.number)
 
 
@@ -291,7 +289,6 @@ def update_issue(token, user, data, issue_number):
     i = repo.get_issue(issue_number)
     e = i.edit(
         title=data['title'],
-        # state=db_issue.state,
         body=data['body'],
     )
 

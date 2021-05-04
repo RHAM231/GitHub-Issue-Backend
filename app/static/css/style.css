@@ -18,6 +18,10 @@ body, html {
   overflow-x: hidden;
 }
 
+.not-visible {
+  display: none !important;
+}
+
 .current-path {
   font-size: 22px;
 }

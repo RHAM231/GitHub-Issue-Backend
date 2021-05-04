@@ -1,24 +1,15 @@
-# Python Imports
-import os
-import json
-import requests
-from pprint import pprint
-from github import Github, GithubException
-
 # Django Imports: Logic from the Django Framework
-from django.shortcuts import render
 from django.conf import settings
+from django.shortcuts import render
 
 # Django Imports: Logic specific to this project
-from issues.models import Issue
-from repositories.models import Repository, RepoFolder, RepoFile
-from consume_api.serializers import TestIssueSerializer, RepoSerializer
 from . github_client import (
     get_query_url, get_serializer_and_model, get_root_folder, 
     get_repo, get_repo_issues, create_issue, update_issue
     )
 
 
+# 
 def confirm_sync(request):
     if request.method == 'POST':
         token = settings.TEST_TOKEN
@@ -33,7 +24,7 @@ def confirm_sync(request):
     return render(request, 'sync/confirm_sync.html')
 
 
-
+# 
 def sync_success(request):
     return render(request, 'sync/sync_success.html')
 

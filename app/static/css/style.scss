@@ -66,6 +66,12 @@ body, html {
   overflow-x: hidden;
 }
 
+// Hide our unused sync elements on the confirm sync page.
+// Use the javascript file progress_spinner to add or remove this class.
+.not-visible{
+  display: none!important;
+}
+
 ////////////////////////////////////////////////////////////////////////////
 // CURRENT PATH LINKS
 ////////////////////////////////////////////////////////////////////////////
@@ -804,7 +810,8 @@ body, html {
   box-shadow: 0 8px 16px 0 rgba(0,0,0,0.05), 0 6px 20px 0 rgba(0,0,0,0.05);
 }
 
-// 
+// Absolutely position a box around the title text 
+// so we can control position
 .title-text-box{
   @extend .button-position-abs;
   width: 250px;
@@ -812,6 +819,8 @@ body, html {
   left: 60%;
 }
 
+// Absolutely position a box around the repo title text 
+// so we can control position
 .repo-title-text-box{
   @extend .button-position-abs;
   width: 250px;
@@ -819,7 +828,8 @@ body, html {
   left: 60%;
 }
 
-// 
+// Absolutely position a box around the description text 
+// so we can control position
 .description-text-box{
   @extend .button-position-abs;
   top: 80%;
