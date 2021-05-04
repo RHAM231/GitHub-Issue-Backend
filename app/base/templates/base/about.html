@@ -43,12 +43,21 @@
           </div>
           <div class="row mb-2 border-bottom"></div>
             <div class="row">
-                {% lorem 67 w %}
+              <a class="pb-3">
+                Issue Tracker is a Python web application running on Ubuntu. It uses the Django web framework to 
+                clone basic bug tracker features
+                from GitHub and adds the ability to flag issues against folders, files, and individual lines of code.
+              </a>
+              <a>
+                The site is integrated with GitHub's public API. It utilizes the Python client, 
+              </a>
+              <a href="https://github.com/PyGithub/PyGithub">PyGitHub</a>
+              <a>
+                , and a custom client script to create, update, open, and close GitHub issues.
+              </a>
             </div>
           <div class="row mt-3 mb-2 border-bottom"></div>
 
-
-          
           <div class="row justify-content-center mt-5 mb-3 d-flex">
             <a class="text-center" href="https://www.django-rest-framework.org/">
               <img class="DRF-resize" src="{% static 'images/drf.png' %}" 
@@ -57,25 +66,12 @@
           </div>
           <div class="row mb-2 border-bottom"></div>
             <div class="row">
-                {% lorem 67 w %}
+              <a>
+                Issue Tracker uses the Django REST framework to consume API data from GitHub. It can import a GitHub 
+                repository folder/file structure as well 
+              </a>
             </div>
           <div class="row mt-3 mb-2 border-bottom"></div>
-
-
-
-          <div class="row justify-content-center mt-5 mb-3 d-flex">
-            <a class="text-center" href="https://www.docker.com/">
-              <img class="docker-resize" src="{% static 'images/docker.png' %}" 
-                  alt="">
-            </a>
-          </div>
-          <div class="row mb-3 border-bottom"></div>
-            <div class="row">
-                {% lorem 67 w %}
-            </div>
-          <div class="row mt-3 mb-2 border-bottom"></div>
-
-
 
           <div class="row justify-content-center mt-5 mb-3 d-flex">
             <a class="text-center" href="https://aws.amazon.com/what-is-cloud-computing">
@@ -85,9 +81,10 @@
           </div>
           <div class="row mb-2 border-bottom"></div>
             <div class="row">
-              {% lorem 67 w %}
+              <a>Issue Tracker runs on an AWS EC2 instance. It stores its data in a Postgres database housed in an RDS instance.</a>
             </div>
           <div class="row mt-3 mb-2 border-bottom"></div>
+
 
           <div class="row mt-4 mb-5"></div>
 

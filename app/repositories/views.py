@@ -18,7 +18,8 @@ from . models import Repository, RepoFolder, RepoFile, LineOfCode
 
 '''
 Let's define views to display a GitHub repo file structure. We use Django's generic ListView for the repos and folders, and
-DetailView for individual files. 
+DetailView for individual files. We'll override the views' get_queryset() and get_context_data() methods to customize our display
+data.
 '''
 
 #################################################################################################################################
