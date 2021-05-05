@@ -7,6 +7,7 @@ from . github_client import (
     get_query_url, get_serializer_and_model, get_root_folder, 
     get_repo, get_repo_issues, create_issue, update_issue
     )
+from users.models import Profile
 
 
 # 
@@ -16,10 +17,12 @@ def confirm_sync(request):
         headers = {
             'Authorization': f'token {token}',
             }
+        user = request.user
+
         # update_issue(token, 6)
-        # get_repo('get_repo', headers)
+        get_repo('get_repo', headers, user)
         # get_root_folder(headers)
-        return render(request, 'sync/sync_success.html')
+        # return render(request, 'sync/sync_success.html')
 
     return render(request, 'sync/confirm_sync.html')
 

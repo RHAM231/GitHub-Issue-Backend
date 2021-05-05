@@ -151,6 +151,12 @@ class LineOfCode(models.Model):
     content = models.CharField(max_length=255)
     line_number = models.IntegerField()
     repofile = models.ForeignKey(RepoFile, max_length=100, on_delete=models.CASCADE, related_name='loc')
+    path = models.CharField(max_length=255)
+
+    # Override the model's save method so we can include custom save methods
+    def save(self, *args, **kwargs):
+        self.path = RepoFile.objects.get(id=self.repofile.id).issuetracker_url_path
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return str(self.line_number)

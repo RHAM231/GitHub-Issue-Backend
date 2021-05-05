@@ -59,10 +59,10 @@
         </div>
         <div class="col-6 text-left">
           <a class="tracking-text">
-            {% if project_count > 1 %}
-              Projects
+            {% if project_count == 1 %}
+              Repository
             {% else %}
-              Project
+              Repositories
             {% endif %}
           </a>
           <i class="fas fa-project-diagram tracking-text"></i>
@@ -74,10 +74,10 @@
         </div>
         <div class="col-6 text-left">
           <a class="tracking-text">
-            {% if folder_count > 1 %}
-              Folders
-            {% else %}
+            {% if folder_count == 1 %}
               Folder
+            {% else %}
+              Folders
             {% endif %}
           </a>
           <i class="far fa-folder tracking-text"></i>
@@ -89,10 +89,10 @@
         </div>
         <div class="col-6 text-left">
           <a class="tracking-text">
-            {% if file_count > 1 %}
-              Files
-            {% else %}
+            {% if file_count == 1 %}
               File
+            {% else %}
+              Files
             {% endif %}
           </a>
           <i class="far fa-file tracking-text"></i>
@@ -104,10 +104,10 @@
         </div>
         <div class="col-6 text-left">
           <a class="tracking-text">
-            {% if issue_count > 1 %}
-              Issues
-            {% else %}
+            {% if issue_count == 1 %}
               Issue
+            {% else %}
+              Issues
             {% endif %}
           </a>
           <i class="fas fa-bug tracking-text"></i>
