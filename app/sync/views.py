@@ -10,7 +10,7 @@ from . github_client import (
 from users.models import Profile
 
 
-# 
+# Define a view to begin the GitHub repo import process
 def confirm_sync(request):
     if request.method == 'POST':
         token = settings.TEST_TOKEN
@@ -18,16 +18,13 @@ def confirm_sync(request):
             'Authorization': f'token {token}',
             }
         user = request.user
-
-        # update_issue(token, 6)
         get_repo('get_repo', headers, user)
-        # get_root_folder(headers)
-        # return render(request, 'sync/sync_success.html')
+        return render(request, 'sync/sync_success.html')
 
     return render(request, 'sync/confirm_sync.html')
 
 
-# 
+# Define a view to display a success message after importing a GitHub repo
 def sync_success(request):
     return render(request, 'sync/sync_success.html')
 

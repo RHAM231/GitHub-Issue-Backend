@@ -83,28 +83,32 @@ def delete_stamp(issue):
 # Define a method for setting our stamp attributes based on what associations are present
 # in our issue. Return these to our create stamp method below so we can generate a stamp.
 def set_association_atrs(issue):
-    # If a folder association is present, set our attributes and leave file and loc as None
-    if issue.associated_folder:
+    # First check for a line of code association. If present set all associations based on the line.
+    if issue.associated_loc:
+        loc = str(issue.associated_loc.line_number)
+        issue.associated_file = issue.associated_loc.repofile
+        issue.associated_folder = issue.associated_file.parent_folder
+        file_name = str(issue.associated_file.name)
+        folder_name = str(issue.associated_folder.name)
+        full_path = str(issue.associated_file.repository.name) + '/' + str(issue.associated_file.path)
+
+    # Next check for a file. If present, set line to none and everything based on the file.
+    elif issue.associated_file:
+        loc = 'None'
+        issue.associated_folder = issue.associated_file.parent_folder
+        file_name = str(issue.associated_file.name)
+        folder_name = str(issue.associated_folder.name)
+        full_path = str(issue.associated_file.repository.name) + '/' + str(issue.associated_file.path)
+    
+    # Last, check for a folder. If present set line and file to none and run a check to set path
+    elif issue.associated_folder:
+        loc = 'None'
+        file_name = 'None'
+        folder_name = str(issue.associated_folder.name)
         if issue.associated_folder.path:
             full_path = str(issue.repository.name) + '/' + str(issue.associated_folder.path)
         else:
             full_path = str(issue.repository.name)
-        folder_name = str(issue.associated_folder.name)
-        file_name = 'None'
-        loc = 'None'
-
-        # If we have a file association, set its value and re-define path based on the file
-        if issue.associated_file:
-            issue.associated_folder = issue.associated_file.parent_folder
-            full_path = str(issue.associated_file.repository.name) + '/' + str(issue.associated_file.path)
-            file_name = str(issue.associated_file.name)
-            
-            # If we've associated our issue with a line of code, set its value for the stamp
-            # based on its line number
-            if issue.associated_loc:
-                issue.associated_file = issue.associated_loc.repofile
-                issue.associated_folder = issue.associated_file.parent_folder
-                loc = str(issue.associated_loc.line_number)
 
     # Return our parameters so we can set the stamp in our create stamp method
     return (full_path, folder_name, file_name, loc)
@@ -137,12 +141,26 @@ def update_stamp(issue):
 # Given the old associations and the issue itself, check if any associations changed,
 # then update the stamp accordingly
 def check_associations(old, issue):
+    print('CHECKING ASSOCIATIONS ...')
     new = [issue.associated_folder, issue.associated_file, issue.associated_loc]
+    print(old)
+    print(new)
+
+    # Check if all the old values were empty and if all the new values will be empty
+    old_none = all(atr is None for atr in old)
+    new_none = all(atr is None for atr in new)
+
     # Check for changes
-    if old != new:
-        # Check if all the old values were empty and if all the new values will be empty
-        old_none = all(atr is None for atr in old)
-        new_none = all(atr is None for atr in new)
+
+    # If we're creating an issue for the first time AND we're creating it with an association, 
+    # call the create stamp method. This check is necessary for Django REST's serializer to work.
+    if not issue.pk and new_none == False:
+        print('creating new issue with stamp')
+        issue.stamp = create_stamp(issue)
+
+    # Else if we're updating the issue, check which type of change we're making
+    elif old != new:
+        print('Changes detected ...')
 
         # If we're adding an association when there were none before, call the create stamp method
         if old_none == True and new_none == False:
@@ -186,7 +204,7 @@ def generate_slug(instance, model):
     # Otherwise, set it based on itertools.count()
     else:
         slug_new = slug_candidate
-    # For larger sites we would want to define a max_length for slugs
+
     instance.slug = slug_new
     return instance.slug
 
@@ -261,17 +279,24 @@ class Issue(models.Model):
     # Override the model's save method so we can include custom save methods
     def save(self, *args, **kwargs):
         # If we're creating the object for the first time, generate a slug
+
+        print('printing titles ...')
+        print('regular')
+        print(self.title)
+        print('original')
+        print(self.__original_title)
+
         if not self.pk:
-            # self._get_slug()
+            print('NO SELF PK')
             self.slug = generate_slug(self, Issue)
         # Else if we changed the name, generate a slug
         elif self.title != self.__original_title:
-            # self._get_slug()
             self.slug = generate_slug(self, Issue)
 
         # If we're changing the associated files, folders or lines of codes, let's
         # update the body with our custom stamp methods defined above
         old = [self.__original_associated_folder, self.__original_associated_file, self.__original_associated_loc]
+        print('TRYING TO CREATE STAMP ...')
         self.stamp = check_associations(old, self)
         super().save(*args, **kwargs)
     

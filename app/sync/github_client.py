@@ -271,16 +271,17 @@ def check_for_stamp(body):
     return check_results
 
 
+# If an Issue Tracker generated stamp is present in our issue we're importing from GitHub,
+# get all the stamp data so we can inject it as json before serializing our issue to the
+# database
 def extract_stamp_data(body):
+    # Get our stamp data
     path = (body.splitlines()[0]).replace('Issue Location: ', '')
-    print()
-    print('PRINTING PATH')
-    print(path)
-    print()
     folder = (body.splitlines()[1]).replace('Affected Folder: ', '')
     file = (body.splitlines()[2]).replace('Affected File: ', '')
     loc = (body.splitlines()[3]).replace('Affected Line of Code: ', '')
 
+    # Based on the stamp data, set the injected json accordingly
     if loc != 'None':
         path_and_file = path.rsplit('/', 1)
         file_id = RepoFile.objects.get(issuetracker_url_path=path_and_file[0], name=path_and_file[1])
@@ -299,9 +300,12 @@ def extract_stamp_data(body):
         folder_pk = str(folder.pk)
         injected_json = {"associated_loc":None, "associated_file":None, "associated_folder":folder_pk}
 
+    # Send our injected json back to our get_issue() method
     return injected_json
 
 
+# Define a method to remove an Issue Tracker stamp from the imported GitHub issue body
+# before saving the issue to the database
 def remove_stamp(body):
     nlines = body.count('\n')
     if nlines == 5:
@@ -318,17 +322,15 @@ def get_issue(lookup, repo_pk, headers, issue_id, user):
     r = requests.get(query_url, headers=headers)
     raw_issue = r.json()
 
-
+    # Check if the GitHub issue as an Issue Tracker stamp
     stamp_present = check_for_stamp(raw_issue['body'])
+    # If the stamp is present, extract the stamp data to inject in our json object
+    # so we can serialize the correct fields
     if stamp_present == True:
         injected_json = extract_stamp_data(raw_issue['body'])
         raw_issue.update(injected_json)
+        # Finally, remove the stamp from the body before serializing
         raw_issue['body'] = remove_stamp(raw_issue['body'])
-
-        print()
-        print('PRINTING JSON')
-        pprint(raw_issue)
-        print()
 
 
     # Check wether the user is a guest or is logged in and get the profile
@@ -396,10 +398,6 @@ def serialize_github_object(repo_pk, slookup, raw, path=None, file_listing=None,
     # ing the serializer.
         injected_json = {"repository":repo_pk, "parent_folder":parent_folder_pk}
     else:
-        # injected_json = {
-        #     "repository":repo_pk, "associated_folder":None, 
-        #     "associated_file":None, "associated_loc":None
-        #     }
         injected_json = {
             "repository":repo_pk
             }
@@ -410,7 +408,6 @@ def serialize_github_object(repo_pk, slookup, raw, path=None, file_listing=None,
     serializer, model = get_serializer_and_model(slookup, raw)
     # Now we check validity and type, then save with additional parameters
     if serializer.is_valid(raise_exception=True):
-        print('valid')
         if file_listing:
             # Save a file object with the extra data_type parameter obtained from its parent GitHub tree
             saved = serializer.save(data_type=file_listing['type'])

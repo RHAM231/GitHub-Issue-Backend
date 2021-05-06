@@ -12,7 +12,11 @@ from repositories.models import Repository, RepoFolder, RepoFile, LineOfCode
 #################################################################################################################################
 
 '''
+Let's use Django REST to easily consume API data from GitHub. We define a set of model serializers for each of our models that
+we're importing GitHub data into (repositories, folders, files, lines of code). We'll call these serializers from our 
+github_client script in the sync app.
 
+We'll use each serializer to create entries in our database from the GitHub json objects.
 '''
 
 #################################################################################################################################
@@ -20,19 +24,22 @@ from repositories.models import Repository, RepoFolder, RepoFile, LineOfCode
 #################################################################################################################################
 
 
+# Define a Django REST model serializer for our issue model. This is equivalent/similiar to a Django modelform
+# except for consuming json API data instead of user input data.
 class IssueSerializer(serializers.ModelSerializer):
-    # associated_folder = serializers.PrimaryKeyRelatedField(queryset=RepoFolder.objects.all())
-    # associated_file = serializers.PrimaryKeyRelatedField(queryset=RepoFile.objects.all())
-    # associated_loc = serializers.PrimaryKeyRelatedField(queryset=LineOfCode.objects.all())
+    # Declare our required foreign key fields
     repository = serializers.PrimaryKeyRelatedField(queryset=Repository.objects.all())
     author = serializers.PrimaryKeyRelatedField(queryset=Profile.objects.all())
     class Meta:
+        # Set our model to recieve the data
         model = Issue
+        # Declare our serializer fields the same way we would for a Django modelform
         fields = [
             'id', 'title', 'state', 'body', 'created_at', 'updated_at', 'closed_at', 
             'number', 'author', 'repository', 'associated_folder', 'associated_file', 'associated_loc'
             ]
-    
+
+    # Define custom methods for our association foreign key fields to make these fields optional
     def get_folder(self, obj):
         if obj.associated_folder is not None:
             return IssueSerializer(obj.associated_folder).data
@@ -52,38 +59,36 @@ class IssueSerializer(serializers.ModelSerializer):
             return None
 
 
+# Define a test serializer
 class TestIssueSerializer(serializers.HyperlinkedModelSerializer):
-    # repository = serializers.PrimaryKeyRelatedField(queryset=Repository.objects.all())
-    # highlight = serializers.HyperlinkedIdentityField(view_name='issue-highlight', format='html')
     class Meta:
         model = TestIssue
         fields = ['id', 'title', 'state', 'body', 'number', 'created_at', 'repository_url']
 
 
+# Serializer to consume GitHub repository json objects
 class RepoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Repository
         fields = ['id', 'name', 'description', 'open_issues_count', 'created_at', 'updated_at', 'url']
 
 
+# Serializer to consume GitHub folder json objects
 class RepoFolderSerializer(serializers.ModelSerializer):
     repository = serializers.PrimaryKeyRelatedField(queryset=Repository.objects.all())
-    # parent_folder = serializers.PrimaryKeyRelatedField(queryset=RepoFolder.objects.all())
     class Meta:
         model = RepoFolder
         fields = ['id', 'sha', 'url', 'repository', 'parent_folder']
     
+    # Set the parent folder as an optional foreign key field
     def get_parent(self, obj):
         if obj.parent_folder is not None:
             return RepoFolderSerializer(obj.parent_folder).data
         else:
             return None
 
-    # def save(self):
-    #     repository = self.repo_obj
 
-
-
+# Serializer to consume GitHub file json objects
 class RepoFileSerializer(serializers.ModelSerializer):
     class Meta:
         model = RepoFile
@@ -91,45 +96,6 @@ class RepoFileSerializer(serializers.ModelSerializer):
             'id', 'name', 'path', 'sha', 'url', 'data_type', 'content', 
             'encoding', 'size', 'repository', 'parent_folder'
             ]
-
-
-    # def create(self, validated_data, **kwargs):
-    #     repo_obj = Repository.objects.get(id=validated_data["repository"])
-    #     testissue = TestIssue.objects.create(
-    #         name=validated_data["name"],
-    #         state=validated_data["state"],
-    #         body=validated_data["body"],
-    #         number=validated_data["number"],
-    #         repository=repo_obj
-    #     )
-    #     return testissue
-
-
-# class TestIssueSerializer(serializers.Serializer):
-#     id = serializers.IntegerField(read_only=True)
-#     name = serializers.CharField(required=False, allow_blank=True, max_length=100)
-#     state = serializers.CharField(max_length=100)
-#     body = serializers.CharField()
-#     number = serializers.IntegerField()
-#     repository = serializers.CharField(source='repository.name')
-
-#     def create(self, validated_data):
-#         """
-#         Create and return a new `TestIssue` instance, given the validated data.
-#         """
-#         return TestIssue.objects.create(**validated_data)
-
-#     def update(self, instance, validated_data):
-#         """
-#         Update and return an existing `TestIssue` instance, given the validated data.
-#         """
-#         instance.name = validated_data.get('name', instance.name)
-#         instance.state = validated_data.get('state', instance.state)
-#         instance.body = validated_data.get('body', instance.body)
-#         instance.number = validated_data.get('number', instance.number)
-#         instance.repository = validated_data.get('repository', instance.name) #FIXME
-#         instance.save()
-#         return instance
 
 
 #################################################################################################################################
