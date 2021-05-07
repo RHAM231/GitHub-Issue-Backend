@@ -3,12 +3,15 @@ from django.contrib.auth.admin import UserAdmin
 from . forms import CustomUserCreationForm, CustomUserChangeForm
 from . models import CustomUser, Profile
 
+
+# Register the Profile model in our admin site
 registeredModels = [
     Profile
 ]
 admin.site.register(registeredModels)
 
 
+# Customize our custom user admin interface
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
@@ -28,4 +31,5 @@ class CustomUserAdmin(UserAdmin):
     search_fields = ('email',)
     ordering = ('email',)
 
+# Register our custom user classes
 admin.site.register(CustomUser, CustomUserAdmin)

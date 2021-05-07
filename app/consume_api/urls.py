@@ -6,21 +6,20 @@ from consume_api import views
 # Define our urls for our REST portion that interfaces with GitHub
 urlpatterns = [
     # Issues
-    path('issues_real/', views.IssueList.as_view()),
-    path('issues_real/<int:pk>/', views.IssueDetail.as_view()),
+    path('Issues-List/', views.IssueList.as_view()),
+    path('Issue-Detail/<int:pk>/', views.IssueDetail.as_view()),
     # Repositories
-    path('repositories/', views.RepoList.as_view()),
-    path('repositories/<int:pk>/', views.RepoDetail.as_view()),
+    path('Repositories-List/', views.RepoList.as_view()),
+    path('Repository-Detail/<int:pk>/', views.RepoDetail.as_view()),
     # Folders
-    path('folders/', views.RepoFolderList.as_view()),
-    path('folders/<int:pk>/', views.RepoFolderDetail.as_view()),
+    path('Folders-List/', views.RepoFolderList.as_view()),
+    path('Folder-Detail/<int:pk>/', views.RepoFolderDetail.as_view()),
     # Files
-    path('files/', views.RepoFileList.as_view()),
-    path('files/<int:pk>/', views.RepoFileDetail.as_view()),
+    path('Files-List/', views.RepoFileList.as_view()),
+    path('File-Detail/<int:pk>/', views.RepoFileDetail.as_view()),
     # Test
     path('issues_test/', views.TestIssueList.as_view()),
     path('issues_test/<int:pk>/', views.TestIssueDetail.as_view()),
-    # path('', views.api_root),
 ]
 
 urlpatterns = format_suffix_patterns(urlpatterns)

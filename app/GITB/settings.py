@@ -74,6 +74,8 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 # Registers our navbar search form
                 'base.context_processors.Master_Search_Form',
+                # Adds profile to context
+                'base.context_processors.get_profile',
             ],
 
             # Registers a custom filters.py file in the base app.

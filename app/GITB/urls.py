@@ -25,9 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('base.urls')),
     path('Sync/', include('sync.urls')),
-    path('consume_api/', include('consume_api.urls')),
-    # path('api-auth/', include('rest_framework.urls')),
-
+    path('API/', include('consume_api.urls')),
     path('Issues/', include('issues.urls')),
     path('Repositories/', include('repositories.urls')),
     path('profile/', user_views.profile, name='profile'),

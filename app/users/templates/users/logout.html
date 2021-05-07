@@ -10,19 +10,24 @@
                 col-sm-12 mx-auto">
 
         <div class="text-center">
-            <h2>You have been successfully logged out</h2>
+          <h2>You have been successfully logged out</h2>
         </div>
         <div class="border-top text-center pt-3">
-            <small class="text-muted">
-                <a href="{% url 'login' %}">Log In Again</a>
-            </small>
+          <small class="text-muted">
+            <a href="{% url 'home' %}">Home</a>
+          </small>
+        </div>
+        <div class="text-center pt-1">
+          <small class="text-muted">
+            <a href="{% url 'login' %}">Log In Again</a>
+          </small>
         </div>
 
     </div>
 
 
 </div>
-<div class="row my-5"></div>
+  <div class="row my-5"></div>
 </div>
 
 {% endblock content %}

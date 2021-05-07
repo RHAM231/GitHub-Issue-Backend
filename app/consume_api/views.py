@@ -2,6 +2,7 @@
 from rest_framework.views import APIView
 from rest_framework import mixins
 from rest_framework import generics
+from rest_framework.response import Response
 
 # Django Imports: Logic specific to this project
 from issues.models import Issue, TestIssue
@@ -25,7 +26,7 @@ from consume_api.serializers import (
 #################################################################################################################################
 
 
-# 
+# Define an issue list view in our REST api to display all the issues
 class IssueList(APIView):
     """
     List all issues, or create a new issue.
@@ -43,7 +44,7 @@ class IssueList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# 
+# Define a REST api view for a single issue
 class IssueDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
                     mixins.DestroyModelMixin,
@@ -61,6 +62,7 @@ class IssueDetail(mixins.RetrieveModelMixin,
         return self.destroy(request, *args, **kwargs)
 
 
+# Define views for the remaining objects, both list and detail views
 class RepoList(generics.ListCreateAPIView):
     queryset = Repository.objects.all()
     serializer_class = RepoSerializer

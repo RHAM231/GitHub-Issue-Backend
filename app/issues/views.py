@@ -29,7 +29,7 @@ from . forms import IssueSearchForm, IssueEntryForm, OpenCloseIssueForm, IssueSt
 
 '''
 Let's define CRUD functionality for our issues. We use Django's pre-built class based views, ListView, DetailView, CreateView,
-UpdateView, and DeleteView.
+and UpdateView.
 
 Any time we use a view to make changes to our issues, we'll also call our GitHub issue methods from github_client.py in the sync
 app.
@@ -51,7 +51,7 @@ class IssueListView(FormMixin, ListView):
     model = Issue
     template_name = 'issues/issue_list.html'
     context_object_name = 'issues'
-    paginate_by = 5
+    paginate_by = 8
     form_class = IssueSearchForm
 
     # Override ListView's get_queryset() method to add simple search to our view
@@ -151,15 +151,14 @@ class IssueCreateView(CreateView):
     # Overwrite CreateView's form_valid method so we can call our GitHub create_issue
     # method when saving the form
     def form_valid(self, form):
-        # form.instance.author = self.request.user
-        # First save the valid form data to create the new object in our database
-
+        # Get our profile based on user
         if self.request.user.__class__.__name__ == "AnonymousUser":
             profile = Profile.objects.get(name='Guest')
         else:
             profile = Profile.objects.get(user=self.request.user)
         form.instance.author = profile
 
+        # First save the valid form data to create the new object in our database
         response = super(IssueCreateView, self).form_valid(form)
 
         # Grab some data from our new instance as well as the form data
@@ -179,17 +178,9 @@ class IssueCreateView(CreateView):
     # Add additonal parameters to the template
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-
         context['title'] = 'Issues'
         # Tell the template we need the create button for the form
         context['create'] = 'create'
-
-        if self.request.user.__class__.__name__ == "AnonymousUser":
-            profile = Profile.objects.get(name='Guest')
-        else:
-            profile = Profile.objects.get(user=self.request.user)
-
-        context['profile'] = profile
         return context
 
 
@@ -207,7 +198,6 @@ class IssueUpdateView(UpdateView):
 
     def form_valid(self, form):
         response = super(IssueUpdateView, self).form_valid(form)
-        # stamp = self.object.stamp
         issue_number = self.object.number
         data = form.cleaned_data
         update_issue(self.token, self.gh_user, data, issue_number)
