@@ -80,14 +80,30 @@ See views.py under the projects app
              role="button" data-toggle="dropdown"
              aria-haspopup="true"
              aria-expanded="false">
-            Dropdown Links
+            API
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item border-bottom" href="">Dropdown Item 1</a>
-            <a class="dropdown-item border-bottom" href="">Dropdown Item 2</a>
-            <a class="dropdown-item" href="">Dropdown Item 3</a>
+            <a class="dropdown-item border-bottom" href="">API Home</a>
+            <a class="dropdown-item border-bottom" href="">Issues</a>
+            <a class="dropdown-item border-bottom" href="">Repositories</a>
+            <a class="dropdown-item border-bottom" href="">Folders</a>
+            <a class="dropdown-item" href="">Files</a>
           </div>
-        <li class="nav-item"><a href="{% url 'project-list' %}" class="nav-link link-effect">Repositories</a></li>
+        <li class="nav-item dropdown">
+          <a class="nav-link link-effect"
+              href="#" id="navbarDropdownMenuLink"
+              role="button" data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false">
+            Repositories
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            {% for repo in repositories %}
+              <a class="dropdown-item border-bottom" href="{% url 'project-contents' repo_slug=repo.slug %}">{{ repo.name }}</a>
+            {% endfor %}
+            <a class="dropdown-item" href="{% url 'confirm-sync' %}">Import</a>
+          </div>
+        <!-- <li class="nav-item"><a href="{% url 'project-list' %}" class="nav-link link-effect">Repositories</a></li> -->
         <li class="nav-item"><a href="{% url 'issue-list' %}" class="nav-link link-effect">Issues</a></li>
         <li class="nav-item"><a href="{% url 'about' %}" class="nav-link link-effect">About</a></li>
       </ul>
@@ -118,7 +134,6 @@ and footer to easily control, size, spacing, and background color
 {% block content %}{% endblock %}
   </div>
 
-<!-- Left some additional html structure to easily feed in future entries as needed -->
   <footer class="footer">
     <div class="container h-100">
       <div class="row h-100">
@@ -138,8 +153,11 @@ and footer to easily control, size, spacing, and background color
 
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+  <!-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
           integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+          crossorigin="anonymous"></script> -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+          integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
           crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
           integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"

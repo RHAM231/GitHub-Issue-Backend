@@ -49,12 +49,8 @@
                 from GitHub and adds the ability to flag issues against folders, files, and individual lines of code.
               </a>
               <a>
-                The site is integrated with GitHub's public API. It utilizes the Python client, 
-              </a>
-              <a href="https://github.com/PyGithub/PyGithub">PyGitHub</a>
-              <a>
-                , and a custom client script to create, update, open, and close GitHub issues.
-                It can also import a GitHub repository folder/file system.
+                The site is integrated with GitHub's public API. It utilizes the Python client, PyGitHub, 
+                and a custom client script to create, update, open, and close GitHub issues.
               </a>
             </div>
           <div class="row mt-3 mb-2 border-bottom"></div>
@@ -67,9 +63,17 @@
           </div>
           <div class="row mb-2 border-bottom"></div>
             <div class="row">
-              <a>
+              <a class="pb-3">
                 Issue Tracker uses the Django REST framework to consume API data from GitHub. It can import a GitHub 
-                repository folder/file structure as well 
+                repository folder/file structure with all the repo's issues, including additional issue data added
+                by Issue Tracker.
+              </a>
+              <a class="pb-3">
+                To consume API data, Issue Tracker uses Django REST's serializers to quickly save JSON
+                objects into its database.
+              </a>
+              <a>
+                To add additional issue data, not tracked by GitHub, Issue Tracker "stamps" the Issue body 
               </a>
             </div>
           <div class="row mt-3 mb-2 border-bottom"></div>
@@ -82,7 +86,11 @@
           </div>
           <div class="row mb-2 border-bottom"></div>
             <div class="row">
-              <a>Issue Tracker runs on an AWS EC2 instance. It stores its data in a Postgres database housed in an RDS instance.</a>
+              <a>
+                Issue Tracker runs on an AWS EC2 instance, using Apache to serve site files. It stores its data in a 
+                Postgres database housed in an RDS instance. More details about the deployment process can be found
+              </a>
+              <a href="https://github.com/RHAM231/GitHub-Issue-Backend#readme">here</a>.
             </div>
           <div class="row mt-3 mb-2 border-bottom"></div>
 

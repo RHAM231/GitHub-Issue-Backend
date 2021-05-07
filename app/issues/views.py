@@ -198,9 +198,10 @@ class IssueUpdateView(UpdateView):
 
     def form_valid(self, form):
         response = super(IssueUpdateView, self).form_valid(form)
+        stamp = self.object.stamp
         issue_number = self.object.number
         data = form.cleaned_data
-        update_issue(self.token, self.gh_user, data, issue_number)
+        update_issue(self.token, self.gh_user, data, stamp, issue_number)
         return response
 
     def get_context_data(self, **kwargs):

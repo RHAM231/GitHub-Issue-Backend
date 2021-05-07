@@ -1,5 +1,6 @@
 from . forms import MasterSearchForm
 from users.models import Profile
+from repositories.models import Repository
 
 
 # Adds our navbar search form to context so we can access it from every page
@@ -19,4 +20,12 @@ def get_profile(request):
         profile = Profile.objects.get(user=request.user)
     return {
         'profile': profile,
+    }
+
+
+# Adds our repos to context for the dropdown links in the navbar
+def get_repos(request):
+    repositories = Repository.objects.all()
+    return {
+        'repositories': repositories,
     }

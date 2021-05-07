@@ -374,14 +374,20 @@ def create_issue(token, user, data, stamp, issue_id):
 
 
 # Given data from our frontend, edit an existing issue on GitHub
-def update_issue(token, user, data, issue_number):
+def update_issue(token, user, data, stamp, issue_number):
     g = Github(token)
     user_repo = user + '/' + data['repository'].name
+
+    if stamp:
+        body = stamp + data['body']
+    else:
+        body = data['body']
+
     repo = g.get_repo(user_repo)
     i = repo.get_issue(issue_number)
     e = i.edit(
         title=data['title'],
-        body=data['body'],
+        body=body,
     )
 
 

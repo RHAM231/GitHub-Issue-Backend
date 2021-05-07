@@ -310,7 +310,8 @@ body, html {
   display: none;
 }
 
-.button-style-global, .button-sync, .button-search, .delete-button, .sign-up-button, .form-button-cancel, .form-button, .close-button, .edit-issue-button, .new-issue-button, .issue-button {
+.button-style-global, .button-sync, .button-search, .delete-button, .sign-up-button, .form-button-cancel, .form-button,
+.close-button, .form-button-success, .edit-issue-button, .new-issue-button, .issue-button {
   height: 40px;
   border-radius: 7px;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.15), 0 4px 6px 0 rgba(0, 0, 0, 0.15);
@@ -328,7 +329,8 @@ body, html {
   text-align: center;
 }
 
-.button-style-2, .sign-up-button, .form-button-cancel, .form-button, .close-button {
+.button-style-2, .sign-up-button, .form-button-cancel, .form-button,
+.close-button, .form-button-success {
   width: 160px;
   border: 1px solid;
   border-color: #000000;
@@ -361,6 +363,12 @@ body, html {
 
 .form-button-cancel {
   color: #b90000;
+  text-align: center;
+  line-height: 40px;
+}
+
+.form-button-success {
+  color: #11a72a;
   text-align: center;
   line-height: 40px;
 }
@@ -425,7 +433,7 @@ body, html {
 
 .delete-button:hover, .close-button:hover, .sign-up-button:hover,
 .form-button:hover, .form-button-cancel:hover, .issue-button:hover,
-.new-issue-button:hover, .issues-count-btn:hover {
+.new-issue-button:hover, .issues-count-btn:hover, .form-button-success:hover {
   text-decoration: none;
   color: #FFFFFF;
 }
@@ -442,6 +450,10 @@ body, html {
   background: #b90000;
 }
 
+.form-button-success:hover {
+  background: #11a72a;
+}
+
 .issues-count-btn:hover {
   box-shadow: 0px 0px 15px rgba(51, 65, 255, 0.6);
 }
@@ -452,7 +464,8 @@ body, html {
 
 .form-button-cancel:focus, .sign-up-button:focus, .form-button:focus,
 .delete-button:focus, .close-button:focus, .issue-button:focus,
-.new-issue-button:focus, .issues-count-btn:focus, .button-sync:focus {
+.new-issue-button:focus, .issues-count-btn:focus, .button-sync:focus,
+.form-button-success:focus {
   outline: none;
   box-shadow: none;
 }
