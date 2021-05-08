@@ -1,41 +1,51 @@
 # GitHub-Issue-Backend
-Development repository for building the backend for GitHub Issue Tracker
-
-To see GitHub Issue Tracker go to ...
+This is the source code for my project site [Issue Tracker]().
 
 # Motivation
 
-The client wanted to switch from Wix to gain more control over their design and layout. The site also utilizes third party forms that will eventually be replaced by Django.
+I wanted a project that dove deeper into Django functionality. I also wanted to learn the Django REST framwork and practice integrating with a third pary API.
 
 # Goals
 
-I wanted to provide a high quality modern web application for the client. I strove to provide the following:
+I strove to achieve the following:
 * A fully deployed, functioning, and secure web application.
-* A mobile first design utilizing modern CSS and Javascript providing site visitors a clean, user friendly experience.
-* A backend allowing all site text to be customized from Django's admin panel.
+* A site integrated with GitHub's public API, using Django REST to consume API data.
+* A clone of some of GitHub's issue tracking features, adding the ability to associate issues to folders, files, and lines of code. These associations are tracked in GitHub by "stamping" the issue body with the added data.
+* A backend relying heavily on class based Django views to serve site pages instead of function based views.
+* A backend designed to keep as much code in the Django models as reasonably possible.
+* A clean, user friendly frontend.
 
 # My Thought Process and Methods
 
-For a more detailed write up of my approach to web development see the [README](https://github.com/RHAM231/My-Django-Website/blob/master/README.md) of my portfolio site.
+
+
+For a more detailed write up of my general approach to web development see the [README](https://github.com/RHAM231/My-Django-Website/blob/master/README.md) of my portfolio site.
 
 ### Apps
 
 Following Django convention, I split the site into apps based on function. The apps include:
 
-##### 'base_pages'
-Serves generic site pages such as 'home', 'about', FAQS, etc. Also establishes a base.html template that all other templates inherit from.
+##### 'base'
+Serves the generic site pages 'home', and 'about', as well as the site search results page. Also establishes a base.html template for the navbar and footer that all other templates inherit from.
 
-##### 'contact'
-Renders the contact page and houses all the contact form logic.
+##### 'consume_api'
+The app that houses all Django REST specific functionality such as serializers.py. Contains all the logic for serializing GitHub JSON objects to the database as well as the views needed to display Issue Tracker's API user interface.
 
-##### 'HMWA'
-The default generated app when the Django project was created. Controls admin functions such as overall url mapping, email settings, security settings, installed Django apps, etc.
+##### 'GITB (GitHub Issue Tracker Backend)'
+The default generated app when the Django project was created. Controls admin functions such as overall url mapping, email settings, security settings, installed Django apps, Django REST settings, etc.
 
-##### 'information'
-Houses all logic for storing and rendering site specific information such as services and donations pages.
+##### 'issues'
+Houses all logic for creating, reading, updating, and closing, issues. The models.py file also defines 
 
 ##### 'register'
 Houses all logic for the site's registration page.
+
+# Key Script Files of Interest
+
+Want to see the core logic of this project without digging through the repo structure? Check out these files:
+
+* [issues.models.py](): Houses issue database logic, including custom stamping methods for adding/updating issue associations.
+* [sync.github_client.py]():
 
 # Security
 
