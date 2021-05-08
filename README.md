@@ -258,13 +258,13 @@ Deployed. Site recieves periodic updates.
 
 # Languages/Frameworks/Tools Used
 
-#### Tools
+### Tools
 Visual Studio Code, Pycharm
 
-#### Backend
+### Backend
 Python, Django, Django REST, AWS, Apache2, Ubuntu, Postgres, Sqlite
 
-#### Frontend
+### Frontend
 Bootstrap, HTML, CSS, SCSS, Javascript, AJAX
 
 # License
