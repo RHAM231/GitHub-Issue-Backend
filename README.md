@@ -1,5 +1,5 @@
 # GitHub-Issue-Backend
-This is the source code for my project site [Issue Tracker]().
+This is the source code for my API project [Issue Tracker]().
 
 # Motivation
 
