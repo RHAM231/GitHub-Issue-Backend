@@ -83,11 +83,11 @@ See views.py under the projects app
             API
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item border-bottom" href="">API Home</a>
-            <a class="dropdown-item border-bottom" href="">Issues</a>
-            <a class="dropdown-item border-bottom" href="">Repositories</a>
-            <a class="dropdown-item border-bottom" href="">Folders</a>
-            <a class="dropdown-item" href="">Files</a>
+            <a class="dropdown-item border-bottom" href="{% url 'api-home' %}">API Home</a>
+            <a class="dropdown-item border-bottom" href="{% url 'api-issue-list' %}">Issues</a>
+            <a class="dropdown-item border-bottom" href="{% url 'api-repo-list' %}">Repositories</a>
+            <a class="dropdown-item border-bottom" href="{% url 'api-folder-list' %}">Folders</a>
+            <a class="dropdown-item" href="{% url 'api-file-list' %}">Files</a>
           </div>
         <li class="nav-item dropdown">
           <a class="nav-link link-effect"

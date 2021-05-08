@@ -33,10 +33,13 @@ class IssueSerializer(serializers.ModelSerializer):
     class Meta:
         # Set our model to recieve the data
         model = Issue
+        author = serializers.CharField(read_only=True)
+        
         # Declare our serializer fields the same way we would for a Django modelform
         fields = [
             'id', 'title', 'state', 'body', 'created_at', 'updated_at', 'closed_at', 
-            'number', 'author', 'repository', 'associated_folder', 'associated_file', 'associated_loc'
+            'number', 'author', 'repository', 'associated_folder', 'associated_file', 
+            'associated_loc'
             ]
 
     # Define custom methods for our association foreign key fields to make these fields optional
