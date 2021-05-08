@@ -28,7 +28,7 @@ Want to see the core logic of this project without digging through the repo stru
 
 For a more detailed write up of my general approach to web development see the [README](https://github.com/RHAM231/My-Django-Website/blob/master/README.md) of my portfolio site.
 
-### Apps
+### Issue Tracker Django Apps
 
 Following Django convention, I split the site into apps based on function. The apps include:
 
