@@ -15,6 +15,13 @@ I strove to achieve the following:
 * A backend designed to keep as much code in the Django models as reasonably possible.
 * A clean, user friendly frontend.
 
+# Key Script Files of Interest
+
+Want to see the core logic of this project without digging through the repo structure? Check out these files:
+
+* [issues.models.py](): Houses issue database logic, including custom stamping methods for adding/updating issue associations.
+* [sync.github_client.py](): My custom client script for connecting GitHub's API and Django REST to my site. Any data traveling from my site to GitHub or vice versa, gets routed through this script.
+
 # My Thought Process and Methods
 
 
@@ -35,30 +42,26 @@ The app that houses all Django REST specific functionality such as serializers.p
 The default generated app when the Django project was created. Controls admin functions such as overall url mapping, email settings, security settings, installed Django apps, Django REST settings, etc.
 
 ##### 'issues'
-Houses all logic for creating, reading, updating, and closing, issues. The models.py file also defines 
+Houses all logic for creating, reading, updating, and closing, issues. The models.py file in this app also defines custom stamping methods for issues to enable extra data not tracked by GitHub.
 
-##### 'register'
-Houses all logic for the site's registration page.
+##### 'repositories'
+Houses all logic for storing and displaying GitHub repo structures. Handles repositories, folders, and files.
 
-# Key Script Files of Interest
-
-Want to see the core logic of this project without digging through the repo structure? Check out these files:
-
-* [issues.models.py](): Houses issue database logic, including custom stamping methods for adding/updating issue associations.
-* [sync.github_client.py]():
+##### 'sync'
+Houses the heart of the project, a Python script called [github_client.py](). This script is responsible for moving GitHub data between my site's frontend, backend, Django REST, and GitHub's API. It utilizes custom code for importing a repo and the third party Python package, [PyGithub]() for editing and creating issues from the site's frontend.
 
 # Security
 
-This site scores an A on [SecurityHeaders.com](https://securityheaders.com/?q=https%3A%2F%2Frexhmitchell.com%2F). For more detailed information on my approach to security see the [README](https://github.com/RHAM231/My-Django-Website/blob/master/README.md#security) on my portfolio site.
+This site scores an A on [SecurityHeaders.com](). For more detailed information on my approach to security see the [README]() on my portfolio site.
 
 # Deployment
 
-I utilized the following process to deploy the site to an AWS EC2 instance, connect it with an RDS instance, and configure it with the client's existing domain.
+I utilized the following process to deploy the site to an AWS EC2 instance, connect it with an AWS RDS instance, and configure it with my site domain.
 
 ## Pre-Deployment
 
-1. **Run through my Checklist url**
-1. **Run through the Django deployment checklist url**
+1. **Run through my [Checklist]()**
+1. **Run through the [Django deployment checklist]()**
 1. **Create Deploy Branch**
     1. Create branch “deploy” on Github then pull from server
       1. Use “git checkout branch name” to swap between master and deploy
@@ -66,7 +69,7 @@ I utilized the following process to deploy the site to an AWS EC2 instance, conn
     1. Remove all comments from deploy branch
     1. Add deployment settings to settings.py on deploy branch
     1. Commit and push to repository
-1. **Create AWS Account**
+1. **Create AWS Account (If needed)**
 1. **Update Ubuntu on computer**
     1. apt-get update && apt-get upgrade
 
@@ -252,8 +255,15 @@ Deployed. Site recieves periodic updates.
 
 # Languages/Frameworks/Tools Used
 
-Python, Django, Pycharm, Bootstrap, HTML, CSS, Javascript, AWS, Apache2, Ubuntu, Postgres
+#### Tools
+Visual Studio Code, Pycharm
+
+#### Backend
+Python, Django, Django REST, AWS, Apache2, Ubuntu, Postgres, Sqlite
+
+#### Frontend
+Bootstrap, HTML, CSS, SCSS, Javascript, AJAX
 
 # License
 
-Copyright 2021 © Hope Medical WA
+No copyright. GitHub clone, Rex Mitchell
