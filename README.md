@@ -50,6 +50,9 @@ Houses all logic for storing and displaying GitHub repo structures. Handles repo
 ##### 'sync'
 Houses the heart of the project, a Python script called [github_client.py](). This script is responsible for moving GitHub data between my site's frontend, backend, Django REST, and GitHub's API. It utilizes custom code for importing a repo and the third party Python package, [PyGithub]() for editing and creating issues from the site's frontend.
 
+##### 'users'
+Contains logic for overriding Django's User class with a CustomUser class, allowing me to easily add fields and user types.
+
 # Security
 
 This site scores an A on [SecurityHeaders.com](). For more detailed information on my approach to security see the [README]() on my portfolio site.
