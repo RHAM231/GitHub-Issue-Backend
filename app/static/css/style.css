@@ -9,7 +9,7 @@ body, html {
 }
 
 .wrapper {
-  background: #f6f8fc;
+  background: #f5f7fc;
   overflow: auto;
   min-height: 100%;
 }
@@ -89,7 +89,7 @@ body, html {
   display: block;
   width: 0;
   height: 2px;
-  background: #3c4ef1;
+  background: #0275D8;
   transition: width 0.3s;
 }
 
@@ -111,7 +111,7 @@ body, html {
 
 .dropdown-item:hover {
   color: #ffffff;
-  background: #3c4ef1;
+  background: #0275D8;
 }
 
 .dropdown-menu {
@@ -287,7 +287,7 @@ body, html {
   }
 }
 .login-out-link:hover {
-  color: #3c4ef1;
+  color: #0275D8;
   text-decoration: none;
 }
 
@@ -321,7 +321,7 @@ body, html {
 .button-style-1, .edit-issue-button, .new-issue-button, .issue-button {
   width: 80px;
   border: none;
-  background: #3c4ef1;
+  background: #0275D8;
   color: #FFFFFF;
   display: flex;
   flex-direction: column;
@@ -335,7 +335,7 @@ body, html {
   border: 1px solid;
   border-color: #000000;
   background: #fdfdfd;
-  color: #3c4ef1;
+  color: #0275D8;
 }
 
 .button-position-rel, .project-button, .folder-file-button {
@@ -385,12 +385,12 @@ body, html {
 .button-search {
   width: 85px;
   border: none;
-  background: #3c4ef1;
+  background: #0275D8;
   color: #FFFFFF;
 }
 
 .form-button, .close-button {
-  background: #3c4ef1;
+  background: #0275D8;
   color: #FFFFFF;
   border: none;
 }
@@ -439,7 +439,7 @@ body, html {
 }
 
 .sign-up-button:hover {
-  background: #3c4ef1;
+  background: #0275D8;
 }
 
 .form-button:hover, .issue-button:hover, .new-issue-button:hover {
@@ -517,7 +517,7 @@ body, html {
 }
 .description {
   color: #ffffff;
-  background: #1d1b4b;
+  background: #2B303A;
   text-align: center;
 }
 
@@ -538,13 +538,13 @@ body, html {
   font-size: 55px;
   line-height: 55px;
   font-weight: 700;
-  color: #3c4ef1;
+  color: #0275D8;
 }
 
 .tracking-text {
   line-height: 50px;
   font-size: 50px;
-  color: #3c4ef1;
+  color: #0275D8;
 }
 
 @media (max-width: 600px) {
@@ -564,7 +564,7 @@ body, html {
   line-height: 45px;
   width: 260px;
   border: none;
-  background: #3c4ef1;
+  background: #0275D8;
   color: #FFFFFF;
 }
 
@@ -585,7 +585,7 @@ body, html {
 }
 
 .sync-icon {
-  background: #3c4ef1;
+  background: #0275D8;
 }
 
 .sync-success-icon {
@@ -616,7 +616,7 @@ body, html {
   height: 58px;
   width: 75px;
   border-radius: 7px 0px 0px 7px;
-  background: #3c4ef1;
+  background: #0275D8;
 }
 
 .results-tile > i {
@@ -712,7 +712,7 @@ body, html {
 
 .icon-tab,
 .icon-tab-folder-file {
-  background: #3c4ef1;
+  background: #0275D8;
   border-radius: 10px 0px 0px 10px;
   height: 60px;
   width: 70px;
@@ -905,7 +905,7 @@ body, html {
 }
 
 .issue-form-field:focus {
-  border-color: #3c4ef1;
+  border-color: #0275D8;
   outline: none;
 }
 
@@ -940,7 +940,7 @@ body, html {
 }
 
 .issue-open, .issue-closed {
-  background: #3c4ef1;
+  background: #0275D8;
   color: #ffffff;
   width: 90px;
   height: 30px;
@@ -1007,7 +1007,7 @@ body, html {
   width: 75px;
   height: 30px;
   position: relative;
-  background: #3c4ef1;
+  background: #0275D8;
   border-radius: 5px 5px 5px 5px;
   text-align: center;
 }
@@ -1020,7 +1020,7 @@ body, html {
 .search-glass {
   height: 40px;
   width: 70px;
-  background: #3c4ef1;
+  background: #0275D8;
   color: #ffffff;
   position: relative;
   border-radius: 7px 0px 0px 7px;
@@ -1101,7 +1101,7 @@ body, html {
 .filter-field {
   height: 40px;
   width: 100px;
-  background: #3c4ef1;
+  background: #0275D8;
   color: #FFFFFF;
   border: none;
   border-radius: 7px 0px 0px 7px;
@@ -1155,7 +1155,7 @@ body, html {
 }
 
 .footer {
-  background: #3c4ef1;
+  background: #0275D8;
   height: 250px;
 }
 

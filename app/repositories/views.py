@@ -70,7 +70,7 @@ class RepoContentsListView(ListView):
         context['title'] = 'Repositories'
 
         # Get a list of all files in the root folder by using self.root from get_queryset(). Add the issues count.
-        files = RepoFile.objects.filter(parent_folder=self.root.id).annotate(issue_count=Count('repofile'))
+        files = RepoFile.objects.filter(parent_folder=self.root).annotate(issue_count=Count('repofile'))
         # Grab our folder_contents queryset defined by get_queryset() and add it to context with files
         # as a dictionary. This allows us to minimize our html by iterating over one context object rather than two
         context['folders_and_files'] = {
@@ -90,6 +90,7 @@ class FolderContentsListView(ListView):
     def get_queryset(self):
         # Get the parent folder using the slug from the url
         parent_folder = RepoFolder.objects.get(slug=self.kwargs['folder_slug'])
+        self.folder = parent_folder
         # Define the folder queryset by the parent folder. Annotate each folder with its issue count
         queryset = RepoFolder.objects.filter(parent_folder=parent_folder).annotate(issue_count=Count('repofolder'))
         return queryset

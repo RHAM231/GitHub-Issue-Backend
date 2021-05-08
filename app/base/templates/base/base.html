@@ -53,7 +53,8 @@ See views.py under the projects app
 <body>
   <nav class="navbar navbar-expand-custom mb-5">
     <a class="navbar-brand" href="{% url 'home' %}">Issue Tracker</a>
-    <form class="nav-search-collapse ml-auto" action="" method="get">
+    <!-- Use this search form for small screens -->
+    <form class="nav-search-collapse ml-auto" action="{% url 'search-results' %}" method="get">
       <a class="nav-search-icon mr-1">
         <i class="fas fa-search"></i>
       </a>
@@ -98,9 +99,7 @@ See views.py under the projects app
             Repositories
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            {% for repo in repositories %}
-              <a class="dropdown-item border-bottom" href="{% url 'project-contents' repo_slug=repo.slug %}">{{ repo.name }}</a>
-            {% endfor %}
+            <a class="dropdown-item border-bottom" href="{% url 'project-list' %}">View</a>
             <a class="dropdown-item" href="{% url 'confirm-sync' %}">Import</a>
           </div>
         <!-- <li class="nav-item"><a href="{% url 'project-list' %}" class="nav-link link-effect">Repositories</a></li> -->
@@ -108,10 +107,11 @@ See views.py under the projects app
         <li class="nav-item"><a href="{% url 'about' %}" class="nav-link link-effect">About</a></li>
       </ul>
       <ul class="navbar-nav ml-auto">
+        <!-- Use this search form for large screens -->
         <li class="nav-item nav-search">
           <form class="pr-4 border-right" action="{% url 'search-results' %}" method="get">
             <a class="px-2">Search Site:</a>
-            {{ ms_search_form.master_search }}
+              {{ ms_search_form.master_search }}
             <button class="button-search my-2 my-sm-0" type="submit">Search</button>
           </form>
         </li>
@@ -153,9 +153,6 @@ and footer to easily control, size, spacing, and background color
 
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <!-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-          integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-          crossorigin="anonymous"></script> -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"
           integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
           crossorigin="anonymous"></script>

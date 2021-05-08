@@ -56,7 +56,7 @@ body, html {
 
 // Sets the default background color for the website
 .wrapper {
-    background: #f6f8fc;
+    background: #f5f7fc;
     overflow: auto;
     min-height: 100%;
 }
@@ -162,7 +162,7 @@ body, html {
   display: block;
   width: 0;
   height: 2px;
-  background: #3c4ef1;
+  background: #0275D8;
   transition: width .3s;
 }
 
@@ -188,7 +188,7 @@ body, html {
 // Set hover effect for the dropdown items
 .dropdown-item:hover{
   color: #ffffff;
-  background: #3c4ef1;
+  background: #0275D8;
 }
 
 // Styles the dropdown menu opened by the toggler to match the navbar
@@ -381,7 +381,7 @@ body, html {
 
 // Set hover effect for link
 .login-out-link:hover{
-  color: #3c4ef1;
+  color: #0275D8;
   text-decoration: none;
 }
 
@@ -431,7 +431,7 @@ body, html {
 .button-style-1{
   width: 80px;
   border: none;
-  background: #3c4ef1;
+  background: #0275D8;
   color: #FFFFFF;
   display: flex;
   flex-direction: column;
@@ -445,7 +445,7 @@ body, html {
   border: 1px solid;
   border-color: #000000;
   background: #fdfdfd;
-  color: #3c4ef1;
+  color: #0275D8;
 }
 
 // Create a parent relative position style for buttons
@@ -517,12 +517,12 @@ body, html {
   @extend .button-style-global;
   width: 85px;
   border: none;
-  background: #3c4ef1;
+  background: #0275D8;
   color: #FFFFFF;
 }
 
 .form-button, .close-button{
-  background: #3c4ef1;
+  background: #0275D8;
   color: #FFFFFF;
   border: none;
 }
@@ -590,7 +590,7 @@ body, html {
 
 // Customize individual button hover effects
 .sign-up-button:hover{
-  background: #3c4ef1;
+  background: #0275D8;
 }
 
 .form-button:hover, .issue-button:hover, .new-issue-button:hover{
@@ -642,6 +642,7 @@ body, html {
   line-height: 100px;
 }
 
+// Style the logos on the about page
 .aws-resize{
   width: 80%;
 }
@@ -688,7 +689,7 @@ body, html {
 
 .description{
   color: #ffffff;
-  background: #1d1b4b;
+  background: #2B303A; //#3D314A
   text-align: center;
 }
 
@@ -709,13 +710,13 @@ body, html {
   font-size: 55px;
   line-height: 55px;
   font-weight: 700;
-  color:#3c4ef1;
+  color:#0275D8;
 }
 
 .tracking-text{
   line-height: 50px;
   font-size: 50px;
-  color:#3c4ef1;
+  color:#0275D8;
 }
 
 @media(max-width:600px){
@@ -736,7 +737,7 @@ body, html {
   line-height: 45px;
   width: 260px;
   border: none;
-  background: #3c4ef1;
+  background: #0275D8;
   color: #FFFFFF;
 }
 
@@ -765,7 +766,7 @@ body, html {
 // Style the sync and sync success icons on their respective pages
 .sync-icon{
   @extend .circular-icon;
-  background: #3c4ef1;
+  background: #0275D8;
 }
 
 .sync-success-icon{
@@ -805,7 +806,7 @@ body, html {
   height: 58px;
   width: 75px;
   border-radius: 7px 0px 0px 7px;
-  background: #3c4ef1;
+  background: #0275D8;
 }
 
 // Style the icon inside the tiles
@@ -939,7 +940,7 @@ body, html {
 .icon-tab, 
 .icon-tab-folder-file{
   @extend .inline-block-relative;
-  background: #3c4ef1;
+  background: #0275D8;
   border-radius: 10px 0px 0px 10px;
   height: 60px;
   width: 70px;
@@ -1182,7 +1183,7 @@ body, html {
 
 // Give the form fields a blue border on focus
 .issue-form-field:focus{
-  border-color: #3c4ef1;
+  border-color: #0275D8;
   outline: none;
 }
 
@@ -1225,7 +1226,7 @@ body, html {
 
 // Style the issue state tabs on the issue detail page
 .issue-open, .issue-closed{
-  background: #3c4ef1;
+  background: #0275D8;
   color: #ffffff;
   width: 90px;
   height: 30px;
@@ -1314,7 +1315,7 @@ body, html {
   width: 75px;
   height: 30px;
   position: relative;
-  background: #3c4ef1;
+  background: #0275D8;
   border-radius: 5px 5px 5px 5px;
   text-align: center;
 }
@@ -1329,7 +1330,7 @@ body, html {
 .search-glass{
   height: 40px;
   width: 70px;
-  background: #3c4ef1;
+  background: #0275D8;
   color: #ffffff;
   position: relative;
   border-radius: 7px 0px 0px 7px;
@@ -1425,7 +1426,7 @@ body, html {
 .filter-field{
   height: 40px;
   width: 100px;
-  background: #3c4ef1;
+  background: #0275D8;
   color: #FFFFFF;
   border: none;
   border-radius: 7px 0px 0px 7px;
@@ -1493,7 +1494,7 @@ body, html {
 
 // Sets footer size and color
 .footer {
-  background: #3c4ef1;
+  background: #0275D8;
   height: 250px;
 }
 

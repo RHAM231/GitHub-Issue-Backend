@@ -21,11 +21,3 @@ def get_profile(request):
     return {
         'profile': profile,
     }
-
-
-# Adds our repos to context for the dropdown links in the navbar
-def get_repos(request):
-    repositories = Repository.objects.all()
-    return {
-        'repositories': repositories,
-    }

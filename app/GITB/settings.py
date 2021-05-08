@@ -76,8 +76,6 @@ TEMPLATES = [
                 'base.context_processors.Master_Search_Form',
                 # Adds profile to context
                 'base.context_processors.get_profile',
-                # Adds repos to context for navbar dropdown links
-                'base.context_processors.get_repos',
             ],
 
             # Registers a custom filters.py file in the base app.

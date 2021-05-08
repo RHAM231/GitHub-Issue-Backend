@@ -43,15 +43,24 @@
           </div>
           <div class="row mb-2 border-bottom"></div>
             <div class="row">
-              <a class="pb-3">
-                Issue Tracker is a Python web application running on Ubuntu. It uses the Django web framework to 
-                clone basic bug tracker features
-                from GitHub and adds the ability to flag issues against folders, files, and individual lines of code.
-              </a>
-              <a>
-                The site is integrated with GitHub's public API. It utilizes the Python client, PyGitHub, 
-                and a custom client script to create, update, open, and close GitHub issues.
-              </a>
+              <p>
+                <a>
+                  Issue Tracker is a Python web application running on Ubuntu. It uses the Django web framework to 
+                  clone basic bug tracking features from GitHub and adds the ability to flag issues against 
+                  folders, files, and individual lines of code.
+                </a>
+                <br>
+                <br>
+                <a>
+                  The site is integrated with GitHub's public API. It utilizes the Python client, PyGitHub, 
+                  and a custom client script to create, update, open, and close GitHub issues.
+                </a>
+                <br>
+                <br>
+                <a>More details about the site can be found in the project</a>
+                <a href="https://github.com/RHAM231/GitHub-Issue-Backend#readme">README</a>
+                <a>on GitHub.</a>
+              </p>
             </div>
           <div class="row mt-3 mb-2 border-bottom"></div>
 
@@ -69,11 +78,13 @@
                 by Issue Tracker.
               </a>
               <a class="pb-3">
-                To consume API data, Issue Tracker uses Django REST's serializers to quickly save JSON
-                objects into its database.
+                To import GitHub JSON objects into its database, Issue Tracker uses Django REST's serializers and
+                a custom client script.
               </a>
               <a>
-                To add additional issue data, not tracked by GitHub, Issue Tracker "stamps" the Issue body 
+                When adding additional issue data not tracked by GitHub, Issue Tracker "stamps" the Issue body 
+                with the data. Whenever Issue Tracker serializes a GitHub issue, it reads the stamp back into 
+                the appropriate foreign key relationships.
               </a>
             </div>
           <div class="row mt-3 mb-2 border-bottom"></div>
@@ -86,11 +97,13 @@
           </div>
           <div class="row mb-2 border-bottom"></div>
             <div class="row">
-              <a>
-                Issue Tracker runs on an AWS EC2 instance, using Apache to serve site files. It stores its data in a 
-                Postgres database housed in an RDS instance. More details about the deployment process can be found
-              </a>
-              <a href="https://github.com/RHAM231/GitHub-Issue-Backend#readme">here</a>.
+              <p>
+                <a>
+                  Issue Tracker runs on an AWS EC2 instance, using Apache to serve site files. It stores its data in a 
+                  Postgres database housed on an AWS RDS instance. More details about the deployment process can be found
+                </a>
+                <a href="https://github.com/RHAM231/GitHub-Issue-Backend#readme">here</a>.
+              </p>
             </div>
           <div class="row mt-3 mb-2 border-bottom"></div>
 

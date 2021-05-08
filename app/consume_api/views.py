@@ -33,7 +33,7 @@ from consume_api.serializers import (
 @api_view(['GET'])
 def api_root(request, format=None):
     """
-    Welcome to Issue Tracker's API written in Django REST! Here you can view Issues, 
+    Welcome to Issue Tracker's API written in Django REST. Here you can view Issues, 
     Repositories, Folders, and Files from the database as JSON objects.
     
     You can also perform GET, POST, and PUT operations on Issues.
