@@ -8,7 +8,7 @@ I wanted a project that dove deeper into Django functionality. I also wanted to 
 # Goals
 
 I strove to achieve the following:
-* A fully deployed, functioning, and secure web application.
+* A fully deployed, functional, and secure web application.
 * A site integrated with GitHub's public API, using Django REST to consume API data.
 * A clone of some of GitHub's issue tracking features, adding the ability to associate issues to folders, files, and lines of code. These associations are tracked in GitHub by "stamping" the issue body with the added data.
 * A backend relying heavily on class based Django views to serve site pages instead of function based views.
