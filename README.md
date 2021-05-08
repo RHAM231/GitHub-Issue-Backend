@@ -33,7 +33,7 @@ For a more detailed write up of my general approach to web development see the [
 Following Django convention, I split the site into apps based on function. The apps include:
 
 ##### 'base'
-Serves the generic site pages 'home', and 'about', as well as the site search results page. Also establishes a base.html template for the navbar and footer that all other templates inherit from.
+Serves the generic site pages 'home' and 'about', as well as the site search results page. Also establishes a base.html template for the navbar and footer that all other templates inherit from.
 
 ##### 'consume_api'
 The app that houses all Django REST specific functionality such as serializers.py. Contains all the logic for serializing GitHub JSON objects to the database as well as the views needed to display Issue Tracker's API user interface.
