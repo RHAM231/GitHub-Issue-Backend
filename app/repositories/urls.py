@@ -5,6 +5,8 @@ from . views import (
     FolderContentsListView, FileDetailView,
 )
 
+
+# Urls for the repositories app
 urlpatterns = [
     path('', RepositoryListView.as_view(), name='project-list'),
     path('<slug:repo_slug>/Repo/', RepoContentsListView.as_view(), name='project-contents'),

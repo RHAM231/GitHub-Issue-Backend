@@ -7,6 +7,7 @@
   <div class="row mt-5 mb-5"></div>
   <div class="row mt-5 mb-5"></div>
 
+  <!-- Header with link -->
   <div class="row mt-1 mb-4">
     <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 mx-auto">
       <a href="{% url 'project-list' %}" class="current-path">Repositories</a>
@@ -43,15 +44,18 @@
                   {% elif key == 'files' %}
                     <a class="custom-header" href="{% url 'file-contents' file_path=instance.issuetracker_url_path file_slug=instance.slug %}">
                   {% endif %}
+                  <!-- Folder or File name -->
                     {{ instance.name }}
                     </a>
                 </div>
               </div>
+              <!-- Date created -->
               <div class="mr-auto ml-auto">
                 <div class="folder-file-date">
                   <a class="text-secondary dynamic-hide">Created {{ instance.created_at }}</a>
                 </div>
               </div>
+              <!-- Display Issue button with issue count, if issues are present -->
               <div class="folder-file-button">
                 <a href="{% url 'issue-list' %}" class="issue-button">Issues</a>
                 <!-- Resize the number text for numbers greater than 99 -->

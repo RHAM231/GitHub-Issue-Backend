@@ -3,6 +3,7 @@ from django.db import models
 from django.utils import timezone
 
 
+# Define object choices for the model instances below
 def type_choices():
     TYPE_CHOICES = (
         ('file', 'file'),
@@ -12,7 +13,9 @@ def type_choices():
     return TYPE_CHOICES
 
 
+# Define a repo instance in the database
 class Repository(models.Model):
+    # Fields
     name = models.CharField(max_length=100)
     description = models.CharField(max_length=255)
     open_issues_count = models.IntegerField()
@@ -38,11 +41,14 @@ class Repository(models.Model):
             self.slug = issues_models.generate_slug(self, Repository)
         super().save(*args, **kwargs)
 
+    # Display the repo by its name in the admin site
     def __str__(self):
         return self.name
 
 
+# Define a folder instance in the database
 class RepoFolder(models.Model):
+    # Fields
     name = models.CharField(max_length=100)
     path = models.CharField(max_length=150, null=True, blank=True)
     sha = models.CharField(max_length=40)
@@ -53,6 +59,7 @@ class RepoFolder(models.Model):
     issuetracker_url_path = models.CharField(max_length=150)
     slug = models.SlugField(max_length = 200)
 
+    # Foreign Key Fields
     repository = models.ForeignKey(
         Repository,
         max_length=100,
@@ -88,15 +95,18 @@ class RepoFolder(models.Model):
 
         super().save(*args, **kwargs)
 
-
+    # Display the folder by its name in the admin site
     def __str__(self):
         return self.name
 
 
+# Define a file instance in the database
 class RepoFile(models.Model):
+    # Choices
     ENCODING_CHOICES = (
         ('base64', 'base64'),
     )
+    # Fields
     name = models.CharField(max_length=100)
     path = models.CharField(max_length=150)
     data_type = models.CharField(max_length=4, choices=type_choices(), default='blob')
@@ -109,6 +119,7 @@ class RepoFile(models.Model):
     issuetracker_url_path = models.CharField(max_length=150)
     slug = models.SlugField(max_length = 200)
 
+    # Foreign Key Fields
     repository = models.ForeignKey(
         Repository,
         max_length=100,
@@ -123,11 +134,12 @@ class RepoFile(models.Model):
         blank=True
         )
 
+    # Grab our original name so we can detect changes for updating slugs
     def __init__(self, *args, **kwargs):
         super (RepoFile, self).__init__(*args, **kwargs)
         self.__original_name = self.name
 
-    # Override the model's save method so we can include custom save methods
+    # Override the model's save method so we can save the path by parent repo and slug by file name
     def save(self, *args, **kwargs):
         if self.path:
             self.issuetracker_url_path = (self.repository.name + '/' + self.path).rsplit('/', 1)[0]
@@ -143,20 +155,24 @@ class RepoFile(models.Model):
 
         super().save(*args, **kwargs)
 
+    # Display the file by its name in the admin site
     def __str__(self):
         return self.name
 
 
 class LineOfCode(models.Model):
+    # Fields
     content = models.CharField(max_length=255)
     line_number = models.IntegerField()
     repofile = models.ForeignKey(RepoFile, max_length=100, on_delete=models.CASCADE, related_name='loc')
     path = models.CharField(max_length=255)
 
-    # Override the model's save method so we can include custom save methods
+    # Methods
+    # Override the model's save method so we can save the path based on the parent file
     def save(self, *args, **kwargs):
         self.path = RepoFile.objects.get(id=self.repofile.id).issuetracker_url_path
         super().save(*args, **kwargs)
 
+    # Display the line of code by its line number in the admin site
     def __str__(self):
         return str(self.line_number)

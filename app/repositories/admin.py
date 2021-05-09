@@ -3,6 +3,7 @@ from . models import (
     Repository, RepoFolder, RepoFile, LineOfCode
 )
 
+# Register our models in the admin site
 registeredModels = [
     Repository, RepoFolder, RepoFile, LineOfCode
 ]
