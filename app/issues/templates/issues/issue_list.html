@@ -8,77 +8,51 @@
   <div class="row mt-5 mb-5"></div>
   <div class="row mt-5 mb-5"></div>
 
-  <!-- <div class="row">
-    <div class="col-6 col-offset-3 mx-auto">
-      <h2 class="text-center border-bottom mb-2">Project / Folder / File: Issues</h2>
+  <!-- Begin header -->
+  <div class="row">
+    <div class="col-md-10 col-md-offset-1 col-sm-12 mx-auto">
+      <h2 class="border-bottom mb-2">Issues</h2>
     </div>
-  </div> -->
+  </div>
 
 
-
+  <!-- Begin search form -->
   <form method="GET">
     <div class="row mt-4 mb-5">
       <div class="col-md-10 col-md-offset-1 col-sm-12 mx-auto">
         <div class="issues-header">
           <div class="row mx-0 border-bottom header-top">
             <div class="col-12 my-auto mx-auto d-flex flex-wrap">
-              <!-- <div class="form-filter">{{ form.filters }}</div> -->
-              <!-- <div class="search-glass">
-                <i class="fas fa-search"></i>
-              </div> -->
+
+              <!-- Search form submit button -->
               <button class="search-glass" type="submit">
                 <i class="fas fa-search"></i>
               </button>
+              <!-- Search form search field -->
               <div class="form-search">{{ form.search }}</div>
               <div class="line-break"></div>
+              <!-- New issue link button -->
               <div class="row header-btn-container float-right">
                 <a href="{% url 'issue-create' %}" class="new-issue-button">New Issue</a>
               </div>
             </div>
-            <!-- <div class="col-2 my-auto">
-              <div class="float-right">
-                <div class="">
-                  <a href="{% url 'issue-list' %}" class="new-issue-button">New Issue</a>
-                </div>
-              </div>
-            </div> -->
           </div>
-          <!-- <div class="row mx-0 header-bottom">
-            <div class="col-md-4 col-sm-12 d-flex vertical-align" style="white-space: nowrap;">
-              <a class="pl-3 pr-2">{{ form.select_all }}</a>
-              <i class="pr-2 fas fa-bug"></i>
-              <a>{{ form.open_filter }}</a>
-              <button class="state-btn" type="submit" name="open">
-                <i class="pr-2 fas fa-bug"></i>
-                Open
-              </button>
-              <i class="pr-2 pl-2 far fa-check-circle"></i>
-              <a>{{ form.closed_filter }}</a>
-              <button class="state-btn" type="submit" name="closed">
-                <i class="pr-2 pl-2 far fa-check-circle"></i>
-                Closed
-              </button>
-            </div>
-            <div class="col-md-8 col-sm-12">
-              <div class="issue-dropdown-filters">
-                <a>{{ form.author }}{{ form.projects }}{{ form.sort }}</a>
-              </div>
-            </div>
-          </div> -->
         </div>
         <div class="issues-container py-3">
-
           <div class="col-12">
-
+            
+            <!-- List all our currently displayed issues based on search -->
             {% for issue in issues %}
                 <div class="issue-row py-auto my-3">
                 <div class="d-flex col-12 px-0">
+                    <!-- Colored tab with icon -->
                     <div class="issue-tab">
-                    <!-- <a class="check-center pl-3 pr-2">{{ form.select_all }}</a> -->
                       <i class="fas fa-bug"></i>
                     </div>
+                    <!-- Issue title with link -->
                     <b><a class="pl-2" href="{% url 'issue-read' issue_slug=issue.slug %}">{{ issue.title }}</a></b>
                 </div>
+                <!-- Description date text -->
                 <div class="col-12 px-0">
                     <a class="pl-5 sub-date">Opened {{ issue.created_at }}</a>
                 </div>
@@ -86,19 +60,21 @@
             {% endfor %}
 
           </div>
-
-
         </div>
 
+        <!-- Display our pagination buttons -->
         <div class="issues-footer py-3 pl-3 mb-3">
           {% if is_paginated %}
 
+            <!-- If there's a previous page display a first and previous button -->
             {% if page_obj.has_previous %}
               <a class="btn btn-outline-primary mb-4" href="?{% url_replace page=1 %}">First</a>
               <a class="btn btn-outline-primary mb-4" href="?{% url_replace page=page_obj.previous_page_number %}">Previous</a>
             {% endif %}
 
+            <!-- Display all the current page buttons -->
             {% for num in page_obj.paginator.page_range %}
+              <!-- Highlight the current page button based on number of pages and what page the user is currently viewing -->
               {% if page_obj.number == num %}
                 <a class="btn btn-primary mb-4" href="?{% url_replace page=num %}">{{ num }}</a>
               {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
@@ -106,6 +82,7 @@
               {% endif %}
             {% endfor %}
 
+            <!-- If there's a next page, display a next and last button -->
             {% if page_obj.has_next %}
               <a class="btn btn-outline-primary mb-4" href="?{% url_replace page=page_obj.next_page_number %}">Next</a>
               <a class="btn btn-outline-primary mb-4" href="?{% url_replace page=page_obj.paginator.num_pages %}">Last</a>

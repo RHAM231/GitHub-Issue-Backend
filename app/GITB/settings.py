@@ -32,12 +32,14 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    # Standard Django Apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    # Apps added in development
     'django.contrib.postgres',
     'sync.apps.SyncConfig',
     'base.apps.BaseConfig',
@@ -74,7 +76,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 # Registers our navbar search form
                 'base.context_processors.Master_Search_Form',
-                # Adds profile to context
+                # Adds profile to context for the site
                 'base.context_processors.get_profile',
             ],
 
@@ -137,23 +139,30 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
+# Static files
 STATIC_URL = '/static/'
-
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
-
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
+# Media files, database
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+# Initialize Django Crispy Forms
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
+# Custom User settings
 AUTH_USER_MODEL = 'users.CustomUser'
 LOGIN_REDIRECT_URL = 'home'
 LOGIN_URL = 'login'
+
+# GitHub authentication settings, user, token
 TEST = config('test', default='')
 TEST_TOKEN = config('TEST_TOKEN', default='')
 GH_USER = config('USER', default='')
 
+# Django REST Settings
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 5,

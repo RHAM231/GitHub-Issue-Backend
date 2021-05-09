@@ -271,9 +271,9 @@ def check_for_stamp(body):
     return check_results
 
 
-# If an Issue Tracker generated stamp is present in our issue we're importing from GitHub,
-# get all the stamp data so we can inject it as json before serializing our issue to the
-# database
+# If an Issue Tracker generated stamp is present in our issue, we're importing from GitHub.
+# Get all the stamp data so we can inject it as json before serializing our issue to the
+# database.
 def extract_stamp_data(body):
     # Get our stamp data
     path = (body.splitlines()[0]).replace('Issue Location: ', '')

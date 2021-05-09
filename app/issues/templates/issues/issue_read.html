@@ -7,6 +7,7 @@
   <div class="row mt-5 mb-5"></div>
   <div class="row mt-5 mb-5"></div>
 
+  <!-- Display a header with a link back to the issue list page -->
   <div class="row issue-header mb-3">
     <div class="col-lg-8 col-lg-offset-2
                 col-md-10 col-md-offset-1
@@ -15,6 +16,7 @@
     </div>
   </div>
 
+  <!-- Issue header and title -->
   <div class="row issue-header">
     <div class="col-lg-8 col-lg-offset-2
                 col-md-10 col-md-offset-1
@@ -22,10 +24,13 @@
       <h2>{{ issue.title }}</h2>
     </div>
   </div>
+  <!-- Issue subheader -->
   <div class="row issue-subheader">
     <div class="col-lg-8 col-lg-offset-2
                 col-md-10 col-md-offset-1
                 col-sm-12 mx-auto d-flex">
+      
+      <!-- Display issue state as either open or closed -->
       {% if issue.state == 'open' %}
       <div class="issue-open mr-2">
         <i class="fas fa-bug"></i>
@@ -37,84 +42,92 @@
         <a>Closed</a>
       </div>
       {% endif %}
+      <!-- Author name and created at time -->
       <b><a>{{ issue.author.name }}</a></b>
       <a>&nbsp opened this issue {{ issue.created_at }}</a>
     </div>
   </div>
 
-    <div class="row mt-4 mb-5">
-      <div class="col-lg-8 col-lg-offset-2
-                col-md-10 col-md-offset-1
-                col-sm-12 mx-auto">
+  <!-- Issue body -->
+  <div class="row mt-4 mb-5">
+    <div class="col-lg-8 col-lg-offset-2
+              col-md-10 col-md-offset-1
+              col-sm-12 mx-auto">
 
-        <div class="form-box py-3">
-          <div class="col-10 mx-auto">
-            
-            <div class="row mt-2 mb-3 d-flex">
-              <div class="user-box">
-                <img class="user-image" src="{{ issue.author.image.url }}">
-                <!-- <img class="user-image" src="{{ Profile.2.image.url }}">
-                <img class="user-image" src="{% static 'images/user.jpg' %}"> -->
-              </div>
-              <div class="pl-2">
-                <b><a class="user-title" href="">{{ issue.author.name }}</a></b>
-                <a>| Owner</a>
-              </div>
-              <div class="ml-auto">
-                <a href="{% url 'issue-update' issue_slug=issue.slug %}" class="edit-issue-button">Edit</a>
-              </div>
+      <div class="form-box py-3">
+        <div class="col-10 mx-auto">
+          
+          <!-- Issue body header -->
+          <div class="row mt-2 mb-3 d-flex">
+            <!-- Author image and owner status -->
+            <div class="user-box">
+              <img class="user-image" src="{{ issue.author.image.url }}">
             </div>
-
-            <div class="row mb-2 border-bottom"></div>
-
-            <div class="row my-2">
-              <a>Repo: &nbsp</a>
-              <b><a>{{ issue.repository }}</a></b>
+            <div class="pl-2">
+              <b><a class="user-title" href="">{{ issue.author.name }}</a></b>
+              <a>| Owner</a>
             </div>
-            <div class="row my-2">
-              <a>Folder: &nbsp</a>
-              <b><a>{{ issue.associated_folder }}</a></b>
-              <a>&nbsp File: &nbsp</a>
-              <b><a>{{ issue.associated_file }}</a></b>
-              <a>&nbsp Line: &nbsp</a>
-              <b><a>{{ issue.associated_loc }}</a></b>
+            <!-- Issue edit button -->
+            <div class="ml-auto">
+              <a href="{% url 'issue-update' issue_slug=issue.slug %}" class="edit-issue-button">Edit</a>
             </div>
-            <div class="row my-2">
-              <a>Path: &nbsp</a>
-              <b><a>{{ issue_path }}</a></b>
-            </div>
-
-            <div class="row mb-2 border-bottom"></div>
-
-            <div class="row mt-3">
-              {{ form.comment.label }}
-            </div>
-            <div class="row">
-                {{ issue.body }}
-            </div>
-            
-            <div class="row mt-3 mb-2 border-bottom"></div>
-
-            <div class="row d-flex flex-row-reverse py-3">
-              <form method="POST">
-                {% csrf_token %}
-                {{ form }}
-                {% if issue.state == 'open' %}
-                  <input type="submit" value="Close Issue" class="close-button">
-                {% else %}
-                  <input type="submit" value="Open Issue" class="close-button">
-                {% endif %}
-              </form>
-              <form action="https://github.com/RHAM231-IssueTracker/IssueTrackerSandbox/issues/{{ issue.number }}">
-                <input type="submit" value="View on GitHub" class="mr-3 form-button-success">
-              </form>
-            </div>
-        
           </div>
-        </div>
 
+          <div class="row mb-2 border-bottom"></div>
+
+          <!-- Issue association data, first repo -->
+          <div class="row my-2">
+            <a>Repo: &nbsp</a>
+            <b><a>{{ issue.repository }}</a></b>
+          </div>
+          <!-- Then folder, file, and line of code -->
+          <div class="row my-2">
+            <a>Folder: &nbsp</a>
+            <b><a>{{ issue.associated_folder }}</a></b>
+            <a>&nbsp File: &nbsp</a>
+            <b><a>{{ issue.associated_file }}</a></b>
+            <a>&nbsp Line: &nbsp</a>
+            <b><a>{{ issue.associated_loc }}</a></b>
+          </div>
+          <!-- Then path -->
+          <div class="row my-2">
+            <a>Path: &nbsp</a>
+            <b><a>{{ issue_path }}</a></b>
+          </div>
+
+          <div class="row mb-2 border-bottom"></div>
+          
+          <!-- Body field -->
+          <div class="row mt-3">
+              {{ issue.body }}
+          </div>
+          
+          <div class="row mt-3 mb-2 border-bottom"></div>
+
+          <!-- Buttons -->
+          <div class="row d-flex flex-row-reverse py-3">
+            <!-- Open/Close issue form -->
+            <form method="POST">
+              {% csrf_token %}
+              {{ form }}
+              <!-- Display the button as either close or open based on issue state -->
+              {% if issue.state == 'open' %}
+                <input type="submit" value="Close Issue" class="close-button">
+              {% else %}
+                <input type="submit" value="Open Issue" class="close-button">
+              {% endif %}
+            </form>
+            <!-- View on GitHub link button, pass issue number to link to direct to individual page -->
+            <form action="https://github.com/RHAM231-IssueTracker/IssueTrackerSandbox/issues/{{ issue.number }}">
+              <input type="submit" value="View on GitHub" class="mr-3 form-button-success">
+            </form>
+          </div>
+      
+        </div>
       </div>
+
     </div>
+  </div>
 
 </div>
 

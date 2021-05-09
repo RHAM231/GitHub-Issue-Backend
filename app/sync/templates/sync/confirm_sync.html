@@ -7,6 +7,7 @@
   <div class="row mt-5 mb-5"></div>
   <div class="row mt-5 mb-5"></div>
 
+  <!-- Begin sync form -->
   <form method="POST" id="github-import-form">
     {% csrf_token %}
     <div class="row mt-4 mb-5">
@@ -24,6 +25,7 @@
               </div>
             </div>
             
+            <!-- Include brief message explaining the form -->
             <div class="row justify-content-center my-3">
               <a class="text-center"><b>Import GitHub repository?</b></a>
             </div>
@@ -40,20 +42,17 @@
               <a class="text-center"><b>Note: Issue Tracker will reset itself to it's initial state fifteen minutes after it's last synchronization to prepare for future visitors.</b></a>
             </div>
 
-            <!-- <div class="row d-flex justify-content-center py-3">
-              <input type="submit" value="Confirm Synchronization" class="mx-2 form-button-cancel">
-            </div> -->
-            <!-- <div class="row my-3 d-flex justify-content-center">
-              <a href="" class="button-sync text-center">Confirm Synchronization</a>
-            </div> -->
+            <!-- Confirm import button -->
             <div id="sync-btn" class="row my-3 d-flex justify-content-center">
-              <button class="button-sync text-center" type="submit">Confirm Synchronization</button>
+              <button class="button-sync text-center" type="submit">Confirm Import</button>
             </div>
 
+            <!-- Progress spinner, initially hidden until submission -->
             <div id="spinner-box" class="row mb-3 d-flex justify-content-center not-visible">
               <div class="spinner-border text-primary" role="status"></div>
             </div>
 
+            <!-- Progress loading message, initially hidden until submission -->
             <div id="load-msg" class="row d-flex justify-content-center not-visible">
               <h5>Importing repository from GitHub ...</h3>
               <a>(This will take a few moments)</a>
