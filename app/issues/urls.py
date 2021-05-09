@@ -5,6 +5,7 @@ from . views import (
 )
 
 
+# Urls for the issues app
 urlpatterns = [
     path('', IssueListView.as_view(), name='issue-list'),
     path('Create/', IssueCreateView.as_view(), name='issue-create'),

@@ -21,8 +21,8 @@ dynamically extract our searchable classes, excluding the ones we don't want.
 Next we build a get_search_results() method. This queries our list of search models by the term provided from our search form and
 returns a sorted list of results from the database.
 
-Last we define a get_structured_search_results() method which gets called by SearchResultsView in base.views.py. This takes our
-sorted list and breaks into lists by model, returning the lists to SearchResultsView.
+Last we define a get_structured_search_results() method called by the SearchResultsView in base.views.py. This takes our
+sorted list and breaks it into lists by model, returning the lists to the SearchResultsView.
 '''
 
 #################################################################################################################################
@@ -30,7 +30,7 @@ sorted list and breaks into lists by model, returning the lists to SearchResults
 #################################################################################################################################
 
 
-# Method for dynamically importing our models. We pass it a list of modules and classes to exclude.
+# Method for dynamically importing our models. We pass it a list of modules to iterate over and a list of classes to exclude.
 # Returns a list of search models to construct queries from.
 def get_search_models(modules, exclusions):
     search_models = []
