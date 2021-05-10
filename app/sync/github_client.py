@@ -391,6 +391,17 @@ def update_issue(token, user, data, stamp, issue_number):
     )
 
 
+# Given data from our frontend, open or close an existing issue on GitHub
+def open_close_issue(token, user, state, repo, issue_number):
+    g = Github(token)
+    user_repo = user + '/' + repo
+    repo = g.get_repo(user_repo)
+    i = repo.get_issue(issue_number)
+    e = i.edit(
+        state=state
+    )
+
+
 # Define a method for serializing raw json output from our get methods above
 def serialize_github_object(repo_pk, slookup, raw, path=None, file_listing=None, folder_listing=None, folder_sha=None):
     # Get the primary key of our parent folder from our database by its sha. Convert to string.

@@ -19,7 +19,7 @@ from django.views.generic import (
 # Django Imports: Logic specific to this project
 from . models import Issue
 from users.models import Profile
-from sync.github_client import create_issue, update_issue
+from sync.github_client import create_issue, update_issue, open_close_issue
 from . forms import IssueSearchForm, IssueEntryForm, OpenCloseIssueForm, IssueStateFilterForm
 
 
@@ -122,6 +122,8 @@ class OpenCloseIssueView(UpdateView):
     form_class = OpenCloseIssueForm
     model = Issue
     slug_url_kwarg = 'issue_slug'
+    token = settings.TEST_TOKEN
+    gh_user = settings.GH_USER
 
     # If the issue is closed, open it. If open, close it.
     def form_valid(self, form):
@@ -130,7 +132,17 @@ class OpenCloseIssueView(UpdateView):
         elif self.object.state == 'closed':
             self.object.state = 'open'
         self.object.save()
-        return super(OpenCloseIssueView, self).form_valid(form)
+        # Save to database
+        response = super(OpenCloseIssueView, self).form_valid(form)
+
+        # Get our data to pass to our GitHub client script
+        repo = self.object.repository.name
+        issue_number = self.object.number
+        state = self.object.state
+
+        # Call our open close GitHub issue method in github_client.py
+        open_close_issue(self.token, self.gh_user, state, repo, issue_number)
+        return response
 
     # Redirect to our detail view
     def get_success_url(self):

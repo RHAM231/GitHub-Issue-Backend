@@ -280,12 +280,6 @@ class Issue(models.Model):
     def save(self, *args, **kwargs):
         # If we're creating the object for the first time, generate a slug
 
-        print('printing titles ...')
-        print('regular')
-        print(self.title)
-        print('original')
-        print(self.__original_title)
-
         if not self.pk:
             print('NO SELF PK')
             self.slug = generate_slug(self, Issue)

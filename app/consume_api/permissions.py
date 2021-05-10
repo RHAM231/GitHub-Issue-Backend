@@ -1,6 +1,7 @@
 from rest_framework import permissions
 
 
+# Custom permissions for the API views. Currently unused.
 class MyPermission(permissions.BasePermission):
 
     def __init__(self, allowed_methods):
@@ -11,6 +12,7 @@ class MyPermission(permissions.BasePermission):
         return request.method in self.allowed_methods
 
 
+# Custom permissions for the API views. Currently unused.
 class IsOwnerOrReadOnly(permissions.BasePermission):
     """
     Custom permission to only allow owners of an object to edit it.
