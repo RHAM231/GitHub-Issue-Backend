@@ -1,0 +1,4 @@
+<option value="">---------</option>
+{% for file in files %}
+<option value="{{ file.pk }}">{{ file.name }}</option>
+{% endfor %}

@@ -19,6 +19,7 @@ from django.views.generic import (
 # Django Imports: Logic specific to this project
 from . models import Issue
 from users.models import Profile
+from repositories.models import RepoFolder, RepoFile
 from sync.github_client import create_issue, update_issue, open_close_issue
 from . forms import IssueSearchForm, IssueEntryForm, OpenCloseIssueForm, IssueStateFilterForm
 
@@ -194,6 +195,13 @@ class IssueCreateView(CreateView):
         # Tell the template we need the create button for the form
         context['create'] = 'create'
         return context
+
+
+def load_files(request):
+    folder_id = request.GET.get('associated_folder')
+    files = RepoFile.objects.filter(parent_folder=folder_id).order_by('name')
+    context = {'files': files}
+    return render(request, 'issues/files_dropdown_list_options.html', context)
 
 
 class IssueUpdateView(UpdateView):

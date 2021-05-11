@@ -3,6 +3,7 @@ from django.forms import ModelForm
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 from . models import Issue
+from repositories.models import RepoFolder, RepoFile
 
 
 FILTER_CHOICES = [
@@ -75,11 +76,12 @@ class IssueEntryForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(IssueEntryForm, self).__init__(*args, **kwargs)
 
+        self.fields['associated_file'].queryset = RepoFolder.objects.none()
+
         self.fields['associated_folder'].label = 'Folder'
         self.fields['associated_file'].label = 'File'
         self.fields['associated_loc'].label = 'Line of Code'
-        self.fields['associated_file'].disabled = True
-        self.fields['associated_loc'].disabled = True
+
 
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'issue-form-field'
