@@ -78,6 +78,8 @@ class IssueEntryForm(ModelForm):
         self.fields['associated_folder'].label = 'Folder'
         self.fields['associated_file'].label = 'File'
         self.fields['associated_loc'].label = 'Line of Code'
+        self.fields['associated_file'].disabled = True
+        self.fields['associated_loc'].disabled = True
 
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'issue-form-field'
