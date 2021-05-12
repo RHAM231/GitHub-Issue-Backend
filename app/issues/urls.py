@@ -1,7 +1,7 @@
 from django.urls import path
 from . import views
 from . views import (
-    IssueListView, IssueUpdateView, IssueCreateView, IssueView, load_files
+    IssueListView, IssueUpdateView, IssueCreateView, IssueView
 )
 
 

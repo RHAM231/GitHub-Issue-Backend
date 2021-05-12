@@ -201,6 +201,8 @@ def load_files(request):
     folder_id = request.GET.get('associated_folder')
     files = RepoFile.objects.filter(parent_folder=folder_id).order_by('name')
     context = {'files': files}
+    print('test')
+    print(files)
     return render(request, 'issues/files_dropdown_list_options.html', context)
 
 

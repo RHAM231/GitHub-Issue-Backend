@@ -8,7 +8,7 @@
   <div class="row mt-5 mb-5"></div>
 
   <!-- Begin issue update/create form -->
-  <form method="POST">
+  <form method="POST" id="issueForm" data-files-url="{% url 'ajax_load_files' %}" novalidate>
     {% csrf_token %}
 
     <!-- Start our raised form background -->
