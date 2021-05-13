@@ -1,3 +1,7 @@
+<!-- 
+    Return file options to AJAX and the issue_form.html template
+    based on folder id from our load_files view function.
+ -->
 <option value="">---------</option>
 {% for file in files %}
 <option value="{{ file.pk }}">{{ file.name }}</option>

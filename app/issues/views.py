@@ -19,7 +19,7 @@ from django.views.generic import (
 # Django Imports: Logic specific to this project
 from . models import Issue
 from users.models import Profile
-from repositories.models import RepoFolder, RepoFile
+from repositories.models import RepoFolder, RepoFile, LineOfCode
 from sync.github_client import create_issue, update_issue, open_close_issue
 from . forms import IssueSearchForm, IssueEntryForm, OpenCloseIssueForm, IssueStateFilterForm
 
@@ -197,13 +197,22 @@ class IssueCreateView(CreateView):
         return context
 
 
+# Define a view to load file options on our issue form. Get the folder
+# id from AJAX and send back a file queryset to the options template.
 def load_files(request):
-    folder_id = request.GET.get('associated_folder')
+    folder_id = request.GET.get('folder')
     files = RepoFile.objects.filter(parent_folder=folder_id).order_by('name')
     context = {'files': files}
-    print('test')
-    print(files)
     return render(request, 'issues/files_dropdown_list_options.html', context)
+
+
+# Define a view to load line of code options on our issue form. Get the file
+# id from AJAX and send back a line of code queryset to the options template.
+def load_locs(request):
+    file_id = request.GET.get('file')
+    locs = LineOfCode.objects.filter(repofile=file_id).order_by('line_number')
+    context = {'locs': locs}
+    return render(request, 'issues/locs_dropdown_list_options.html', context)
 
 
 class IssueUpdateView(UpdateView):

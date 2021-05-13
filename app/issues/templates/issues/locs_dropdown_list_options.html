@@ -1,0 +1,8 @@
+<!-- 
+    Return line of code options to AJAX and the issue_form.html template
+    based on file id from our load_locs view function.
+ -->
+<option value="">---------</option>
+{% for loc in locs %}
+<option value="{{ loc.pk }}">{{ loc.line_number }}</option>
+{% endfor %}

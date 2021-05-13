@@ -1,3 +1,4 @@
+from repositories.models import LineOfCode
 from django import forms
 from django.forms import ModelForm
 from django.contrib.auth.models import User
@@ -76,7 +77,9 @@ class IssueEntryForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(IssueEntryForm, self).__init__(*args, **kwargs)
 
-        self.fields['associated_file'].queryset = RepoFolder.objects.none()
+        self.fields['associated_file'].queryset = RepoFile.objects.none()
+        self.fields['associated_loc'].queryset = LineOfCode.objects.none()
+
 
         self.fields['associated_folder'].label = 'Folder'
         self.fields['associated_file'].label = 'File'
@@ -89,6 +92,38 @@ class IssueEntryForm(ModelForm):
         for key, field in self.fields.items():
             if key.startswith('associated_'):
                 field.widget.attrs = {'class': 'associate-field'}
+
+        print(self.data)
+
+        if 'associated_folder' in self.data:
+            print('trying ...')
+            try:
+                folder_id = int(self.data.get('associated_folder'))
+                print(folder_id)
+                self.fields['associated_file'].queryset = RepoFile.objects.filter(parent_folder=folder_id).order_by('name')
+                print(self.fields['associated_file'].queryset)
+            except (ValueError, TypeError):
+                print('passed')
+                pass
+        elif self.instance.pk:
+            print('printing from within elif')
+            self.fields['associated_file'].queryset = self.instance.parent_folder.folder_repo.order_by('name')
+            print(self.fields['associated_file'].queryset)
+        
+        if 'associated_file' in self.data:
+            print('trying ...')
+            try:
+                file_id = int(self.data.get('associated_file'))
+                print(file_id)
+                self.fields['associated_loc'].queryset = LineOfCode.objects.filter(repofile=file_id).order_by('line_number')
+                print(self.fields['associated_loc'].queryset)
+            except (ValueError, TypeError):
+                print('passed')
+                pass
+        elif self.instance.pk:
+            print('printing from within elif')
+            self.fields['associated_loc'].queryset = self.instance.repofile.loc.order_by('line_number')
+            print(self.fields['associated_loc'].queryset)
 
 
 class OpenCloseIssueForm(ModelForm):

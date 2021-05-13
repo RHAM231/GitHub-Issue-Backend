@@ -141,6 +141,7 @@ See views.py under the projects app
 Let's put a wrapper around everything other than the header
 and footer to easily control, size, spacing, and background color
 -->
+
   <div class="wrapper">
 {% block content %}{% endblock %}
   </div>
@@ -184,7 +185,8 @@ and footer to easily control, size, spacing, and background color
   <script src="{% static 'js/hamburger.js' %}"></script>
   <script src="{% static 'js/progress_spinner.js' %}"></script>
   <script src="{% static 'js/issue_form.js' %}"></script>
-  <script src="{% static 'js/issue_form_options.js' %}"></script>
+  <script src="{% static 'js/issue_form_file_options.js' %}"></script>
+  <script src="{% static 'js/issue_form_loc_options.js' %}"></script>
 
 </body>
 </html>
