@@ -117,6 +117,25 @@ class IssueEntryForm(ModelForm):
             else:
                 self.fields['associated_loc'].queryset = LineOfCode.objects.none()
 
+        # If folder or file were selected in the form submit, set the querysets for
+        # file and line of code to match, since it may have changed on the frontend
+        # from AJAX updates
+        if 'associated_folder' in self.data:
+            try:
+                folder_id = int(self.data.get('associated_folder'))
+                self.fields['associated_file'].queryset = RepoFile.objects.filter(
+                    parent_folder=folder_id).order_by('name')
+            except (ValueError, TypeError):
+                pass
+        
+        if 'associated_file' in self.data:
+            try:
+                file_id = int(self.data.get('associated_file'))
+                self.fields['associated_loc'].queryset = LineOfCode.objects.filter(
+                    repofile=file_id).order_by('line_number')
+            except (ValueError, TypeError):
+                pass
+
 
 # Form for changing the state of an issue. Used on the issue detail page
 class OpenCloseIssueForm(ModelForm):

@@ -1,6 +1,7 @@
 # Python Imports
 import datetime
 import itertools
+from random import randint
 
 # Django Imports: Logic from the Django Framework
 from django.urls import reverse
@@ -117,7 +118,7 @@ def set_association_atrs(issue):
 # If we're adding associations to an issue that previously had none, set the stamp attributes
 # and create it
 def create_stamp(issue):
-    stamp_id = str(1234567812345678)
+    stamp_id = str(randint(10000000, 99999999))
     # Set the date for when the stamp was generated
     date = dateformat.format(timezone.now(), 'Y-m-d H:i:s')
     # Call our set attributes method to get the rest of the stamp parameters

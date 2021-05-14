@@ -953,6 +953,11 @@ body, html {
   width: 100px;
 }
 
+.path-wrap {
+  word-break: break-word;
+  display: inline-block;
+}
+
 .delete-icon {
   background: #c90000;
 }
