@@ -13,7 +13,7 @@ from . permissions import MyPermission
 from repositories.models import Repository, RepoFolder, RepoFile
 from sync.github_client import update_issue
 from consume_api.serializers import (
-    IssueSerializer, TestIssueSerializer, RepoSerializer,
+    HyperlinkedIssueSerializer, TestIssueSerializer, RepoSerializer,
     RepoFolderSerializer, RepoFileSerializer
     )
 
@@ -56,7 +56,7 @@ class IssueList(generics.ListCreateAPIView):
     List all issues, or create a new issue. As a guest user, you can view issues.
     """
     queryset = Issue.objects.all()
-    serializer_class = IssueSerializer
+    serializer_class = HyperlinkedIssueSerializer
 
 
 # Define an issue list view in our REST api to display all the issues
@@ -93,7 +93,7 @@ class IssueDetail(mixins.RetrieveModelMixin,
     '''
     # permission_classes = (partial(MyPermission, ['GET', 'HEAD', 'PUT']),)
     queryset = Issue.objects.all()
-    serializer_class = IssueSerializer
+    serializer_class = HyperlinkedIssueSerializer
 
     def get(self, request, *args, **kwargs):
         return self.retrieve(request, *args, **kwargs)

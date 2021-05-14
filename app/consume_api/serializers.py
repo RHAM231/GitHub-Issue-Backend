@@ -62,6 +62,23 @@ class IssueSerializer(serializers.ModelSerializer):
             return None
 
 
+class HyperlinkedIssueSerializer(serializers.HyperlinkedModelSerializer):
+    # Declare our required foreign key fields
+    repository = serializers.PrimaryKeyRelatedField(queryset=Repository.objects.all())
+    author = serializers.PrimaryKeyRelatedField(queryset=Profile.objects.all())
+    class Meta:
+        # Set our model to recieve the data
+        model = Issue
+        author = serializers.CharField(read_only=True)
+        
+        # Declare our serializer fields the same way we would for a Django modelform
+        fields = [
+            'id', 'title', 'state', 'body', 'created_at', 'updated_at', 'closed_at', 
+            'number', 'author', 'repository', 'associated_folder', 'associated_file', 
+            'associated_loc'
+            ]
+
+
 # Define a test serializer
 class TestIssueSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
