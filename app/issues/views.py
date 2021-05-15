@@ -21,7 +21,7 @@ from . models import Issue
 from users.models import Profile
 from repositories.models import RepoFolder, RepoFile, LineOfCode
 from sync.github_client import create_issue, update_issue, open_close_issue
-from . forms import IssueSearchForm, IssueEntryForm, OpenCloseIssueForm, IssueStateFilterForm
+from . forms import IssueSearchForm, IssueEntryForm, OpenCloseIssueForm
 
 
 #################################################################################################################################

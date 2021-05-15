@@ -7,45 +7,45 @@ from . models import Issue
 from repositories.models import RepoFolder, RepoFile
 
 
-FILTER_CHOICES = [
-    # ('title', 'Filters'),
-    ('Open', 'Open'),
-    ('Closed', 'Closed'),
-    ('your_issues', 'Your Issues'),
-]
+# FILTER_CHOICES = [
+#     # ('title', 'Filters'),
+#     ('Open', 'Open'),
+#     ('Closed', 'Closed'),
+#     ('your_issues', 'Your Issues'),
+# ]
 
-OPEN_CLOSED_CHOICES = [
-    ('open', 'Open'),
-    ('closed', 'Closed'),
-]
+# OPEN_CLOSED_CHOICES = [
+#     ('open', 'Open'),
+#     ('closed', 'Closed'),
+# ]
 
-AUTHOR_CHOICES = [
-    ('title', 'Author'),
-    ('project1', 'Project1'),
-]
+# AUTHOR_CHOICES = [
+#     ('title', 'Author'),
+#     ('project1', 'Project1'),
+# ]
 
-PROJECT_CHOICES = [
-    ('title', 'Projects'),
-    ('project1', 'Project1'),
-]
+# PROJECT_CHOICES = [
+#     ('title', 'Projects'),
+#     ('project1', 'Project1'),
+# ]
 
-FOLDER_CHOICES = [
-    ('title', 'Folders'),
-    ('folder1', 'Folder1'),
-]
+# FOLDER_CHOICES = [
+#     ('title', 'Folders'),
+#     ('folder1', 'Folder1'),
+# ]
 
-FILE_CHOICES = [
-    ('title', 'Files'),
-    ('file1', 'File1'),
-]
+# FILE_CHOICES = [
+#     ('title', 'Files'),
+#     ('file1', 'File1'),
+# ]
 
-SORT_CHOICES = [
-    ('title', 'Sort'),
-    ('newest', 'Newest'),
-    ('oldest', 'Oldest'),
-    ('recently_updated', 'Recently Updated'),
-    ('least_recently_updated', 'Least Recently Updated'),
-]
+# SORT_CHOICES = [
+#     ('title', 'Sort'),
+#     ('newest', 'Newest'),
+#     ('oldest', 'Oldest'),
+#     ('recently_updated', 'Recently Updated'),
+#     ('least_recently_updated', 'Least Recently Updated'),
+# ]
 
 
 class IssueSearchForm(forms.Form):
@@ -54,16 +54,16 @@ class IssueSearchForm(forms.Form):
         widget=forms.TextInput(
             attrs={'placeholder':'Search title, body, date, etc.', 'class': 'issue-search'}
         ))
-    open_filter = forms.CharField(
-        required=False,
-    )
-    closed_filter = forms.CharField(
-        required=False,
-    )
+    # open_filter = forms.CharField(
+    #     required=False,
+    # )
+    # closed_filter = forms.CharField(
+    #     required=False,
+    # )
 
 
-class IssueStateFilterForm(forms.Form):
-    btn = forms.CharField()
+# class IssueStateFilterForm(forms.Form):
+#     btn = forms.CharField()
 
 
 # Issue form for creating and updating issues
