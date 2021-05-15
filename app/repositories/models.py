@@ -22,7 +22,7 @@ class Repository(models.Model):
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=False)
     url = models.URLField(max_length=200)
-    slug = models.SlugField(max_length = 200, unique=True)
+    slug = models.SlugField(max_length = 200)
 
     # Methods
     # Override the model's initialization method so we can check for changes in values

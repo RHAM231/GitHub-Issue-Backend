@@ -30,16 +30,16 @@
               <a class="text-center"><b>Import GitHub repository?</b></a>
             </div>
             <div class="row justify-content-center my-3">
-              <a class="text-center">Issue tracker will make an API call to the GitHub repository, Issue-Tracker-Sandbox.</a>
+              <a class="text-center">Issue Tracker will make an API call to the GitHub repository, Sandbox-Import.</a>
             </div>
             <div class="row justify-content-center my-3">
-              <a class="text-center">This will save the current project state on Issue Tracker to GitHub.</a>
+              <a class="text-center">This will pull Sandbox-Import with all its issues into the site.</a>
             </div>
             <div class="row justify-content-center my-3">
-              <a class="text-center">All issue changes made since last synchronization will be uploaded.</a>
-            </div>
-            <div class="row justify-content-center my-3">
-              <a class="text-center"><b>Note: Issue Tracker will reset itself to it's initial state fifteen minutes after it's last synchronization to prepare for future visitors.</b></a>
+              <p class="text-center">
+                <a><b>Importing takes a few moments. In a hurry? Check out the existing repo </b></a>
+                <b><a href="">here</a>.</b>
+              </p>
             </div>
 
             <!-- Confirm import button -->
@@ -54,8 +54,10 @@
 
             <!-- Progress loading message, initially hidden until submission -->
             <div id="load-msg" class="row d-flex justify-content-center not-visible">
-              <h5>Importing repository from GitHub ...</h3>
-              <a>(This will take a few moments)</a>
+              <p class="text-center">
+                <b><a>Importing repository from GitHub ...</a></b><br>
+                <a>Please wait</a>
+              </p>
             </div>
         
           </div>

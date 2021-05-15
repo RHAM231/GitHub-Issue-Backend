@@ -9,24 +9,32 @@ const submitBtn = document.getElementById('sync-btn')
 
 // Define a function to add and remove classes to the elements
 // on form submit
-$("#github-import-form").submit(function() {
+
+document.getElementById("sync-btn").addEventListener("click", function() {
     // Change visibility
     spinnerBox.classList.remove('not-visible');
     loadMsg.classList.remove('not-visible');
     submitBtn.classList.add('not-visible');
-
-    // Read our form submit
-    var form = $(this);
-    var url = form.attr('action');
-
-    // Use AJAX to process the submission
-    $.ajax({
-        type: "POST",
-        url: url,
-        data: form.serialize(),
-        succuss: function(data)
-        {
-            alert(data)
-        }
-    })
 });
+
+// $("#github-import-form").submit(function() {
+//     // Change visibility
+//     spinnerBox.classList.remove('not-visible');
+//     loadMsg.classList.remove('not-visible');
+//     submitBtn.classList.add('not-visible');
+
+//     // // Read our form submit
+//     // var form = $(this);
+//     // var url = form.attr('action');
+
+//     // // Use AJAX to process the submission
+//     // $.ajax({
+//     //     type: "POST",
+//     //     url: url,
+//     //     data: form.serialize(),
+//     //     succuss: function(data)
+//     //     {
+//     //         alert(data)
+//     //     }
+//     // })
+// });

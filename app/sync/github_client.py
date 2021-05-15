@@ -96,19 +96,23 @@ def get_repo(lookup, headers, user):
     query_url = get_query_url(lookup)
     r = requests.get(query_url, headers=headers)
     raw = r.json()
+    print('PRINTING RAW ...')
+    print(raw)
     # Pull some additional parameters out of the json that we'll need later
     repo_url = raw['url']
     repo_branch = raw['default_branch']
 
     # For development/testing, purge our database on each new retrieval
-    # Repository.objects.all().delete()
-    Repository.objects.filter(name='IssueTrackerSandbox').delete()
+    Repository.objects.all().delete()
 
     # Now call our serializer method. We'll serialize the repo independently 
     # from our serialize_github_object() method below because this is an edge case.
     serializer = RepoSerializer(data=raw)
+    print('PRINTING SERIALIZER')
+    print(serializer)
     if serializer.is_valid():
-        saved = serializer.save()
+        print('Saving ...')
+        serializer.save()
     
     # Use our json url parameter from above to get the repo's new primary key
     # from our database

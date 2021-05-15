@@ -23,8 +23,3 @@ def confirm_sync(request):
         return render(request, 'sync/sync_success.html', context)
 
     return render(request, 'sync/confirm_sync.html')
-
-
-# Define a view to display a success message after importing a GitHub repo
-# def sync_success(request):
-#     return render(request, 'sync/sync_success.html')
