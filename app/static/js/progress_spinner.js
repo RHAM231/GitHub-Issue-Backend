@@ -24,8 +24,10 @@ $("#github-import-form").submit(function(e) {
         type: "POST",
         url: url,
         data: form.serialize(),
+        // Define success action
         success: function()
         {
+            // Redirect to the success page
             window.location = "Success/"
         }
     })

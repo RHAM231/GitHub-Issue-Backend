@@ -96,8 +96,6 @@ def get_repo(lookup, headers, user):
     query_url = get_query_url(lookup)
     r = requests.get(query_url, headers=headers)
     raw = r.json()
-    print('PRINTING RAW ...')
-    print(raw)
     # Pull some additional parameters out of the json that we'll need later
     repo_url = raw['url']
     repo_branch = raw['default_branch']
@@ -108,10 +106,7 @@ def get_repo(lookup, headers, user):
     # Now call our serializer method. We'll serialize the repo independently 
     # from our serialize_github_object() method below because this is an edge case.
     serializer = RepoSerializer(data=raw)
-    print('PRINTING SERIALIZER')
-    print(serializer)
     if serializer.is_valid():
-        print('Saving ...')
         serializer.save()
     
     # Use our json url parameter from above to get the repo's new primary key
@@ -122,7 +117,6 @@ def get_repo(lookup, headers, user):
     # getting and serializing github objects.
     get_root_folder(repo_pk, repo_branch, headers)
     get_repo_issues('get_repo_issues', repo_pk, headers, user)
-    return repo_pk
 
 
 # Define a method for retrieving the root folder of a GitHub repository

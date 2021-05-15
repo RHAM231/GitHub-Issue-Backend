@@ -16,12 +16,8 @@ def confirm_sync(request):
             'Authorization': f'token {token}',
             }
         user = request.user
-        repo_pk = get_repo('get_repo', headers, user)
-        # context = {
-        #     'repo': Repository.objects.get(id=repo_pk)
-        # }
-        # return render(request, 'sync/sync_success.html', context)
-        return render(request, 'sync/sync_success.html')
+        get_repo('get_repo', headers, user)
+        # Use AJAX to redirect after successful form submission
 
     return render(request, 'sync/confirm_sync.html')
 
