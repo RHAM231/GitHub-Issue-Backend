@@ -51,15 +51,11 @@
                   Issue Tracker is a Python web application running on Ubuntu. It uses the Django web framework to 
                   clone basic bug tracking features from GitHub and adds the ability to flag issues against 
                   folders, files, and individual lines of code.
-                </a>
-                <br>
-                <br>
+                </a><br><br>
                 <a>
                   The site is integrated with GitHub's public API. It utilizes the Python client, PyGitHub, 
                   and a custom client script to create, update, open, and close GitHub issues.
-                </a>
-                <br>
-                <br>
+                </a><br><br>
                 <!-- Provide a link to the project's readme on GitHub -->
                 <a>More details about the site can be found in the project</a>
                 <a href="https://github.com/RHAM231/GitHub-Issue-Backend#readme">README</a>
@@ -78,20 +74,22 @@
           <!-- Begin text -->
           <div class="row mb-2 border-bottom"></div>
             <div class="row">
-              <a class="pb-3">
-                Issue Tracker uses the Django REST framework to consume API data from GitHub. It can import a GitHub 
-                repository folder/file structure with all the repo's issues, including additional issue data added
-                by Issue Tracker.
-              </a>
-              <a class="pb-3">
-                To import GitHub JSON objects into its database, Issue Tracker uses Django REST's serializers and
-                a custom client script.
-              </a>
-              <a>
-                When adding additional issue data not tracked by GitHub, Issue Tracker "stamps" the Issue body 
-                with the data. Whenever Issue Tracker serializes a GitHub issue, it reads the stamp back into 
-                the appropriate foreign key relationships.
-              </a>
+              <p>
+                <a>
+                  Issue Tracker uses Django REST serializers to consume API data from GitHub. It can import a GitHub 
+                  repository folder/file structure with all the repo's issues, including additional issue data added
+                  by Issue Tracker.
+                </a><br><br>
+                <a>
+                  When adding additional issue data not tracked by GitHub, Issue Tracker "stamps" the Issue body 
+                  with the data. Whenever Issue Tracker serializes a GitHub issue, it reads the stamp back into 
+                  the appropriate foreign key relationships.
+                </a><br><br>
+                <a>
+                  Issue Tracker comes with a REST API that displays its database in JSON format. View it  
+                </a>
+                <a href="https://github.com/RHAM231/GitHub-Issue-Backend#readme">here</a>.<br><br>
+              </p>
             </div>
           <div class="row mt-3 mb-2 border-bottom"></div>
           

@@ -5,13 +5,10 @@ from rest_framework import mixins
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
-from functools import partial
 
 # Django Imports: Logic specific to this project
 from issues.models import Issue, TestIssue
-from . permissions import MyPermission
 from repositories.models import Repository, RepoFolder, RepoFile
-from sync.github_client import update_issue
 from consume_api.serializers import (
     HyperlinkedIssueSerializer, TestIssueSerializer, HyperlinkedRepoSerializer,
     HyperlinkedRepoFolderSerializer, HyperlinkedRepoFileSerializer
