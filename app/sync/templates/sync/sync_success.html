@@ -14,7 +14,7 @@
                   col-sm-10 col-sm-offset-1 
                   mx-auto">
 
-        <div class="form-box py-3">
+        <div class="form-box px-3 py-3">
           <div class="col-lg-10 mx-auto">
             
             <!-- Green check mark -->
@@ -33,9 +33,9 @@
             </div>
             
             <!-- Redirect button -->
-            <form action="{% url 'project-contents' repo_slug=repo.slug %}">
+            <form action="{% url 'project-list' %}">
                 <div class="row d-flex justify-content-center py-3">
-                <input type="submit" value="View Repository" class="button-sync">
+                <input type="submit" value="View Repositories" class="button-sync">
                 </div>
             </form>
         

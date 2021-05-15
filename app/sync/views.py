@@ -17,9 +17,15 @@ def confirm_sync(request):
             }
         user = request.user
         repo_pk = get_repo('get_repo', headers, user)
-        context = {
-            'repo': Repository.objects.get(id=repo_pk)
-        }
-        return render(request, 'sync/sync_success.html', context)
+        # context = {
+        #     'repo': Repository.objects.get(id=repo_pk)
+        # }
+        # return render(request, 'sync/sync_success.html', context)
+        return render(request, 'sync/sync_success.html')
 
     return render(request, 'sync/confirm_sync.html')
+
+
+# Define a view to display a success message after importing a GitHub repo
+def sync_success(request):
+    return render(request, 'sync/sync_success.html')
