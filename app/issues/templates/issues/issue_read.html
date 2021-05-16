@@ -118,7 +118,7 @@
               {% endif %}
             </form>
             <!-- View on GitHub link button, pass issue number to link to direct to individual page -->
-            <form action="https://github.com/RHAM231-IssueTracker/IssueTrackerSandbox/issues/{{ issue.number }}">
+            <form action="https://github.com/RHAM231-IssueTracker/{{ issue.repository.name }}/issues/{{ issue.number }}">
               <input type="submit" value="View on GitHub" class="mr-3 form-button-success">
             </form>
           </div>

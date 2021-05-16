@@ -44,9 +44,13 @@ We start this entire process by calling the get_repo() method from our views.py 
 
 # Given a query url lookup string and additional needed parameters, return an endpoint for
 # retrieving GitHub objects from GitHub's API.
-def get_query_url(lookup, branch=None, sha=None, path=None, issue_id=None):
+def get_query_url(lookup, repo, branch=None, sha=None, path=None, issue_id=None):
     # Define our base endpoint
-    endpoint = "https://api.github.com/repos/RHAM231-IssueTracker/IssueTrackerSandbox"
+    if repo == 'IssueTrackerSandbox':
+        endpoint = "https://api.github.com/repos/RHAM231-IssueTracker/IssueTrackerSandbox"
+    elif repo == 'Sandbox-Import':
+        endpoint = "https://api.github.com/repos/RHAM231-IssueTracker/Sandbox-Import"
+    
     # Define a dictionary linking lookups to endpoints
     query_dict = {
         # Rate Limit
@@ -91,9 +95,9 @@ def get_serializer_and_model(slookup, raw):
 
 
 # Define our get GitHub repository method.
-def get_repo(lookup, headers, user):
+def get_repo(lookup, repo_name, headers, user):
     # Given a lookup, retrieve our query url, get our repo, and convert it to json
-    query_url = get_query_url(lookup)
+    query_url = get_query_url(lookup, repo_name)
     r = requests.get(query_url, headers=headers)
     raw = r.json()
     # Pull some additional parameters out of the json that we'll need later
@@ -101,7 +105,7 @@ def get_repo(lookup, headers, user):
     repo_branch = raw['default_branch']
 
     # For development/testing, purge our database on each new retrieval
-    Repository.objects.all().delete()
+    Repository.objects.filter(name=repo_name).delete()
 
     # Now call our serializer method. We'll serialize the repo independently 
     # from our serialize_github_object() method below because this is an edge case.
@@ -115,28 +119,28 @@ def get_repo(lookup, headers, user):
 
     # Now call our root folder method. Pass our extra parameters so we can continue
     # getting and serializing github objects.
-    get_root_folder(repo_pk, repo_branch, headers)
-    get_repo_issues('get_repo_issues', repo_pk, headers, user)
+    get_root_folder(repo_pk, repo_name, repo_branch, headers)
+    get_repo_issues('get_repo_issues', repo_name, repo_pk, headers, user)
 
 
 # Define a method for retrieving the root folder of a GitHub repository
-def get_root_folder(repo_pk, repo_branch, headers):
+def get_root_folder(repo_pk, repo_name, repo_branch, headers):
     # Get the GitHub project's main branch so we can access the root folder sha
-    query_url_branch = get_query_url('get_branch', branch=repo_branch)
+    query_url_branch = get_query_url('get_branch', repo_name, branch=repo_branch)
     main_branch = requests.get(query_url_branch, headers=headers)
     raw_branch = main_branch.json()
     root_folder_sha = raw_branch['commit']['commit']['tree']['sha']
 
     # Use the root folder sha to get the root folder
-    query_url_root = get_query_url('get_root_repo_tree', sha=root_folder_sha)
+    query_url_root = get_query_url('get_root_repo_tree', repo_name, sha=root_folder_sha)
     root_folder = requests.get(query_url_root, headers=headers)
     raw_folder = root_folder.json()
     injected_json = {"repository":repo_pk, "parent_folder":None}
     raw_folder.update(injected_json)
 
     # For testing/development purposes, let's flush our models before we save new objects
-    RepoFolder.objects.all().delete()
-    RepoFile.objects.all().delete()
+    # RepoFolder.objects.all().delete()
+    # RepoFile.objects.all().delete()
 
     # Now save our root folder to database using a Django REST serializer
     serializer = RepoFolderSerializer(data=raw_folder)
@@ -144,12 +148,12 @@ def get_root_folder(repo_pk, repo_branch, headers):
         saved = serializer.save(name='repo_root', path='', data_type='tree', mode='040000')
     
     # Call our recursive method to begin retrieving and saving the repository folders and files
-    unpack_repository(repo_pk, raw_folder, headers, '')
+    unpack_repository(repo_pk, repo_name, raw_folder, headers, '')
 
 
 # Define our recursive method for unpacking a GitHub repo. Give it a folder, current path
 # and headers to pass to our get_repofile and get_repofolder methods. 
-def unpack_repository(repo_pk, folder, headers, current_path):
+def unpack_repository(repo_pk, repo_name, folder, headers, current_path):
     # pull our tree and sha out of our json folder
     tree = folder['tree']
     folder_sha = folder['sha']
@@ -157,19 +161,19 @@ def unpack_repository(repo_pk, folder, headers, current_path):
         # if a tree object is a file, call our get_repofile method, passing headers and current path
         # to it so it can get the file from GitHub. Pass sha so it can serialize the file to database.
         if entry['type'] == 'blob':
-            get_repofile(repo_pk, entry, headers, folder_sha, current_path)
+            get_repofile(repo_pk, repo_name, entry, headers, folder_sha, current_path)
         # if our object is a folder, call our get_repofolder method instead
         elif entry['type'] == 'tree':
-            get_repofolder(repo_pk, entry, headers, folder_sha, current_path)
+            get_repofolder(repo_pk, repo_name, entry, headers, folder_sha, current_path)
 
 
 # Define a get folder method to get a single folder from GitHub, serialize it to database, and call our
 # unpack method again if needed to get the folder's contents.
-def get_repofolder(repo_pk, folder_listing, headers, folder_sha, current_path):
+def get_repofolder(repo_pk, repo_name, folder_listing, headers, folder_sha, current_path):
     # Get our current folder sha from the previous folder tree we got from calling the unpack method
     current_sha = folder_listing['sha']
     # Define our query url using the sha and our get_query_url method defined above
-    query_url = get_query_url('get_folder_tree', sha=current_sha)
+    query_url = get_query_url('get_folder_tree', repo_name, sha=current_sha)
 
     # Get the folder from GitHub using our query url and headers and convert it to raw json
     r = requests.get(query_url, headers=headers)
@@ -191,18 +195,18 @@ def get_repofolder(repo_pk, folder_listing, headers, folder_sha, current_path):
     else:
         current_path = current_path + '/' + folder_listing['path']
     # Now call our unpack method again, giving it our current subfolder and our new path.
-    unpack_repository(repo_pk, raw_subfolder, headers, current_path)
+    unpack_repository(repo_pk, repo_name, raw_subfolder, headers, current_path)
 
 
 # Define a get file method for retrieving and serializing a GitHub file
-def get_repofile(repo_pk, file_listing, headers, folder_sha, current_path):
+def get_repofile(repo_pk, repo_name, file_listing, headers, folder_sha, current_path):
     # Add our file name to the current path so we can retrieve it from GitHub
     if current_path == '':
         path = current_path + file_listing['path']
     else:
         path = current_path + '/' + file_listing['path']
     # Construct our query url from our get url method and our current path
-    query_url = get_query_url('get_file_contents', path=path)
+    query_url = get_query_url('get_file_contents', repo_name, path=path)
     
     # Retrieve the file from GitHub, convert to json, and then serialize to database with our serialize object method
     r = requests.get(query_url, headers=headers)
@@ -242,14 +246,14 @@ def save_locs(content, parent_file):
 
 # Given necessary lookup parameters, get all the GitHub issues from a repository
 # and call our get_issue() method for each issue
-def get_repo_issues(lookup, repo_pk, headers, user):
-    query_url = get_query_url(lookup)
+def get_repo_issues(lookup, repo_name, repo_pk, headers, user):
+    query_url = get_query_url(lookup, repo_name)
     r = requests.get(query_url, headers=headers)
     raw_issues_list = r.json()
     issue_numbers = [issue['number'] for issue in raw_issues_list]
     issue_numbers.reverse()
     for number in issue_numbers:
-        get_issue('get_issue', repo_pk, headers, number, user)
+        get_issue('get_issue', repo_pk, repo_name, headers, number, user)
 
 
 # Run a series of checks to see if our GitHub issue contains a stamp
@@ -317,8 +321,8 @@ def remove_stamp(body):
 
 # Given individual issue parameters, retrieve the single issue from GitHub as
 # a json object and serialize it to the database by calling our serialize method
-def get_issue(lookup, repo_pk, headers, issue_id, user):
-    query_url = get_query_url(lookup, issue_id=issue_id)
+def get_issue(lookup, repo_pk, repo_name, headers, issue_id, user):
+    query_url = get_query_url(lookup, repo_name, issue_id=issue_id)
     r = requests.get(query_url, headers=headers)
     raw_issue = r.json()
 

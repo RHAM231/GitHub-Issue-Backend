@@ -98,6 +98,13 @@ class IssueEntryForm(ModelForm):
         # file fields
         # Check for existing data
         if kwargs['instance']:
+
+            # If we're using the the form to edit the issue, disable the repo field
+            # and set it as optional to allow form submission. Then read in the value
+            # in the repo field's clean method below.
+            self.fields['repository'].widget.attrs['disabled'] = True
+            self.fields['repository'].required = False
+
             # Check for folder data
             if kwargs['instance'].associated_folder:
                 # Get our folder id
@@ -135,6 +142,14 @@ class IssueEntryForm(ModelForm):
                     repofile=file_id).order_by('line_number')
             except (ValueError, TypeError):
                 pass
+    
+    # Define a custom clean method for the repo field so we can disable it for editing but
+    # enable if for creating.
+    def clean_repository(self):
+        if self.instance and self.instance.pk:
+            return self.instance.repository
+        else:
+            return self.cleaned_data['repository']
 
 
 # Form for changing the state of an issue. Used on the issue detail page

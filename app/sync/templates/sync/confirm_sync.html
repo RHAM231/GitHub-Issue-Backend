@@ -35,17 +35,37 @@
             <div class="row justify-content-center my-3">
               <a class="text-center">This will pull Sandbox-Import with all its issues into the site.</a>
             </div>
-            <div class="row justify-content-center my-3">
-              <p class="text-center">
-                <a><b>Importing takes a few moments. In a hurry? Check out the existing repo </b></a>
-                <b><a href="">here</a>.</b>
-              </p>
-            </div>
 
-            <!-- Confirm import button -->
-            <div id="sync-btn" class="row my-3 d-flex justify-content-center">
-              <button class="button-sync text-center" type="submit">Confirm Import</button>
-            </div>
+            <!-- Form for importing repos with conditionally hidden select field -->
+            <!-- <form method="POST">
+              {% csrf_token %} -->
+
+              <!-- If the user is signed in (me) display a choice form for which repo to import -->
+              {% if user.is_authenticated %}
+                <div class="row my-1">
+                  {{ form.repository.label }}
+                </div>
+                <div class="row justify-content-center my-1 mb-3 pb-3">
+                  {{ form.repository }}
+                </div>
+              <!-- 
+                Otherwise if the user is a guest, hide the select field. The form will submit
+                a default value of Sandbox-Import.
+               -->
+              {% else %}
+                <div class="row my-1 not-visible">
+                  {{ form.repository.label }}
+                </div>
+                <div class="row justify-content-center my-1 mb-3 pb-3 not-visible">
+                  {{ form.repository }}
+                </div>
+              {% endif %}
+
+              <!-- Confirm import button -->
+              <div id="sync-btn" class="row my-3 d-flex justify-content-center">
+                <input class="button-sync text-center" type="submit" value="Confirm Import"></input>
+              </div>
+            <!-- </form> -->
 
             <!-- Progress spinner, initially hidden until submission -->
             <div id="spinner-box" class="row mb-3 d-flex justify-content-center not-visible">

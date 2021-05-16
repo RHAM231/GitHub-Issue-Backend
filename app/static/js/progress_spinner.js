@@ -29,6 +29,10 @@ $("#github-import-form").submit(function(e) {
         {
             // Redirect to the success page
             window.location = "Success/"
+        },
+        error: function(XMLHttpRequest, textStatus, errorThrown) {
+            // Redirect to the failure page
+            window.location = "Failure/"
         }
     })
 });

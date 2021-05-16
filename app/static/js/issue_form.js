@@ -1,8 +1,7 @@
-
-
 // Start our script if the loaded page is the issue form
 if($('body').hasClass("issueForm")){
     // Grab our association fields
+    var repo = document.getElementById("id_repository")
     var folder = document.getElementById("id_associated_folder");
     var file = document.getElementById("id_associated_file");
     var loc = document.getElementById("id_associated_loc");
@@ -26,6 +25,7 @@ if($('body').hasClass("issueForm")){
         check_file();
     });
 }
+
 
 // Set editablity of the file and loc fields based on the value
 //  of the folder field
