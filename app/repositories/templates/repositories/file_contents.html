@@ -74,7 +74,7 @@
                   <!-- If an issue is present on the line, highlight in red with an orange button next to it -->
                   {% if line.issue_count %}
                     <td class="issue-present">
-                      <a class="issues-count-btn" href="">{{ line.issue_count }}</a>
+                      <a class="issues-count-btn" href="{% url 'issue-list' %}">{{ line.issue_count }}</a>
                     </td>
                     <td class="index">{{ line.line_number }}</td>
                     <td class="code-text code-issue">{{ line.content }}</td>
