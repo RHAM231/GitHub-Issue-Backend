@@ -1,0 +1,15 @@
+{% load filters %}
+<!-- 
+    Return select options to AJAX and the issue_form.html template
+    based on object id from our load_options view function.
+ -->
+ <option value="">---------</option>
+ {% for instance in instances %}
+  <option value="{{ instance.pk }}">
+    {% if instance|to_class_name == 'LineOfCode' %}
+      {{ instance.line_number }}
+    {% else %}
+      {{ instance.name }}
+    {% endif %}
+  </option>
+ {% endfor %}

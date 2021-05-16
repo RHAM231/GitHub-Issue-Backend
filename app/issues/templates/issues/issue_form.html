@@ -12,8 +12,7 @@
     <form 
       method="POST" 
       id="issueForm" 
-      data-files-url="{% url 'ajax_load_files' %}" 
-      data-locs-url="{% url 'ajax_load_locs' %}"
+      data-options-url="{% url 'ajax_load_options' %}"
       novalidate>
       {% csrf_token %}
 

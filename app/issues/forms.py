@@ -127,6 +127,14 @@ class IssueEntryForm(ModelForm):
         # If folder or file were selected in the form submit, set the querysets for
         # file and line of code to match, since it may have changed on the frontend
         # from AJAX updates
+        if 'repository' in self.data:
+            try:
+                repo_id = int(self.data.get('repository'))
+                self.fields['associated_folder'].queryset = RepoFolder.objects.filter(
+                    repository=repo_id).order_by('name')
+            except (ValueError, TypeError):
+                pass
+        
         if 'associated_folder' in self.data:
             try:
                 folder_id = int(self.data.get('associated_folder'))

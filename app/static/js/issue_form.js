@@ -8,10 +8,17 @@ if($('body').hasClass("issueForm")){
     // When the page loads, enable/disable the fields 
     // accordingly based on value
     window.onload = () => {
-        // Call our check_folder and check_file functions
+        // Call our check functions
+        check_repo();
         check_folder();
         check_file();
     };
+    // Listen for a change in the repo field and enable/disable 
+    // the file and loc fields accordingly
+    repo.addEventListener("change", function(){
+        // Call our check_folder function
+        check_repo();
+    });
     // Listen for a change in the folder association field
     // and enable/disable the file and loc fields accordingly
     folder.addEventListener("change", function(){
@@ -26,6 +33,23 @@ if($('body').hasClass("issueForm")){
     });
 }
 
+// Disable the repo field if it already has a value
+function check_repo() {
+    // If an option is currently selected in the field
+    if($(repo).val()) {
+        // Disable the field
+        folder.disabled = false;
+    // If the the field is empty
+    } else {
+        // Enable the field
+        folder.disabled = true;
+        file.disabled = true;
+        loc.disabled = true;
+        folder.selectedIndex = 0;
+        file.selectedIndex = 0;
+        loc.selectedIndex = 0;
+    };
+};
 
 // Set editablity of the file and loc fields based on the value
 //  of the folder field
