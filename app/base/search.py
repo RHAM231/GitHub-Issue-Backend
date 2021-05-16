@@ -81,7 +81,8 @@ def get_search_results(form):
         # Chain our field queries together before passing them to filer() below
         q_object = Q()
         for query in search_queries:
-            q_object = q_object & query
+            # Check if our search term is in field1 OR field2 OR field3 etc.
+            q_object = q_object | query
         
         # Query each model by our chained q_object and add to results
         results = model.objects.filter(q_object)
