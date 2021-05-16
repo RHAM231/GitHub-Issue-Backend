@@ -33,7 +33,7 @@ method is running.
 
 We also define a method for decoding and saving all the individual lines of code for each GitHub file we serialize.
 
-We start this entire process by calling the get_repo() method from our views.py file in this app
+We start this entire process by calling the get_repo() method from our views.py file in this app.
 '''
 
 
