@@ -1,4 +1,3 @@
-
 // Let's define a simple script to animate the hamburger toggler
 // in the navbar when clicked. Also make some adjustments to our
 // navbar when expanding and collapsing.

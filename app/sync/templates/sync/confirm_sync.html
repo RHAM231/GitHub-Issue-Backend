@@ -36,10 +36,6 @@
               <a class="text-center">This will pull Sandbox-Import with all its issues into the site.</a>
             </div>
 
-            <!-- Form for importing repos with conditionally hidden select field -->
-            <!-- <form method="POST">
-              {% csrf_token %} -->
-
               <!-- If the user is signed in (me) display a choice form for which repo to import -->
               {% if user.is_authenticated %}
                 <div class="row my-1">
@@ -65,7 +61,6 @@
               <div id="sync-btn" class="row my-3 d-flex justify-content-center">
                 <input class="button-sync text-center" type="submit" value="Confirm Import"></input>
               </div>
-            <!-- </form> -->
 
             <!-- Progress spinner, initially hidden until submission -->
             <div id="spinner-box" class="row mb-3 d-flex justify-content-center not-visible">

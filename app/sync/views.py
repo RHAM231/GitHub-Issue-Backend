@@ -19,7 +19,6 @@ def confirm_sync(request):
         if form.is_valid():
             # Get our repo choice
             repo_name = form.cleaned_data['repository']
-            print(repo_name)
 
             # Get our authentication data to pass to our github_client script
             token = settings.TEST_TOKEN
