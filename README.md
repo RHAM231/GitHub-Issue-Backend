@@ -15,7 +15,7 @@ I strove to achieve the following:
 * A backend designed to keep as much code in the Django models as reasonably possible.
 * A clean, user friendly frontend.
 
-# Key Script Files of Interest
+# Script Files of Interest
 
 Want to see the core logic of this project without digging through the repo structure? Check out these files:
 
