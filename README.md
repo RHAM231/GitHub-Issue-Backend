@@ -95,7 +95,7 @@ I utilized the following process to deploy the site to an AWS EC2 instance, conn
     1. Change the file permissions on the key
         1. sudo chmod 400 KEY_NAME.pem
 1. **SSH into EC2 instance**
-    1. cd /mnt/c/Users/rexmi/PycharmProjects/MWDK
+    1. cd /mnt/c/Users/steph/OneDrive/Documents/VS-Code/ITDK
     1. sudo ssh -i "FILE_NAME.pem" <span>ubuntu@ec2-IP-ADDRESS.REGION.compute.amazonaws.com</span>
 1. **Upgrade instance**
     1. apt-get update && apt-get upgrade
@@ -103,19 +103,19 @@ I utilized the following process to deploy the site to an AWS EC2 instance, conn
     1. mkdir django
     1. cd django
 1. **Clone deploy branch from GitHub into Django directory (while in ~/django)**
-    1. git clone -b deploy https://github.com/RHAM231/HMWA
+    1. git clone -b deploy https://github.com/RHAM231/GitHub-Issue-Backend
 1. **Install Python with pip (while in ~)**
     1. sudo apt-get install python3-pip
 1. **Install venv (while in ~)**
     1. sudo apt-get install python3-venv
-1. **Create env inside the django directory (while in ~) (we call it “env” to distinguish between venv used during development)**
+1. **Create env inside the django directory (while in ~)**
     1. python3 -m venv django/env
 1. **Activate env (while in ~/django)**
     1. source env/bin/activate
-1. **Install packages (while in ~/django/HMWA)**
+1. **Install packages (while in ~/django/GitHub-Issue-Backend)**
     1. pip install -r requirements.txt
     1. Manually install as needed
-1. **Update settings.py (while in ~/django/HMWA/HMWA)**
+1. **Update settings.py (while in ~/django/GitHub-Issue-Backend/app/GITB)**
     1. nano settings.py
     1. Set ALLOWED HOSTS to temporary IP address
     1. Turn on config settings and make sure that the secrect key is loading from a config file.
@@ -142,7 +142,7 @@ I utilized the following process to deploy the site to an AWS EC2 instance, conn
      1. sudo nano django_project.conf
      1. Edit the file to look like the following:
      1. Ctrl x, y, Enter to save file
- 1. **Enable the .conf file and disable the default.conf file**
+ 1. **Enable the django_project.conf file and disable the default.conf file**
      1. cd ~/
      1. sudo a2ensite PROJECT NAME
      1. sudo a2dissite 000-default.conf
