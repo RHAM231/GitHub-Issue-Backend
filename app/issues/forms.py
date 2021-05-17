@@ -94,10 +94,14 @@ class IssueEntryForm(ModelForm):
                 field.widget.attrs = {'class': 'associate-field'}
 
         # If the form already has data when loaded (update/edit) set the querysets
-        # for the file and line of code fields based on the ids of the folder and
-        # file fields
+        # for the folder, file, and line of code fields based on the ids of the repo, 
+        # folder, and file fields
+
         # Check for existing data
         if kwargs['instance']:
+            repo_id = kwargs['instance'].repository.id
+            self.fields['associated_folder'].queryset = RepoFolder.objects.filter(
+                    repository=repo_id).order_by('name')
 
             # If we're using the the form to edit the issue, disable the repo field
             # and set it as optional to allow form submission. Then read in the value
@@ -124,9 +128,9 @@ class IssueEntryForm(ModelForm):
             else:
                 self.fields['associated_loc'].queryset = LineOfCode.objects.none()
 
-        # If folder or file were selected in the form submit, set the querysets for
-        # file and line of code to match, since it may have changed on the frontend
-        # from AJAX updates
+        # If repository, folder, or file were selected in the form submit, set the 
+        # querysets for file and line of code to match, since it may have changed 
+        # on the frontend from AJAX updates
         if 'repository' in self.data:
             try:
                 repo_id = int(self.data.get('repository'))

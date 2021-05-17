@@ -851,20 +851,14 @@ body, html {
 
 // Styles and positions the title text within the tile
 .results-tile-title{
-  // @extend .button-position-abs;
   font-size: 18px;
-  // top: 50%;
-  // left: 37%;
 }
 
 // Styles and positions the description text within the tile
 .results-tile-description{
-  // @extend .button-position-abs;
   font-size: 14px;
   white-space: nowrap;
   color: #5e5e5e;
-  // top: 50%;
-  // left: 72%;
 }
 
 // Enlarge the search result tiles on hover
