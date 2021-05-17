@@ -219,8 +219,9 @@ def load_options(request):
     return render(request, 'issues/select_dropdown_list_options.html', context)
 
 
+# Define a view for updating an issue, use the IssueForm
 class IssueUpdateView(UpdateView):
-    # Set our standard values for the create view
+    # Set our standard values for the update view
     model = Issue
     template_name = 'issues/issue_form.html'
     context_object_name = 'issue'

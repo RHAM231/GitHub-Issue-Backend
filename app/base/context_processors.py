@@ -12,7 +12,8 @@ def Master_Search_Form(request):
     }
 
 
-# Add our user to context for the entire site to avoid loading it multiple times in multiple views
+# Add our user to context for the entire site to avoid loading 
+# it multiple times in multiple views
 def get_profile(request):
     if request.user.__class__.__name__ == "AnonymousUser":
         profile = Profile.objects.get(name='Guest')
