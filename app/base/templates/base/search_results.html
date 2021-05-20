@@ -8,12 +8,10 @@
   <div class="row mt-5 mb-5"></div>
   <div class="row mt-5 mb-5"></div>
 
-  <!-- Header at the top of the page -->
   <div class="row justify-content-center mb-5">
     <h2 class="text-center">Search Results</h2>
   </div>
 
-  <!-- Begin listing issue search results -->
   <div class="row mt-5">
     <div class="col-lg-2 col-lg-offset-5
                 col-md-4 col-md-offset-4
@@ -25,32 +23,21 @@
 
   <div class="row mt-4 dynamic-center">
 
-    <!-- 
-      For every issue returned from the search queryset, 
-      display the issue as a clickable, hoverable button 
-    -->
     {% for instance in issues %}
       <div class="col-lg-4 col-md-10 col-sm-10">
         <div class="row d-flex justify-content-center">
           <div class="results-tile-container">
 
-            <!-- Button link -->
             <a class="button-spacer" href="{% url 'issue-read' issue_slug=instance.slug %}">
               <input class="hide-button" type="button" name="" id="{{ instance.slug }}">
-
-              <!-- Put our title, description, colored tab, and icon in a label for positioning -->
               <label class="results-tile" for="{{ instance.slug }}">
-                <!-- Title text -->
                 <div class="title-text-box">
                   <span class="results-tile-title">{{ instance.title }}</span>
                 </div>
-                <!-- Description text for the issue -->
                 <div class="description-text-box">
                   <span class="results-tile-description">Repo: {{ instance.repository.name }}</span>
                 </div>
-                <!-- Color tab -->
                 <div class="icon-background-color"></div>
-                <!-- Icon -->
                 <i class="fas fa-bug"></i>
               </label>
 
@@ -59,10 +46,6 @@
         </div>
       </div>
 
-    <!-- 
-      If search returned no results and we have an empty queryset, 
-      display a no results message 
-    -->
     {% empty %}
       <div class="col-10 mx-auto">
         <div class="row d-flex justify-content-center">
@@ -76,43 +59,28 @@
 
 <div class="row mt-5">
 
-  <!-- Begin repo search results -->
   <div class="col-lg-3 col-md-10 col-sm-10 mx-auto">
     <div class="row d-flex justify-content-center mb-4">
       <h2 class="text-center border-bottom">Repositories</h2>
     </div>
 
-    <!-- 
-      For every repo returned from the search queryset, 
-      display the repo as a clickable, hoverable button 
-    -->
     {% for instance in repos %}
       <div class="row d-flex justify-content-center mb-3">
         <div class="results-tile-container">
 
-          <!-- Button link -->
           <a class="button-spacer" href="{% url 'project-contents' repo_slug=instance.slug %}">
             <input class="hide-button" type="button" name="" id="{{ instance.slug }}">
-
-            <!-- Put our title, colored tab, and icon in a label for positioning -->
             <label class="results-tile" for="{{ instance.slug }}">
-              <!-- Title text -->
               <div class="repo-title-text-box">
                 <span class="results-tile-title">{{ instance.name }}</span>
               </div>
-              <!-- Color tab -->
               <div class="icon-background-color"></div>
-              <!-- Icon -->
               <i class="fas fa-project-diagram"></i>
             </label>
 
           </a>
         </div>
       </div>
-    <!-- 
-      If search returned no results and we have an empty queryset, 
-      display a no results message 
-    -->
     {% empty %}
       <div class="col-10 mx-auto">
         <div class="row d-flex justify-content-center">
@@ -123,21 +91,15 @@
 
   </div>
 
-  <!-- Begin folder search results -->
   <div class="col-lg-3 col-md-10 col-sm-10 mx-auto">
     <div class="row d-flex justify-content-center mb-4">
       <h2 class="text-center border-bottom">Folders</h2>
     </div>
 
-    <!-- 
-      For every folder returned from the search queryset, 
-      display the folder as a clickable, hoverable button 
-    -->
     {% for instance in folders %}
       <div class="row d-flex justify-content-center mb-3">
         <div class="results-tile-container">
 
-          <!-- Button link, change it if the folder is root -->
           {% if instance.name == 'repo_root' %}
             <a class="button-spacer" 
                 href="{% url 'root-contents' folder_slug=instance.slug %}">
@@ -146,22 +108,16 @@
                 href="{% url 'folder-contents' folder_path=instance.issuetracker_url_path folder_slug=instance.slug %}">
           {% endif %}
 
-            <!-- Button -->
             <input class="hide-button" type="button" name="" id="{{ instance.slug }}">
 
-            <!-- Put our title, description, colored tab, and icon in a label for positioning -->
             <label class="results-tile" for="{{ instance.slug }}">
-              <!-- Title text -->
               <div class="title-text-box">
                 <span class="results-tile-title">{{ instance.name }}</span>
               </div>
-              <!-- Description text -->
               <div class="description-text-box">
                 <span class="results-tile-description">Repo: {{ instance.repository.name }}</span>
               </div>
-              <!-- Color tab -->
               <div class="icon-background-color"></div>
-              <!-- Icon -->
               <i class="fas fa-folder"></i>
             </label>
 
@@ -169,10 +125,6 @@
         </div>
       </div>
 
-    <!-- 
-      If search returned no results and we have an empty queryset, 
-      display a no results message 
-    -->
     {% empty %}
       <div class="col-10 mx-auto">
         <div class="row d-flex justify-content-center">
@@ -184,48 +136,31 @@
 
   </div>
 
-  <!-- Begin file search results -->
   <div class="col-lg-3 col-md-10 col-sm-10 mx-auto">
     <div class="row d-flex justify-content-center mb-4">
       <h2 class="text-center border-bottom">Files</h2>
     </div>
 
-    <!-- 
-      For every file returned from the search queryset, 
-      display the file as a clickable, hoverable button 
-    -->
     {% for instance in files %}
       <div class="row d-flex justify-content-center mb-3">
         <div class="results-tile-container">
-
-          <!-- Button link -->
           <a class="button-spacer" 
               href="{% url 'file-contents' file_path=instance.issuetracker_url_path file_slug=instance.slug %}">
-
-            <!-- Button -->
             <input class="hide-button" type="button" name="" id="{{ instance.slug }}">
-
-            <!-- Put our title, description, colored tab, and icon in a label for positioning -->
             <label class="results-tile" for="{{ instance.slug }}">
-              <!-- Title text -->
               <div class="title-text-box">
                 <span class="results-tile-title">{{ instance.name }}</span>
               </div>
-              <!-- Description text -->
               <div class="description-text-box">
                 <span class="results-tile-description">Repo: {{ instance.repository.name }}</span>
               </div>
-              <!-- Color tab -->
               <div class="icon-background-color"></div>
-              <!-- Icon -->
               <i class="fas fa-file"></i>
             </label>
-
           </a>
         </div>
       </div>
       
-    <!-- If search returned no results, display no results message -->
     {% empty %}
       <div class="col-10 mx-auto">
         <div class="row d-flex justify-content-center">
@@ -234,9 +169,7 @@
       </div>
     {% endfor %}
 
-
   </div>
-
 </div>
 
 <div class="row mb-4"></div>

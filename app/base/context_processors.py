@@ -3,7 +3,6 @@ from users.models import Profile
 from repositories.models import Repository
 
 
-# Add our navbar search form to context so we can access it from every page
 def Master_Search_Form(request):
     form_class = MasterSearchForm
     ms_search_form = form_class()
@@ -12,8 +11,6 @@ def Master_Search_Form(request):
     }
 
 
-# Add our user to context for the entire site to avoid loading 
-# it multiple times in multiple views
 def get_profile(request):
     if request.user.__class__.__name__ == "AnonymousUser":
         profile = Profile.objects.get(name='Guest')
