@@ -7,7 +7,6 @@
   <div class="row mt-5 mb-5"></div>
   <div class="row mt-5 mb-5"></div>
 
-  <!-- Begin sync form -->
   <form method="POST" id="github-import-form">
     {% csrf_token %}
     <div class="row mt-4 mb-5">
@@ -25,7 +24,6 @@
               </div>
             </div>
             
-            <!-- Include brief message explaining the form -->
             <div class="row justify-content-center my-3">
               <a class="text-center"><b>Import GitHub repository?</b></a>
             </div>
@@ -36,7 +34,6 @@
               <a class="text-center">This will pull Sandbox-Import with all its issues into the site.</a>
             </div>
 
-              <!-- If the user is signed in (me) display a choice form for which repo to import -->
               {% if user.is_authenticated %}
                 <div class="row my-1">
                   {{ form.repository.label }}
@@ -44,10 +41,6 @@
                 <div class="row justify-content-center my-1 mb-3 pb-3">
                   {{ form.repository }}
                 </div>
-              <!-- 
-                Otherwise if the user is a guest, hide the select field. The form will submit
-                a default value of Sandbox-Import.
-               -->
               {% else %}
                 <div class="row my-1 not-visible">
                   {{ form.repository.label }}
@@ -57,17 +50,14 @@
                 </div>
               {% endif %}
 
-              <!-- Confirm import button -->
               <div id="sync-btn" class="row my-3 d-flex justify-content-center">
                 <input class="button-sync text-center" type="submit" value="Confirm Import"></input>
               </div>
 
-            <!-- Progress spinner, initially hidden until submission -->
             <div id="spinner-box" class="row mb-3 d-flex justify-content-center not-visible">
               <div class="spinner-border text-primary" role="status"></div>
             </div>
 
-            <!-- Progress loading message, initially hidden until submission -->
             <div id="load-msg" class="row d-flex justify-content-center not-visible">
               <p class="text-center">
                 <b><a>Importing repository from GitHub ...</a></b><br>
@@ -80,12 +70,9 @@
 
       </div>
     </div>
-
-
   </form>
 
 </div>
-
 
 <div class="row mb-4"></div>
 </div>
