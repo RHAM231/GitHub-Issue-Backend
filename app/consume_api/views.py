@@ -1,12 +1,9 @@
-# Django REST Imports: Logic from the Django REST Framework
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework import mixins
 from rest_framework import generics
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
-
-# Django Imports: Logic specific to this project
 from issues.models import Issue, TestIssue
 from repositories.models import Repository, RepoFolder, RepoFile
 from consume_api.serializers import (
@@ -15,34 +12,14 @@ from consume_api.serializers import (
     )
 
 
-#################################################################################################################################
-# SUMMARY
-#################################################################################################################################
-
-'''
-Let's define views for displaying our database through a REST API. We use Django REST's class and function views to define an
-API root view, object list views for our repos, folders, files, and issues, as well as object detail views.
-
-These views enable GET, PUT, POST, and DELETE actions on all our database objects. Guests can view but not edit or delete objects
-using global permissions defined in settings.py.
-'''
-
-#################################################################################################################################
-# BEGIN VIEWS
-#################################################################################################################################
-
-
-# Define the api Home view
 @api_view(['GET'])
 def api_root(request, format=None):
-    # API Intro text
     """
     Welcome to Issue Tracker's API built using Django REST. Here you can view Issues, 
     Repositories, Folders, and Files from the database as JSON objects.
     """
-    # Reverse and Response are specific to DRF
+
     return Response({
-        # List our various list views
         'issues': reverse('api-issue-list', request=request, format=format),
         'repos': reverse('api-repo-list', request=request, format=format),
         'folders': reverse('api-folder-list', request=request, format=format),
@@ -50,8 +27,6 @@ def api_root(request, format=None):
     })
 
 
-# Define an issue list view in our REST api to display all the issues
-# Use default pagination settings defined settings.py for DRF
 class IssueList(generics.ListCreateAPIView):
     """
     List all issues, or create a new issue. As a guest user, you can view issues 
@@ -61,7 +36,6 @@ class IssueList(generics.ListCreateAPIView):
     serializer_class = HyperlinkedIssueSerializer
 
 
-# Define a REST api view for a single issue
 class IssueDetail(generics.RetrieveUpdateDestroyAPIView):
     '''
     Display an individual issue. As a guest user, you can view the issue and navigate 
@@ -71,8 +45,6 @@ class IssueDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = HyperlinkedIssueSerializer
 
 
-# Display all the repositories in the API
-# Use default pagination settings defined settings.py for DRF
 class RepoList(generics.ListCreateAPIView):
     """
     List all repositories. As a guest user, you can view repositories and navigate to other 
@@ -84,7 +56,6 @@ class RepoList(generics.ListCreateAPIView):
     serializer_class = HyperlinkedRepoSerializer
 
 
-# Display an individual repository in the API
 class RepoDetail(generics.RetrieveUpdateDestroyAPIView):
     """
     Display an individual repository. As a guest user, you can view the repository
@@ -96,8 +67,6 @@ class RepoDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = HyperlinkedRepoSerializer
 
 
-# Display all the folders in the API
-# Use default pagination settings defined settings.py for DRF
 class RepoFolderList(generics.ListCreateAPIView):
     """
     List all repository folders, or create a new folder. As a guest user, you can view folders
@@ -109,7 +78,6 @@ class RepoFolderList(generics.ListCreateAPIView):
     serializer_class = HyperlinkedRepoFolderSerializer
 
 
-# Display an individual folder in the API
 class RepoFolderDetail(generics.RetrieveUpdateDestroyAPIView):
     """
     Display an individual repository folder. As a guest user, you can view the folder
@@ -121,8 +89,6 @@ class RepoFolderDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = HyperlinkedRepoFolderSerializer
 
 
-# Display all the files in the API
-# Use default pagination settings defined settings.py for DRF
 class RepoFileList(generics.ListCreateAPIView):
     """
     List all repository files, or create a new file. As a guest user, you can view files
@@ -134,7 +100,6 @@ class RepoFileList(generics.ListCreateAPIView):
     serializer_class = HyperlinkedRepoFileSerializer
 
 
-# Display an individual file in the API
 class RepoFileDetail(generics.RetrieveUpdateDestroyAPIView):
     """
     Display an individual repository file as a JSON object. As a guest user, you can view 
@@ -146,7 +111,6 @@ class RepoFileDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = HyperlinkedRepoFileSerializer
 
 
-# Test Issue List View for development
 class TestIssueList(APIView):
     """
     List all test issues, or create a new test issue.
@@ -164,7 +128,6 @@ class TestIssueList(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# Test Issue Detail view for development
 class TestIssueDetail(mixins.RetrieveModelMixin,
                     mixins.UpdateModelMixin,
                     mixins.DestroyModelMixin,
@@ -180,8 +143,3 @@ class TestIssueDetail(mixins.RetrieveModelMixin,
 
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
-
-
-#################################################################################################################################
-# END
-#################################################################################################################################

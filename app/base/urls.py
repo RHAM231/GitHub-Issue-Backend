@@ -5,7 +5,6 @@ from . views import (
 )
 
 
-# Define our urls for the base app
 urlpatterns = [
     path('', views.home, name='home'),
     path('about', views.about, name='about'),
