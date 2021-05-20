@@ -4,7 +4,6 @@ from . models import (
 )
 
 
-# Use custom registration to make the stamp field read-only
 @admin.register(Issue)
 class IssueAdmin(admin.ModelAdmin):
     readonly_fields = ('stamp',)
