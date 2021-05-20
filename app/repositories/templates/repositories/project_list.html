@@ -7,35 +7,27 @@
   <div class="row mt-5 mb-5"></div>
   <div class="row mt-5 mb-5"></div>
 
-  <!-- Header link -->
   <div class="row mt-1 mb-4">
     <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 mx-auto">
       <a href="{% url 'home' %}" class="current-path">Home</a>
     </div>
   </div>
 
-  <!-- Display all the repositories -->
   {% for repo in repositories %}
     <div class="row mb-4">
         <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1 col-sm-10 col-sm-offset-1 mx-auto">
           <div class="project-box">
             <div class="icon-tab">
-              <!-- Icon -->
               <i class="fas fa-project-diagram"></i>
-              <!-- Description -->
               <a class="project-description dynamic-hide-small">{{ repo.description }}</a>
-              <!-- Date updated -->
               <a class="project-date text-secondary dynamic-hide-small">Updated {{ repo.updated_at }}</a>
             </div>
-            <!-- Repo header with link -->
             <div class="project-header">
               <h4><a href="{% url 'project-contents' repo_slug=repo.slug %}">{{ repo.name }}</a></h4>
             </div>
-            <!-- Issue button with count if issues are present -->
             <div class="row justify-content-end">
               <div class="project-button">
                   <a href="{% url 'issue-list' %}" class="issue-button">Issues</a>
-                  <!-- Resize the number text for numbers greater than 99 -->
                   {% if repo.issue_count > 99 %}
                     <div class="issues-count text-center count-small"><a>{{ repo.issue_count }}</a></div>
                   {% else %}
@@ -49,7 +41,6 @@
   {% endfor %}
 
 </div>
-
 
 <div class="row mb-4"></div>
 </div>

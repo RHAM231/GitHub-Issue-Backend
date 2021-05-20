@@ -7,14 +7,12 @@
   <div class="row mt-5 mb-5"></div>
   <div class="row mt-5 mb-5"></div>
 
-  <!-- Header with link to repo list page -->
   <div class="row mt-1 mb-4">
     <div class="col-12 mx-auto">
       <a href="{% url 'project-list' %}" class="current-path">Repositories</a>
     </div>
   </div>
 
-  <!-- Begin file contents -->
   <div class="row">
     <div class="col-12 mx-auto">
       <div class="file-contents-box">
@@ -26,21 +24,17 @@
                 <div class="icon-tab">
                   <i class="fas fa-file"></i>
                 </div>
-                <!-- File name -->
                 <div class="folder-file-header">
                   <a class="custom-header">{{ file.name }}</a>
                 </div>
               </div>
-              <!-- Date created -->
               <div class="mr-auto ml-auto">
                 <div class="folder-file-date">
                   <a class="text-secondary dynamic-hide">Created {{ file.created_at }}</a>
                 </div>
               </div>
-              <!-- File issue button, display number of issues on button as orange circle -->
               <div class="folder-file-button">
                 <a href="{% url 'issue-list' %}" class="issue-button">Issues</a>
-                <!-- Resize the number text for numbers greater than 99 -->
                 {% if issues > 99 %}
                   <div class="issues-count text-center count-small"><a>{{ issues }}</a></div>
                 {% elif issues is 0 %}
@@ -52,7 +46,6 @@
           </div>
         </div>
         
-        <!-- Display the file attributes, line count, lines of code, file size -->
         <div class="row p-custom">
           <div class="col-12 file-subheader border-bottom">
             <div class="row px-3 py-3">
@@ -63,22 +56,18 @@
           </div>
         </div>
         
-        <!-- Display file contents in a table -->
         <div class="row p-custom mb-5">
           <div class="col-12 file-contents">
             <div class="row table-scroll">
               <table>
-                <!-- Iterate over all the lines of code -->
                 {% for line in lines %}
                 <tr>
-                  <!-- If an issue is present on the line, highlight in red with an orange button next to it -->
                   {% if line.issue_count %}
                     <td class="issue-present">
                       <a class="issues-count-btn" href="{% url 'issue-list' %}">{{ line.issue_count }}</a>
                     </td>
                     <td class="index">{{ line.line_number }}</td>
                     <td class="code-text code-issue">{{ line.content }}</td>
-                  <!-- Otherwise display as normal -->
                   {% else %}
                     <td></td>
                     <td class="index">{{ line.line_number }}</td>
@@ -96,7 +85,6 @@
   </div>
 
 </div>
-
 
 <div class="row mb-4"></div>
 </div>
