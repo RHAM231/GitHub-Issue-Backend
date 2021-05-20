@@ -162,7 +162,7 @@ TEST = config('test', default='')
 TEST_TOKEN = config('TEST_TOKEN', default='')
 GH_USER = config('USER', default='')
 
-# Django REST Settings
+# Django REST Settings deploy
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
     'PAGE_SIZE': 5,
