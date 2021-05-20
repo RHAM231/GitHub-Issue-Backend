@@ -19,8 +19,8 @@ I strove to achieve the following:
 
 Want to see the core logic of this project without digging through the repo structure? Check out these files:
 
-* [issues.models.py](): Houses issue database logic, including custom stamping methods for adding/updating issue associations.
-* [sync.github_client.py](): My custom client script for connecting GitHub's API and Django REST to my site. Any data traveling from my site to GitHub or vice versa, gets routed through this script.
+* [issues/models.py](https://github.com/RHAM231/GitHub-Issue-Backend/blob/master/app/issues/models.py): Houses issue database logic, including custom stamping methods for adding/updating issue associations.
+* [sync/github_client.py](https://github.com/RHAM231/GitHub-Issue-Backend/blob/master/app/sync/github_client.py): My custom client script for connecting GitHub's API and Django REST to my site. Any data traveling from my site to GitHub or vice versa, gets routed through this script.
 
 # My Thought Process and Methods
 
