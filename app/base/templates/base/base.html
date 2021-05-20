@@ -2,43 +2,29 @@
 <html lang="en">
 {% load static %}
 
-<!--###############################################################################################################-->
-<!--HEAD: Bootstrap, Icons, CSS, Favicons, Fonts, Tab Titles-->
-<!--###############################################################################################################-->
-
 <head>
-  <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport"
         content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-  <!-- Bootstrap CSS -->
   <link rel="stylesheet"
         href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
         crossorigin="anonymous">
 
-  <!-- Icon Stylesheet -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/all.css">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.13.0/css/v4-shims.css">
 
-  <!-- My CSS Stylesheet -->
   <link rel="stylesheet" href="{% static 'css/style.css' %}" type="text/css">
 
-  <!-- My Favicon -->
   <link rel="icon" href="{% static 'images/logo.jpg' %}">
 
-  <!-- Google Font -->
   <link href="https://fonts.googleapis.com/css2?family=Merriweather+Sans:wght@400;700&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Varela+Round&display=swap" rel="stylesheet">
 
   <meta charset="UTF-8">
 
-<!--
-Applies custom internet tab titles based on the title provided in each page view function's context.
-See views.py under the projects app
--->
   {% if title %}
     <title>Issue Tracker | {{ title }}</title>
   {% else %}
@@ -46,15 +32,9 @@ See views.py under the projects app
   {% endif %}
 </head>
 
-<!--###############################################################################################################-->
-<!--BODY: navbar, wrapper, footer-->
-<!--###############################################################################################################-->
-
 <body>
-  <!-- Start the navbar -->
   <nav class="navbar navbar-expand-custom mb-5">
     <a class="navbar-brand" href="{% url 'home' %}">Issue Tracker</a>
-    <!-- Use this search form for small screens -->
     <form class="nav-search-collapse ml-auto" action="{% url 'search-results' %}" method="get">
       <a class="nav-search-icon mr-1">
         <i class="fas fa-search"></i>
@@ -62,7 +42,6 @@ See views.py under the projects app
       {{ ms_search_form.master_search }}
     </form>
     <a>
-      <!-- Navbar animated toggler -->
       <button class="navbar-toggler"
               type="button"
               data-toggle="collapse"
@@ -74,12 +53,9 @@ See views.py under the projects app
         </span>
       </button>
     </a>
-    <!-- Set up the collapsible navbar -->
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
       <ul class="navbar-nav">
-        <!-- Home link -->
         <li class="nav-item"><a href="{% url 'home' %}" class="nav-link link-effect">Home</a></li>
-        <!-- API dropdown link -->
         <li class="nav-item dropdown">
           <a class="nav-link link-effect"
              href="#" id="navbarDropdownMenuLink"
@@ -88,7 +64,6 @@ See views.py under the projects app
              aria-expanded="false">
             API
           </a>
-          <!-- Individual API dropdown links -->
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <a class="dropdown-item border-bottom" href="{% url 'api-home' %}">API Home</a>
             <a class="dropdown-item border-bottom" href="{% url 'api-issue-list' %}">Issues</a>
@@ -96,7 +71,6 @@ See views.py under the projects app
             <a class="dropdown-item border-bottom" href="{% url 'api-folder-list' %}">Folders</a>
             <a class="dropdown-item" href="{% url 'api-file-list' %}">Files</a>
           </div>
-        <!-- Repositories dropdown links -->
         <li class="nav-item dropdown">
           <a class="nav-link link-effect"
               href="#" id="navbarDropdownMenuLink"
@@ -105,18 +79,14 @@ See views.py under the projects app
               aria-expanded="false">
             Repositories
           </a>
-          <!-- Individual repository dropdown links -->
           <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <a class="dropdown-item border-bottom" href="{% url 'project-list' %}">View</a>
             <a class="dropdown-item" href="{% url 'confirm-sync' %}">Import</a>
           </div>
-        <!-- Issues link -->
         <li class="nav-item"><a href="{% url 'issue-list' %}" class="nav-link link-effect">Issues</a></li>
-        <!-- About link -->
         <li class="nav-item"><a href="{% url 'about' %}" class="nav-link link-effect">About</a></li>
       </ul>
       <ul class="navbar-nav ml-auto">
-        <!-- Use this search form for large screens -->
         <li class="nav-item nav-search">
           <form class="pr-4 border-right" action="{% url 'search-results' %}" method="get">
             <a class="px-2">Search Site:</a>
@@ -124,9 +94,7 @@ See views.py under the projects app
             <button class="button-search my-2 my-sm-0" type="submit">Search</button>
           </form>
         </li>
-        <!-- Logout and Guest profile links -->
         <li class="nav-item">
-          <!-- Display one or the other depending on whether the user is logged in our not -->
           {% if user.is_authenticated %}
             <a href="{% url 'logout' %}" class="login-out-link">Logout</a>
           {% else %}
@@ -137,30 +105,20 @@ See views.py under the projects app
     </div>
   </nav>
 
-<!--
-Let's put a wrapper around everything other than the header
-and footer to easily control, size, spacing, and background color
--->
-
   <div class="wrapper">
 {% block content %}{% endblock %}
   </div>
 
-  <!-- Begin footer -->
   <footer class="footer">
     <div class="container h-100">
       <div class="row h-100">
 
         <div class="footer-text col-sm-12 col-lg-12 my-auto">
-          <!-- Title and name -->
           <a>2021 Rex Mitchell, Github Issue Tracker Clone</a><br>
-          <!-- Email me link -->
           <a>Contact me | </a><a class="footer-link" href="mailto:nogardjmj@gmail.com">nogardjmj@gmail.com</a>&nbsp
           <i class="footer-icon far fa-envelope"></i><br>
-          <!-- Link to my personal GitHub page -->
           <a>My GitHub | </a><a class="footer-link" href="https://github.com/RHAM231">RHAM231</a>&nbsp
           <i class="footer-icon fab fa-github"></i><br>
-          <!-- Link to my personal website -->
           <a>My Website | </a><a class="footer-link" href="https://rexhmitchell.com">rexhmitchell.com</a>
         </div>
 
@@ -168,9 +126,6 @@ and footer to easily control, size, spacing, and background color
     </div>
   </footer>
 
-  <!-- Load JavaScript -->
-  <!-- Optional JavaScript -->
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"
           integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
           crossorigin="anonymous"></script>
@@ -181,12 +136,8 @@ and footer to easily control, size, spacing, and background color
           integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
           crossorigin="anonymous"></script>
 
-  <!-- Now load our custom scripts from static -->
-  <!-- Navbar toggler -->
   <script src="{% static 'js/hamburger.js' %}"></script>
-  <!-- Import progess spinner -->
   <script src="{% static 'js/progress_spinner.js' %}"></script>
-  <!-- Issue form with dropdown options -->
   <script src="{% static 'js/issue_form.js' %}"></script>
   <script src="{% static 'js/issue_form_file_options.js' %}"></script>
   <script src="{% static 'js/issue_form_loc_options.js' %}"></script>
