@@ -112,7 +112,7 @@ I utilized the following process to deploy the site to an AWS EC2 instance, conn
     1. python3 -m venv django/env
 1. **Activate env (while in ~/django)**
     1. source env/bin/activate
-1. **Install packages (while in ~/django/GitHub-Issue-Backend)**
+1. **Install packages (while in ~/django/GitHub-Issue-Backend/app)**
     1. pip install -r requirements.txt
     1. Manually install as needed
 1. **Update settings.py (while in ~/django/GitHub-Issue-Backend/app/GITB)**
