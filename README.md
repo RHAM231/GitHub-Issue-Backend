@@ -123,9 +123,9 @@ I utilized the following process to deploy the site to an AWS EC2 instance, conn
     1. sudo touch /etc/config.json
     1. sudo nano /etc/config.json
     1. Edit the file to look like the following:
-1. **Run collectstatic (while in ~/django/HMWA/HMWA)**
+1. **Run collectstatic (while in ~/django/GitHub-Issue-Backend/app)**
     1. python manage.py collectstatic
-1. **Test Development Server on EC2 instance (while in ~/django/HMWA/HMWA)**
+1. **Test Development Server on EC2 instance (while in ~/django/GitHub-Issue-Backend/app)**
     1. python manage.py runserver 0.0.0.0:8000
     1. Type “temporary IP address:8000” into browser
     1. Everything should be running, test the site
@@ -134,7 +134,7 @@ I utilized the following process to deploy the site to an AWS EC2 instance, conn
 
 ### Configure Apache2
 
- 1. **Install apache2 and Django mod_wsgi**
+ 1. **Install apache2 and Django mod_wsgi (while in ~)**
      1. sudo apt-get install apache2 libapache2-mod-wsgi-py3
  1. **Navigate to apache2 configuration directory and create the .conf file**
      1. cd /etc/apache2/sites-available/
@@ -178,7 +178,7 @@ I utilized the following process to deploy the site to an AWS EC2 instance, conn
     1. sudo nano /etc/config.json
     1. Edit the file to look like the following:
 1. **Verify proper settings for postgres db in settings.py, comment out development database, and uncomment real database**
-1. **Initilize database (while in ~/django/HMWA/HMWA/HMWA)** (home/django/TOP_FOLDER/PROJECT/APP)
+1. **Initilize database (while in ~/django/GitHub-Issue-Backend/app/GITB)** (home/django/TOP_FOLDER/PROJECT/APP)
     1. python manage.py makemigrations
     1. python manage.py migrate
     1. python manage.py createsuperuser
@@ -189,7 +189,7 @@ I utilized the following process to deploy the site to an AWS EC2 instance, conn
 
 ### Build additional security settings in settings.py
 
-1. Turn on all security settings as shown below:
+1. Turn on all security settings except for SSL and HSTS settings (we will turn these on after enabling the SSL certificate:
 1. Leave HSTS seconds at 60 for now to avoid breaking the site
 1. Build up a Content Security Policy using Django-CSP, test each value
 
@@ -238,7 +238,10 @@ I utilized the following process to deploy the site to an AWS EC2 instance, conn
     1. sudo apachectl configtest
     1. sudo service apache2 restart
     1. Test the site
-1. **Setup auto rewew**
+1. **Turn on the last of the security settings**
+    1. Leave HSTS seconds at 60 for now to avoid breaking the site (we will gradually increase this over time)
+    1. Test new settings
+3. **Setup auto rewew**
     1. sudo certbot renew--dry-run
     1. sudo crontab -e, 1 to use nano
     1. Edit to look like the following:
