@@ -81,7 +81,7 @@ class OpenCloseIssueView(UpdateView):
     form_class = OpenCloseIssueForm
     model = Issue
     slug_url_kwarg = 'issue_slug'
-    token = settings.TEST_TOKEN
+    token = settings.GH_TOKEN
     gh_user = settings.GH_USER
 
     def form_valid(self, form):
@@ -108,7 +108,7 @@ class IssueCreateView(CreateView):
     template_name = 'issues/issue_form.html'
     slug_url_kwarg = 'issue_slug'
     form_class = IssueEntryForm
-    token = settings.TEST_TOKEN
+    token = settings.GH_TOKEN
     gh_user = settings.GH_USER
 
     def form_valid(self, form):
@@ -153,7 +153,7 @@ class IssueUpdateView(UpdateView):
     context_object_name = 'issue'
     slug_url_kwarg = 'issue_slug'
     form_class = IssueEntryForm
-    token = settings.TEST_TOKEN
+    token = settings.GH_TOKEN
     gh_user = settings.GH_USER
 
     def form_valid(self, form):

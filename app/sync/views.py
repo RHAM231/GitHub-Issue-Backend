@@ -11,7 +11,7 @@ def confirm_sync(request):
         form = ImportRepoForm(request.POST)
         if form.is_valid():
             repo_name = form.cleaned_data['repository']
-            token = settings.TEST_TOKEN
+            token = settings.GH_TOKEN
             headers = {'Authorization': f'token {token}',}
             user = request.user
             get_repo('get_repo', repo_name, headers, user)
