@@ -1,5 +1,5 @@
 import os
-from decouple import config
+# from decouple import config
 import json
 
 
@@ -129,10 +129,10 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-]
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, "static"),
+# ]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -144,8 +144,8 @@ LOGIN_REDIRECT_URL = 'home'
 LOGIN_URL = 'login'
 
 # This may need tweeking
-GH_TOKEN = config('GH_TOKEN', default='')
-GH_USER = config('GH_USER', default='')
+GH_TOKEN = config('GH_TOKEN')
+GH_USER = config('GH_USER')
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
