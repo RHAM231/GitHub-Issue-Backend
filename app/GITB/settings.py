@@ -144,9 +144,9 @@ LOGIN_REDIRECT_URL = 'home'
 LOGIN_URL = 'login'
 
 # This may need tweeking
-GH_TOKEN = config('GH_TOKEN')
-GH_USER = config('GH_USER')
-ADMIN_USER = config('ADMIN_USER')
+GH_TOKEN = config.get('GH_TOKEN')
+GH_USER = config.get('GH_USER')
+ADMIN_USER = config.get('ADMIN_USER')
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
