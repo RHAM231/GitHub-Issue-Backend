@@ -146,6 +146,7 @@ LOGIN_URL = 'login'
 # This may need tweeking
 GH_TOKEN = config('GH_TOKEN')
 GH_USER = config('GH_USER')
+ADMIN_USER = config('ADMIN_USER')
 
 REST_FRAMEWORK = {
     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',

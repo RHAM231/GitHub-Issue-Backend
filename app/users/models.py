@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 
 
@@ -15,7 +16,7 @@ class Profile(models.Model):
     image = models.ImageField(default='static/images/logo.jpg', upload_to='images')
 
     def save(self, *args, **kwargs):
-        if self.user.username == 'admin':
+        if self.user.username == settings.ADMIN_USER:
             self.name = 'Rex Mitchell'
         else:
             self.name = self.user.username
