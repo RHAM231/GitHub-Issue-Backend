@@ -131,7 +131,7 @@ class FileDetailView(DetailView):
         context['issues'] = Issue.objects.filter(associated_file=repofile.id).count
 
         # Get our lines of code to iterate over in the template
-        lines = LineOfCode.objects.filter(repofile=repofile.id).annotate(issue_count=Count('issue_loc'))
+        lines = LineOfCode.objects.filter(repofile=repofile.id).order_by('line_number').annotate(issue_count=Count('issue_loc'))
 
         # Define our individual file attributes
         context['lines'] = lines
