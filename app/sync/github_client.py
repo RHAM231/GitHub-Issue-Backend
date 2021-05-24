@@ -106,6 +106,7 @@ def get_repo(lookup, repo_name, headers, user):
 
     # For development/testing, purge our database on each new retrieval
     Repository.objects.filter(name=repo_name).delete()
+    RepoFolder.objects.get(name='broke_the_site')
 
     # Now call our serializer method. We'll serialize the repo independently 
     # from our serialize_github_object() method below because this is an edge case.
@@ -137,10 +138,6 @@ def get_root_folder(repo_pk, repo_name, repo_branch, headers):
     raw_folder = root_folder.json()
     injected_json = {"repository":repo_pk, "parent_folder":None}
     raw_folder.update(injected_json)
-
-    # For testing/development purposes, let's flush our models before we save new objects
-    # RepoFolder.objects.all().delete()
-    # RepoFile.objects.all().delete()
 
     # Now save our root folder to database using a Django REST serializer
     serializer = RepoFolderSerializer(data=raw_folder)
