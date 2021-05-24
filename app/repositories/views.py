@@ -78,7 +78,7 @@ class FileDetailView(DetailView):
         context['title'] = 'Files'
         repofile = RepoFile.objects.get(slug=self.kwargs['file_slug'])
         context['issues'] = Issue.objects.filter(associated_file=repofile.id).count
-        lines = LineOfCode.objects.filter(repofile=repofile.id).annotate(issue_count=Count('issue_loc'))
+        lines = LineOfCode.objects.filter(repofile=repofile.id).order_by('line_number').annotate(issue_count=Count('issue_loc'))
         context['lines'] = lines
         context['line_count'] = lines.count()
         context['sloc'] = LineOfCode.objects.filter(repofile=repofile.id).exclude(content='').count()
