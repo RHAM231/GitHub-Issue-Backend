@@ -152,7 +152,7 @@ I utilized the following process to deploy the site to an AWS EC2 instance, conn
          1. sudo chmod 664 PROJECT NAME/db.sqlite3
          1. sudo chown :www-data PROJECT NAME/
          1. sudo chmod 775 PROJECT NAME/
-         1. ls-la, verify permissions
+         1. ls -la, verify permissions
      1. Set owner and permissions for project media folder so we can access it with our database
          1. sudo chown -R :www-data PROJECT NAME/media/
          1. sudo chmod -R 775 PROJECT NAME/media
@@ -178,7 +178,7 @@ I utilized the following process to deploy the site to an AWS EC2 instance, conn
     1. sudo nano /etc/config.json
     1. Edit the file to look like the following:
 1. **Verify proper settings for postgres db in settings.py, comment out development database, and uncomment real database**
-1. **Initilize database (while in ~/django/GitHub-Issue-Backend/app/GITB)** (home/django/TOP_FOLDER/PROJECT/APP)
+1. **Initilize database (while in ~/django/GitHub-Issue-Backend/app)** (home/django/TOP_FOLDER/PROJECT)
     1. python manage.py makemigrations
     1. python manage.py migrate
     1. python manage.py createsuperuser
