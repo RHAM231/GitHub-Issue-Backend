@@ -4,8 +4,10 @@ from users.models import Profile
 from . forms import ImportRepoForm
 from . github_client import get_repo
 from repositories.models import Repository
+from csp.decorators import csp_exempt
 
 
+@csp_exempt
 def confirm_sync(request):
     if request.method == 'POST':
         form = ImportRepoForm(request.POST)

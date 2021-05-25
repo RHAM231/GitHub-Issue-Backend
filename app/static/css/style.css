@@ -489,6 +489,19 @@ body, html {
   width: 50%;
 }
 
+@media (max-width: 630px) {
+  .logo-box {
+    width: 45px;
+    height: 45px;
+    line-height: 45px;
+    margin: 0px 20px;
+  }
+
+  .-resize {
+    width: 90%;
+  }
+}
+
 .welcome {
   text-align: center;
 }
