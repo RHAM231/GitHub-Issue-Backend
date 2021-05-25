@@ -7,10 +7,14 @@ from users.models import Profile
 from . forms import ImportRepoForm
 from . github_client import get_repo
 from repositories.models import Repository
+from csp.decorators import csp_exempt
 
 
 
 # Define a view to begin the GitHub repo import process
+# Make our sync view csp exempt so django-csp doesn't block importing
+# on mobile devices.
+@csp_exempt
 def confirm_sync(request):
     # If a form submission took place
     if request.method == 'POST':
