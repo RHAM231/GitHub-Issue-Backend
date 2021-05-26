@@ -268,20 +268,20 @@ body, html {
   margin-right: 45%;
   margin-left: 45%;
 }
-@media (max-width: 576px){
-  .squash{margin-right: 30%; margin-left: 30%;}
-}
-@media (max-width: 768px){
-  .squash{margin-right: 35%; margin-left: 35%;
+@media (max-width: 1200px){
+  .squash{margin-right: 42%; margin-left: 42%;
   }
 }
 @media (max-width: 992px){
-  .squash{margin-right: 38%; margin-left: 38%;
-  }
-}
-@media (max-width: 1200px){
   .squash{margin-right: 40%; margin-left: 40%;
   }
+}
+@media (max-width: 768px){
+  .squash{margin-right: 37%; margin-left: 37%;
+  }
+}
+@media (max-width: 576px){
+  .squash{margin-right: 32%; margin-left: 32%;}
 }
 
 ////////////////////////////////////////////////////////////////////////////
