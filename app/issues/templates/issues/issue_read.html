@@ -87,10 +87,10 @@
           <!-- Then folder, file, and line of code -->
           <div class="row my-2">
             <a>Folder: &nbsp</a>
-            <b><a>{{ issue.associated_folder }}</a></b>
-            <a>&nbsp File: &nbsp</a>
-            <b><a>{{ issue.associated_file }}</a></b>
-            <a>&nbsp Line: &nbsp</a>
+            <b><a>{{ issue.associated_folder }} &nbsp</a></b>
+            <a>File: &nbsp</a>
+            <b><a>{{ issue.associated_file }} &nbsp</a></b>
+            <a>Line: &nbsp</a>
             <b><a>{{ issue.associated_loc }}</a></b>
           </div>
           <!-- Then path -->
@@ -115,20 +115,24 @@
           <!-- Buttons -->
           <div class="row d-flex flex-row-reverse py-3">
             <!-- Open/Close issue form -->
+            <div class="col-lg-3 col-md-3 col-sm-12 text-right">
             <form method="POST">
               {% csrf_token %}
               {{ form }}
               <!-- Display the button as either close or open based on issue state -->
               {% if issue.state == 'open' %}
-                <input type="submit" value="Close Issue" class="close-button">
+                <input type="submit" value="Close Issue" class="my-2 close-button">
               {% else %}
-                <input type="submit" value="Open Issue" class="close-button">
+                <input type="submit" value="Open Issue" class="my-2 close-button">
               {% endif %}
             </form>
+            </div>
             <!-- View on GitHub link button, pass issue number to link to direct to individual page -->
+            <div class="col-lg-9 col-md-9 col-sm-12 text-right">
             <form action="https://github.com/RHAM231-IssueTracker/{{ issue.repository.name }}/issues/{{ issue.number }}">
-              <input type="submit" value="View on GitHub" class="mr-3 form-button-success">
+              <input type="submit" value="View on GitHub" class="my-2 form-button-success">
             </form>
+            </div>
           </div>
       
         </div>
