@@ -28,23 +28,27 @@
   <div class="row issue-subheader">
     <div class="col-lg-8 col-lg-offset-2
                 col-md-10 col-md-offset-1
-                col-sm-12 mx-auto d-flex">
+                col-sm-12 mx-auto d-flex
+                ">
       
-      <!-- Display issue state as either open or closed -->
-      {% if issue.state == 'open' %}
-      <div class="issue-open mr-2">
-        <i class="fas fa-bug"></i>
-        <a>Open</a>
+      <div class="row p-custom">
+        <!-- Display issue state as either open or closed -->
+        {% if issue.state == 'open' %}
+        <div class="issue-open mr-2">
+          <i class="fas fa-bug"></i>
+          <a>Open</a>
+        </div>
+        {% else %}
+        <div class="issue-closed mr-2">
+          <i class="far fa-check-circle"></i>
+          <a>Closed</a>
+        </div>
+        {% endif %}
+        <!-- Author name and created at time -->
+        <b><a>{{ issue.author.name }} &nbsp</a></b>
+        <a>opened this issue &nbsp</a>
+        <a>{{ issue.created_at }}</a>
       </div>
-      {% else %}
-      <div class="issue-closed mr-2">
-        <i class="far fa-check-circle"></i>
-        <a>Closed</a>
-      </div>
-      {% endif %}
-      <!-- Author name and created at time -->
-      <b><a>{{ issue.author.name }}</a></b>
-      <a>&nbsp opened this issue {{ issue.created_at }}</a>
     </div>
   </div>
 
@@ -93,6 +97,10 @@
           <div class="row my-2">
             <a>Path: &nbsp</a>
             <b><a class="path-wrap">{{ issue_path }}</a></b>
+          </div>
+          
+          <div class="row mt-1">
+            <a>Body:</a>
           </div>
 
           <div class="row mb-2 border-bottom"></div>
