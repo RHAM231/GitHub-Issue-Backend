@@ -106,7 +106,6 @@ def get_repo(lookup, repo_name, headers, user):
 
     # For development/testing, purge our database on each new retrieval
     Repository.objects.filter(name=repo_name).delete()
-    RepoFolder.objects.get(name='broke_the_site')
 
     # Now call our serializer method. We'll serialize the repo independently 
     # from our serialize_github_object() method below because this is an edge case.
