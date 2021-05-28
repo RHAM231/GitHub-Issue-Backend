@@ -1,5 +1,4 @@
 import os
-# from decouple import config
 import json
 
 
@@ -12,15 +11,19 @@ SECRET_KEY = config['SECRET_KEY']
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    '18.208.218.189', 
+    'www.djangoissuetracker.com', 
+    'djangoissuetracker.com'
+    ]
 
 # SESSION_COOKIE_SECURE = True
 # CSRF_COOKIE_SECURE = True
-# SECURE_REFERRER_POLICY = 'same-origin'
-# SECURE_BROWSER_XSS_FILTER = True
-# SECURE_CONTENT_TYPE_NOSNIFF = True
-# X_FRAME_OPTIONS = 'DENY'
-# SECURE_HSTS_SECONDS = 2592000
+SECURE_REFERRER_POLICY = 'same-origin'
+SECURE_BROWSER_XSS_FILTER = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+X_FRAME_OPTIONS = 'DENY'
+# SECURE_HSTS_SECONDS = 60
 # SECURE_HSTS_PRELOAD = True
 # SECURE_HSTS_INCLUDE_SUBDOMAINS = True
 
@@ -51,7 +54,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'csp.middleware.CSPMiddleware',
+    'csp.middleware.CSPMiddleware',
 ]
 
 ROOT_URLCONF = 'GITB.urls'
@@ -81,24 +84,24 @@ TEMPLATES = [
 WSGI_APPLICATION = 'GITB.wsgi.application'
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-
-
 # DATABASES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': config.get('DB_NAME'),
-#         'USER': config.get('DB_USER'),
-#         'PASSWORD': config.get('DB_PASS'),
-#         'HOST': config.get('DB_HOST'),
-#         'PORT': '5432',
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #     }
 # }
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config.get('DB_NAME'),
+        'USER': config.get('DB_USER'),
+        'PASSWORD': config.get('DB_PASS'),
+        'HOST': config.get('DB_HOST'),
+        'PORT': '5432',
+    }
+}
 
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -129,10 +132,10 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
-# STATICFILES_DIRS = [
-#     os.path.join(BASE_DIR, "static"),
-# ]
+# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static"),
+]
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -157,30 +160,36 @@ REST_FRAMEWORK = {
 }
 
 
-# CSP_DEFAULT_SRC = ["'none'"]
-# CSP_SCRIPT_SRC = [
-#     "https://stackpath.bootstrapcdn.com",
-#     "https://cdn.jsdelivr.net",
-#     "https://code.jquery.com",
-#     "'self'"
-# ]
-# CSP_STYLE_SRC = [
-#     "https://stackpath.bootstrapcdn.com",
-#     "'self'"
-# ]
-# CSP_STYLE_SRC_ELEM = [
-#     "https://use.fontawesome.com",
-#     "https://fonts.googleapis.com",
-#     "https://stackpath.bootstrapcdn.com",
-#     "'self'"
-# ]
-# CSP_IMG_SRC = ["'self'"]
-# CSP_MEDIA_SRC = ["'self'"]
-# CSP_FRAME_SRC = ["'self'"]
-# CSP_OBJECT_SRC = ["'self'"]
-# CSP_FONT_SRC = [
-#     "https://use.fontawesome.com",
-#     "https://fonts.googleapis.com",
-#     "https://fonts.gstatic.com/s/spinnaker/v12/w8gYH2oyX-I0_rvR6HmX1XYKmOo.woff2",
-#     "https://fonts.gstatic.com/s/spinnaker/v12/w8gYH2oyX-I0_rvR6HmX23YK.woff2"
-# ]
+CSP_DEFAULT_SRC = ["'none'"]
+CSP_SCRIPT_SRC = [
+    "https://stackpath.bootstrapcdn.com",
+    "https://cdn.jsdelivr.net",
+    "https://code.jquery.com",
+    "'self'"
+]
+CSP_STYLE_SRC = [
+    "https://stackpath.bootstrapcdn.com",
+    "'self'"
+]
+CSP_STYLE_SRC_ELEM = [
+    "https://use.fontawesome.com",
+    "https://fonts.googleapis.com",
+    "https://stackpath.bootstrapcdn.com",
+    "'self'"
+]
+CSP_CONNECT_SRC = ["'self'"]
+CSP_IMG_SRC = [
+    "'self'",
+    "https://d0.awsstatic.com/logos/powered-by-aws.png"
+    ]
+CSP_MEDIA_SRC = ["'self'"]
+CSP_FRAME_SRC = ["'self'"]
+CSP_OBJECT_SRC = ["'self'"]
+CSP_FONT_SRC = [
+    "https://use.fontawesome.com",
+    "https://fonts.googleapis.com",
+    "https://fonts.gstatic.com/s/varelaround/v13/w8gdH283Tvk__Lua32TysjIfqMuPP9g.woff2",
+    "https://fonts.gstatic.com/s/varelaround/v13/w8gdH283Tvk__Lua32TysjIfqcuPP9g.woff2",
+    "https://fonts.gstatic.com/s/varelaround/v13/w8gdH283Tvk__Lua32TysjIfpcuPP9g.woff2",
+    "https://fonts.gstatic.com/s/varelaround/v13/w8gdH283Tvk__Lua32TysjIfp8uP.woff2"
+]
