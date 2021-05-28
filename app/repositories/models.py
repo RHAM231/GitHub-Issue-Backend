@@ -17,6 +17,7 @@ class Repository(models.Model):
     description = models.CharField(max_length=255)
     open_issues_count = models.IntegerField()
     created_at = models.DateTimeField(default=timezone.now)
+    expire_time = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=False)
     url = models.URLField(max_length=200)
     slug = models.SlugField(max_length = 200)
