@@ -132,7 +132,7 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-# STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
@@ -146,7 +146,6 @@ AUTH_USER_MODEL = 'users.CustomUser'
 LOGIN_REDIRECT_URL = 'home'
 LOGIN_URL = 'login'
 
-# This may need tweeking
 GH_TOKEN = config.get('GH_TOKEN')
 GH_USER = config.get('GH_USER')
 ADMIN_USER = config.get('ADMIN_USER')
