@@ -1,5 +1,5 @@
 # GitHub-Issue-Backend
-This is the source code for my API project [Issue Tracker]().
+This is the source code for my API project [Issue Tracker](https://www.djangoissuetracker.com/).
 
 # Motivation
 
@@ -48,14 +48,14 @@ Houses all logic for creating, reading, updating, and closing, issues. The model
 Houses all logic for storing and displaying GitHub repo structures. Handles repositories, folders, and files.
 
 ##### 'sync'
-Houses the heart of the project, a Python script called [github_client.py](). This script is responsible for moving GitHub data between my site's frontend, backend, Django REST, and GitHub's API. It utilizes custom code for importing a repo and the third party Python package, [PyGithub]() for editing and creating issues from the site's frontend.
+Houses the heart of the project, a Python script called [github_client.py](https://github.com/RHAM231/GitHub-Issue-Backend/blob/master/app/sync/github_client.py). This script is responsible for moving GitHub data between my site's frontend, backend, Django REST, and GitHub's API. It utilizes custom code for importing a repo and the third party Python package, [PyGithub](https://pygithub.readthedocs.io/en/latest/introduction.html) for editing and creating issues from the site's frontend.
 
 ##### 'users'
 Contains logic for overriding Django's User class with a CustomUser class, allowing me to easily add fields and user types.
 
 # Security
 
-This site scores an A on [SecurityHeaders.com](). For more detailed information on my approach to security see the [README]() on my portfolio site.
+This site scores an A on [SecurityHeaders.com](). For more detailed information on my approach to security see the [README](https://github.com/RHAM231/My-Django-Website#readme) on my portfolio site.
 
 # Deployment
 
