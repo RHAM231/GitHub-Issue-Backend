@@ -42,7 +42,7 @@ The app that houses all Django REST specific functionality such as serializers.p
 The default generated app when the Django project was created. Controls admin functions such as overall url mapping, email settings, security settings, installed Django apps, Django REST settings, etc.
 
 ##### 'issues'
-Houses all logic for creating, reading, updating, and closing, issues. The models.py file in this app also defines custom stamping methods for issues to enable extra data not tracked by GitHub.
+Houses all logic for creating, reading, updating, and closing issues. The models.py file in this app also defines custom stamping methods for issues to enable extra data not tracked by GitHub.
 
 ##### 'repositories'
 Houses all logic for storing and displaying GitHub repo structures. Handles repositories, folders, and files.
