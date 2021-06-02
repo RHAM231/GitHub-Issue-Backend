@@ -3,7 +3,7 @@ This is the source code for my API project [Issue Tracker](https://www.djangoiss
 
 # Motivation
 
-I wanted a project that dove deeper into Django functionality. I also wanted to learn the Django REST framwork and practice integrating with a third pary API.
+I wanted a project that dove deeper into Django functionality. I also wanted to learn the Django REST framwork and practice integrating with a third party API.
 
 # Goals
 
