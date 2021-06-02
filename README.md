@@ -63,7 +63,7 @@ I utilized the following process to deploy the site to an AWS EC2 instance, conn
 
 ## Pre-Deployment
 
-1. **Run through my [Checklist]()**
+1. **Run through my [Checklist](https://rexhmitchell.com/portfolio-project/project_checklist/)**
 1. **Run through the [Django deployment checklist](https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/)**
 1. **Create Deploy Branch**
     1. Create branch “deploy” on Github then pull from server
