@@ -55,7 +55,7 @@ Contains logic for overriding Django's User class with a CustomUser class, allow
 
 # Security
 
-This site scores an A on [SecurityHeaders.com](). For more detailed information on my approach to security see the [README](https://github.com/RHAM231/My-Django-Website#readme) on my portfolio site.
+This site scores an A on [SecurityHeaders.com](https://securityheaders.com/?q=https%3A%2F%2Fwww.djangoissuetracker.com%2F&followRedirects=on). For more detailed information on my approach to security see the [README](https://github.com/RHAM231/My-Django-Website#readme) on my portfolio site.
 
 # Deployment
 
