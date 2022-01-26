@@ -176,64 +176,88 @@ def get_root_folder(repo_pk, repo_name, repo_branch, headers):
     unpack_repository(repo_pk, repo_name, raw_folder, headers, '')
 
 
-# Define our recursive method for unpacking a GitHub repo. Give it a folder, current path
-# and headers to pass to our get_repofile and get_repofolder methods. 
+# Define our recursive method for unpacking a GitHub repo. Give it a
+# folder, current path and headers to pass to our get_repofile and
+# get_repofolder methods. 
 def unpack_repository(repo_pk, repo_name, folder, headers, current_path):
     # pull our tree and sha out of our json folder
     tree = folder['tree']
     folder_sha = folder['sha']
     for entry in tree:
-        # if a tree object is a file, call our get_repofile method, passing headers and current path
-        # to it so it can get the file from GitHub. Pass sha so it can serialize the file to database.
+        # if a tree object is a file, call our get_repofile method,
+        # passing headers and current path to it so it can get the file
+        # from GitHub. Pass sha so it can serialize the file to
+        # database.
         if entry['type'] == 'blob':
-            get_repofile(repo_pk, repo_name, entry, headers, folder_sha, current_path)
-        # if our object is a folder, call our get_repofolder method instead
+            get_repofile(
+                repo_pk, repo_name, entry, 
+                headers, folder_sha, current_path)
+        # if our object is a folder, call our get_repofolder method
+        # instead
         elif entry['type'] == 'tree':
-            get_repofolder(repo_pk, repo_name, entry, headers, folder_sha, current_path)
+            get_repofolder(
+                repo_pk, repo_name, entry, 
+                headers, folder_sha, current_path)
 
 
-# Define a get folder method to get a single folder from GitHub, serialize it to database, and call our
-# unpack method again if needed to get the folder's contents.
-def get_repofolder(repo_pk, repo_name, folder_listing, headers, folder_sha, current_path):
-    # Get our current folder sha from the previous folder tree we got from calling the unpack method
+# Define a get folder method to get a single folder from GitHub,
+# serialize it to database, and call our unpack method again if needed
+# to get the folder's contents.
+def get_repofolder(
+    repo_pk, repo_name, folder_listing, 
+    headers, folder_sha, current_path):
+    # Get our current folder sha from the previous folder tree we got
+    # from calling the unpack method
     current_sha = folder_listing['sha']
-    # Define our query url using the sha and our get_query_url method defined above
+    # Define our query url using the sha and our get_query_url method
+    # defined above
     query_url = get_query_url('get_folder_tree', repo_name, sha=current_sha)
 
-    # Get the folder from GitHub using our query url and headers and convert it to raw json
+    # Get the folder from GitHub using our query url and headers and
+    # convert it to raw json
     r = requests.get(query_url, headers=headers)
     raw_subfolder = r.json()
 
-    # Dump our new json object into our database by calling our serialize_github_object method,
-    # giving it whatever additional parameters it needs to save the object
+    # Dump our new json object into our database by calling our
+    # serialize_github_object method, giving it whatever additional
+    # parameters it needs to save the object
     print('serializing a folder ...')
     serialize_github_object(
         repo_pk, 'serialize_folder_tree', raw_subfolder, path=current_path,
         folder_listing=folder_listing, folder_sha=folder_sha
         )
 
-    # Now that we've retrieved and saved the folder, we need to retrieve and save it's contents.
-    # If we came from the root folder, add our current subfolder name to the the current path
+    # Now that we've retrieved and saved the folder, we need to
+    # retrieve and save it's contents. If we came from the root folder,
+    # add our current subfolder name to the the current path
     if current_path == '':
         current_path = current_path + folder_listing['path']
     # Otherwise, append our current subfolder to path with a slash
     else:
         current_path = current_path + '/' + folder_listing['path']
-    # Now call our unpack method again, giving it our current subfolder and our new path.
-    unpack_repository(repo_pk, repo_name, raw_subfolder, headers, current_path)
+    # Now call our unpack method again, giving it our current subfolder
+    # and our new path.
+    unpack_repository(
+        repo_pk, repo_name, raw_subfolder, 
+        headers, current_path)
 
 
 # Define a get file method for retrieving and serializing a GitHub file
-def get_repofile(repo_pk, repo_name, file_listing, headers, folder_sha, current_path):
-    # Add our file name to the current path so we can retrieve it from GitHub
+def get_repofile(
+    repo_pk, repo_name, file_listing, 
+    headers, folder_sha, current_path):
+    # Add our file name to the current path so we can retrieve it from
+    # GitHub
     if current_path == '':
         path = current_path + file_listing['path']
     else:
         path = current_path + '/' + file_listing['path']
-    # Construct our query url from our get url method and our current path
+    # Construct our query url from our get url method and our current
+    # path
     query_url = get_query_url('get_file_contents', repo_name, path=path)
     
-    # Retrieve the file from GitHub, convert to json, and then serialize to database with our serialize object method
+    # Retrieve the file from GitHub, convert to json, and then
+    # serialize to database with our serialize object method
     r = requests.get(query_url, headers=headers)
     raw_file = r.json()
 
@@ -242,35 +266,38 @@ def get_repofile(repo_pk, repo_name, file_listing, headers, folder_sha, current_
         file_listing=file_listing, folder_sha=folder_sha
         )
     
-    # Now that we've saved our file to database, let's save indivdual lines of code.
-    # Get our file content and lookup parameters
+    # Now that we've saved our file to database, let's save indivdual
+    # lines of code. Get our file content and lookup parameters
     file_content = raw_file['content']
     file_sha = raw_file['sha']
     file_path = raw_file['path']
 
-    # Get our parent file so we can save lines of code. Lookup by two parameters because GitHub
-    # shas are not always unique.
+    # Get our parent file so we can save lines of code. Lookup by two
+    # parameters because GitHub shas are not always unique.
     parent_file = RepoFile.objects.get(sha=file_sha, path=file_path)
     # Call our save lines of code method
     save_locs(file_content, parent_file)
     
 
-# Given encoded file content and the parent file from our database, decode and save the content
-# as individual lines of code
+# Given encoded file content and the parent file from our database,
+# decode and save the content as individual lines of code
 def save_locs(content, parent_file):
     # Decode our content
     decoded = base64.b64decode(content)
     # Get a list of the lines
     lines_of_code = [item.decode('utf-8') for item in decoded.splitlines()]
 
-    # Save all the lines to database with a foreign key relation to its file
+    # Save all the lines to database with a foreign key relation to its
+    # file
     for i, line in enumerate(lines_of_code):
-        new_line = LineOfCode(content=line, line_number=i, repofile=parent_file)
+        new_line = LineOfCode(
+            content=line, line_number=i, 
+            repofile=parent_file)
         new_line.save()
 
 
-# Given necessary lookup parameters, get all the GitHub issues from a repository
-# and call our get_issue() method for each issue
+# Given necessary lookup parameters, get all the GitHub issues from a
+# repository and call our get_issue() method for each issue
 def get_repo_issues(lookup, repo_name, repo_pk, headers, user):
     query_url = get_query_url(lookup, repo_name)
     r = requests.get(query_url, headers=headers)
@@ -300,9 +327,9 @@ def check_for_stamp(body):
     return check_results
 
 
-# If an Issue Tracker generated stamp is present in our issue, we're importing from GitHub.
-# Get all the stamp data so we can inject it as json before serializing our issue to the
-# database.
+# If an Issue Tracker generated stamp is present in our issue, we're
+# importing from GitHub. Get all the stamp data so we can inject it as
+# json before serializing our issue to the database.
 def extract_stamp_data(body):
     # Get our stamp data
     path = (body.splitlines()[0]).replace('Issue Location: ', '')
@@ -313,28 +340,53 @@ def extract_stamp_data(body):
     # Based on the stamp data, set the injected json accordingly
     if loc != 'None':
         path_and_file = path.rsplit('/', 1)
-        file_id = RepoFile.objects.get(issuetracker_url_path=path_and_file[0], name=path_and_file[1])
-        loc = LineOfCode.objects.get(path=path_and_file[0], line_number=loc, repofile=file_id)
+        file_id = RepoFile.objects.get(
+            issuetracker_url_path=path_and_file[0], 
+            name=path_and_file[1]
+            )
+        loc = LineOfCode.objects.get(
+            path=path_and_file[0], 
+            line_number=loc, 
+            repofile=file_id
+            )
         loc_pk = str(loc.pk)
-        injected_json = {"associated_loc":loc_pk, "associated_file":None, "associated_folder":None}
+        injected_json = {
+            "associated_loc":loc_pk, 
+            "associated_file":None, 
+            "associated_folder":None
+            }
 
     elif file != 'None':
         path_and_file = path.rsplit('/', 1)
-        file = RepoFile.objects.get(issuetracker_url_path=path_and_file[0], name=path_and_file[1])
+        file = RepoFile.objects.get(
+            issuetracker_url_path=path_and_file[0], 
+            name=path_and_file[1]
+            )
         file_pk = str(file.pk)
-        injected_json = {"associated_loc":None, "associated_file":file_pk, "associated_folder":None}
+        injected_json = {
+            "associated_loc":None, 
+            "associated_file":file_pk, 
+            "associated_folder":None
+            }
 
     else:
-        folder = RepoFolder.objects.get(issuetracker_url_path=path, name=folder)
+        folder = RepoFolder.objects.get(
+            issuetracker_url_path=path, 
+            name=folder
+            )
         folder_pk = str(folder.pk)
-        injected_json = {"associated_loc":None, "associated_file":None, "associated_folder":folder_pk}
+        injected_json = {
+            "associated_loc":None, 
+            "associated_file":None, 
+            "associated_folder":folder_pk
+            }
 
     # Send our injected json back to our get_issue() method
     return injected_json
 
 
-# Define a method to remove an Issue Tracker stamp from the imported GitHub issue body
-# before saving the issue to the database
+# Define a method to remove an Issue Tracker stamp from the imported
+# GitHub issue body before saving the issue to the database
 def remove_stamp(body):
     nlines = body.count('\n')
     if nlines == 5:
@@ -344,8 +396,9 @@ def remove_stamp(body):
     return body
 
 
-# Given individual issue parameters, retrieve the single issue from GitHub as
-# a json object and serialize it to the database by calling our serialize method
+# Given individual issue parameters, retrieve the single issue from
+# GitHub as a json object and serialize it to the database by calling
+# our serialize method
 def get_issue(lookup, repo_pk, repo_name, headers, issue_id, user):
     query_url = get_query_url(lookup, repo_name, issue_id=issue_id)
     r = requests.get(query_url, headers=headers)
@@ -353,8 +406,8 @@ def get_issue(lookup, repo_pk, repo_name, headers, issue_id, user):
 
     # Check if the GitHub issue as an Issue Tracker stamp
     stamp_present = check_for_stamp(raw_issue['body'])
-    # If the stamp is present, extract the stamp data to inject in our json object
-    # so we can serialize the correct fields
+    # If the stamp is present, extract the stamp data to inject in our
+    # json object so we can serialize the correct fields
     if stamp_present == True:
         injected_json = extract_stamp_data(raw_issue['body'])
         raw_issue.update(injected_json)
@@ -362,15 +415,16 @@ def get_issue(lookup, repo_pk, repo_name, headers, issue_id, user):
         raw_issue['body'] = remove_stamp(raw_issue['body'])
 
 
-    # Check wether the user is a guest or is logged in and get the profile
+    # Check wether the user is a guest or is logged in and get the
+    # profile
     if user.__class__.__name__ == "AnonymousUser":
         profile = Profile.objects.get(name='Guest')
     else:
         profile = Profile.objects.get(user=user)
 
-    # Use our profile to get the profile primary key and inject this into our json issue.
-    # We do this to work around Django REST being difficult to use when serializing extra
-    # foriegn keys.
+    # Use our profile to get the profile primary key and inject this
+    # into our json issue. We do this to work around Django REST being
+    # difficult to use when serializing extra foriegn keys.
     profile_pk = str(profile.pk)
     injected_json = {"author":profile_pk}
     raw_issue.update(injected_json)
@@ -380,8 +434,8 @@ def get_issue(lookup, repo_pk, repo_name, headers, issue_id, user):
     serialize_github_object(repo_pk, 'serialize_repo_issue', raw_issue)
 
 
-# Given data from our frontend issue creation form, use the 3rd party module, 
-# GitHub, to create a new issue on GitHub
+# Given data from our frontend issue creation form, use the 3rd party
+# module, GitHub, to create a new issue on GitHub
 def create_issue(token, user, data, stamp, issue_id):
     # Set attributes we will use to get the repo and create the issue
     g = Github(token)
@@ -397,8 +451,8 @@ def create_issue(token, user, data, stamp, issue_id):
         title=data['title'],
         body=body,
     )
-    # Grab the returned issue number from GitHub and update our 
-    # own database instance with it
+    # Grab the returned issue number from GitHub and update our own
+    # database instance with it
     Issue.objects.filter(id=issue_id).update(number=i.number)
 
 
