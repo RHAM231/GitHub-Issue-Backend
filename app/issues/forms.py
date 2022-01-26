@@ -10,7 +10,10 @@ class IssueSearchForm(forms.Form):
     search = forms.CharField(
         required=False,
         widget=forms.TextInput(
-            attrs={'placeholder':'Search title, body, date, etc.', 'class': 'issue-search'}
+            attrs={
+                'placeholder':'Search title, body, date, etc.',
+                'class': 'issue-search'
+                 }
         ))
 
 
@@ -23,7 +26,8 @@ class IssueEntryForm(ModelForm):
             'associated_file', 'associated_loc'
             ]
 
-    # Override the form's init method to set labels, classes, and populate dropdown data
+    # Override the form's init method to set labels, classes, and
+    # populate dropdown data
     def __init__(self, *args, **kwargs):
         super(IssueEntryForm, self).__init__(*args, **kwargs)
 
@@ -36,24 +40,26 @@ class IssueEntryForm(ModelForm):
         for visible in self.visible_fields():
             visible.field.widget.attrs['class'] = 'issue-form-field'
 
-        # Set a special class for our association fields so we can style them differently
+        # Set a special class for our association fields so we can
+        # style them differently
         for key, field in self.fields.items():
             if key.startswith('associated_'):
                 field.widget.attrs = {'class': 'associate-field'}
 
-        # If the form already has data when loaded (update/edit) set the querysets
-        # for the folder, file, and line of code fields based on the ids of the repo, 
-        # folder, and file fields
+        # If the form already has data when loaded (update/edit) set
+        # the querysets for the folder, file, and line of code fields
+        # based on the ids of the repo, folder, and file fields
 
         # Check for existing data
         if kwargs['instance']:
             repo_id = kwargs['instance'].repository.id
-            self.fields['associated_folder'].queryset = RepoFolder.objects.filter(
-                    repository=repo_id).order_by('name')
+            self.fields['associated_folder'].queryset = \
+                RepoFolder.objects.filter(repository=repo_id).order_by('name')
 
-            # If we're using the the form to edit the issue, disable the repo field
-            # and set it as optional to allow form submission. Then read in the value
-            # in the repo field's clean method below.
+            # If we're using the the form to edit the issue, disable
+            # the repo field and set it as optional to allow form
+            # submission. Then read in the value in the repo field's
+            # clean method below.
             self.fields['repository'].widget.attrs['disabled'] = True
             self.fields['repository'].required = False
 
@@ -76,9 +82,9 @@ class IssueEntryForm(ModelForm):
             else:
                 self.fields['associated_loc'].queryset = LineOfCode.objects.none()
 
-        # If repository, folder, or file were selected in the form submit, set the 
-        # querysets for file and line of code to match, since it may have changed 
-        # on the frontend from AJAX updates
+        # If repository, folder, or file were selected in the form
+        # submit, set the querysets for file and line of code to match,
+        # since it may have changed on the frontend from AJAX updates
         if 'repository' in self.data:
             try:
                 repo_id = int(self.data.get('repository'))
@@ -103,8 +109,8 @@ class IssueEntryForm(ModelForm):
             except (ValueError, TypeError):
                 pass
     
-    # Define a custom clean method for the repo field so we can disable it for editing but
-    # enable if for creating.
+    # Define a custom clean method for the repo field so we can disable
+    # it for editing but enable if for creating.
     def clean_repository(self):
         if self.instance and self.instance.pk:
             return self.instance.repository
@@ -112,7 +118,8 @@ class IssueEntryForm(ModelForm):
             return self.cleaned_data['repository']
 
 
-# Form for changing the state of an issue. Used on the issue detail page
+# Form for changing the state of an issue. Used on the issue detail
+# page
 class OpenCloseIssueForm(ModelForm):
     class Meta:
         model = Issue

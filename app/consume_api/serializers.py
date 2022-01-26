@@ -12,11 +12,13 @@ from repositories.models import Repository, RepoFolder, RepoFile, LineOfCode
 #################################################################################################################################
 
 '''
-Let's use Django REST to easily consume API data from GitHub. We define a set of model serializers for each of our models that
-we're importing GitHub data into (repositories, folders, files, lines of code). We'll call these serializers from our 
-github_client script in the sync app.
+Let's use Django REST to easily consume API data from GitHub. We define
+a set of model serializers for each of our models that we're importing
+GitHub data into (repositories, folders, files, lines of code). We'll
+call these serializers from our github_client script in the sync app.
 
-We'll use each serializer to create entries in our database from the GitHub json objects.
+We'll use each serializer to create entries in our database from the
+GitHub json objects.
 '''
 
 #################################################################################################################################
