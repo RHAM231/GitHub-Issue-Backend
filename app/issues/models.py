@@ -47,7 +47,11 @@ class TestIssue(models.Model):
         ('closed', 'closed'),
     )
     title = models.CharField(max_length=100)
-    state = models.CharField(max_length=6, choices = STATE_CHOICES, default='open')
+    state = models.CharField(
+        max_length=6, 
+        choices = STATE_CHOICES, 
+        default='open'
+        )
     body = models.TextField()
     number = models.IntegerField()
     created_at = models.DateTimeField(default=timezone.now)
@@ -59,14 +63,15 @@ class TestIssue(models.Model):
         related_name='testissue_repo'
         )
 
-    # Override the model's save method so we can save and update slugs automatically
+    # Override the model's save method so we can save and update slugs
+    # automatically
     def save(self, *args, **kwargs):
         self.repository = Repository.objects.get(url=self.repository_url)
         super().save(*args, **kwargs)
 
 
-# Given all the necessary stamp parameters, set our stamp and return it to our
-# create stamp method below
+# Given all the necessary stamp parameters, set our stamp and return it
+# to our create stamp method below
 def set_stamp(path, folder, fname, loc, date, stamp_id):
     stamp = (
         'Issue Location: ' + path + '\n' +
@@ -86,10 +91,12 @@ def delete_stamp(issue):
     return (issue, stamp)
 
 
-# Define a method for setting our stamp attributes based on what associations are present
-# in our issue. Return these to our create stamp method below so we can generate a stamp.
+# Define a method for setting our stamp attributes based on what
+# associations are present in our issue. Return these to our create
+# stamp method below so we can generate a stamp.
 def set_association_atrs(issue):
-    # First check for a line of code association. If present set all associations based on the line.
+    # First check for a line of code association. If present set all
+    # associations based on the line.
     if issue.associated_loc:
         loc = str(issue.associated_loc.line_number)
         issue.associated_file = issue.associated_loc.repofile
@@ -98,7 +105,8 @@ def set_association_atrs(issue):
         folder_name = str(issue.associated_folder.name)
         full_path = str(issue.associated_file.repository.name) + '/' + str(issue.associated_file.path)
 
-    # Next check for a file. If present, set line to none and everything based on the file.
+    # Next check for a file. If present, set line to none and
+    # everything based on the file.
     elif issue.associated_file:
         loc = 'None'
         issue.associated_folder = issue.associated_file.parent_folder
@@ -106,7 +114,8 @@ def set_association_atrs(issue):
         folder_name = str(issue.associated_folder.name)
         full_path = str(issue.associated_file.repository.name) + '/' + str(issue.associated_file.path)
     
-    # Last, check for a folder. If present set line and file to none and run a check to set path
+    # Last, check for a folder. If present set line and file to none
+    # and run a check to set path
     elif issue.associated_folder:
         loc = 'None'
         file_name = 'None'
@@ -116,27 +125,30 @@ def set_association_atrs(issue):
         else:
             full_path = str(issue.repository.name)
 
-    # Return our parameters so we can set the stamp in our create stamp method
+    # Return our parameters so we can set the stamp in our create stamp
+    # method
     return (full_path, folder_name, file_name, loc)
 
 
-# If we're adding associations to an issue that previously had none, set the stamp attributes
-# and create it
+# If we're adding associations to an issue that previously had none,
+# set the stamp attributes and create it
 def create_stamp(issue):
     stamp_id = str(randint(10000000, 99999999))
     # Set the date for when the stamp was generated
     date = dateformat.format(timezone.now(), 'Y-m-d H:i:s')
-    # Call our set attributes method to get the rest of the stamp parameters
+    # Call our set attributes method to get the rest of the stamp
+    # parameters
     path, folder, fname, loc = set_association_atrs(issue)
     # Now set our stamp with the parameters
     stamp = set_stamp(path, folder, fname, loc, date, stamp_id)
-    # Populate our model field with our new stamp we set in the set_stamp method
+    # Populate our model field with our new stamp we set in the
+    # set_stamp method
     issue.stamp = stamp
     return issue.stamp
 
 
-# If we're changing existing associations on our Issue instance, first delete the
-# old stamp, then create a new one
+# If we're changing existing associations on our Issue instance, first
+# delete the old stamp, then create a new one
 def update_stamp(issue):
     issue, issue.stamp = delete_stamp(issue)
     # body = create_stamp(issue, body=issue.body)
@@ -144,51 +156,63 @@ def update_stamp(issue):
     return (issue, stamp)
 
 
-# Given the old associations and the issue itself, check if any associations changed,
-# then update the stamp accordingly
+# Given the old associations and the issue itself, check if any
+# associations changed, then update the stamp accordingly
 def check_associations(old, issue):
     print('CHECKING ASSOCIATIONS ...')
-    new = [issue.associated_folder, issue.associated_file, issue.associated_loc]
+    new = [
+        issue.associated_folder, 
+        issue.associated_file, 
+        issue.associated_loc
+        ]
     print(old)
     print(new)
 
-    # Check if all the old values were empty and if all the new values will be empty
+    # Check if all the old values were empty and if all the new values
+    # will be empty
     old_none = all(atr is None for atr in old)
     new_none = all(atr is None for atr in new)
 
     # Check for changes
 
-    # If we're creating an issue for the first time AND we're creating it with an association, 
-    # call the create stamp method. This check is necessary for Django REST's serializer to work.
+    # If we're creating an issue for the first time AND we're creating
+    # it with an association, call the create stamp method. This check
+    # is necessary for Django REST's serializer to work.
     if not issue.pk and new_none == False:
         print('creating new issue with stamp')
         issue.stamp = create_stamp(issue)
 
-    # Else if we're updating the issue, check which type of change we're making
+    # Else if we're updating the issue, check which type of change
+    # we're making
     elif old != new:
         print('Changes detected ...')
 
-        # If we're adding an association when there were none before, call the create stamp method
+        # If we're adding an association when there were none before,
+        # call the create stamp method
         if old_none == True and new_none == False:
             print('create')
             issue.stamp = create_stamp(issue)
         
-        # If we're updating existing associations, call our update stamp method
+        # If we're updating existing associations, call our update
+        # stamp method
         elif old_none == False and new_none == False:
             print('update')
             issue, issue.stamp = update_stamp(issue)
 
-        # If we're removing all associations, call our delete stamp method
+        # If we're removing all associations, call our delete stamp
+        # method
         elif old_none == False and new_none == True:
             print('delete')
             issue, issue.stamp = delete_stamp(issue)
             return issue.stamp
-    # Return our new issue stamp to Issue's save method so we can update the field
+    # Return our new issue stamp to Issue's save method so we can
+    # update the field
     return issue.stamp
 
 
-# Let's create unique slugs for each model object from the object name using itertools.
-# We'll also define a method for updating slugs if the name changes.
+# Let's create unique slugs for each model object from the object name
+# using itertools. We'll also define a method for updating slugs if the
+# name changes.
 def generate_slug(instance, model):
     # Check which model we're using
     if hasattr(instance, 'name'):
@@ -204,7 +228,8 @@ def generate_slug(instance, model):
         if not model.objects.filter(slug=slug_candidate).exists():
             break
         slug_candidate = '{}_{}'.format(slug_value, str(i))
-    # If we're creating the first object, set slug to default value above
+    # If we're creating the first object, set slug to default value
+    # above
     if i == 1:
         slug_new = slug_original
     # Otherwise, set it based on itertools.count()
@@ -225,7 +250,11 @@ class Issue(models.Model):
 
     # Fields
     title = models.CharField(max_length=100)
-    state = models.CharField(max_length=6, choices = STATE_CHOICES, default='open')
+    state = models.CharField(
+        max_length=6, 
+        choices = STATE_CHOICES, 
+        default='open'
+        )
     body = models.TextField(null=True, blank=True)
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(null=True, blank=True)
@@ -273,8 +302,8 @@ class Issue(models.Model):
         )
     
     # Methods
-    # Override the model's initialization method so we can check for changes in values
-    # we want to save with custom methods
+    # Override the model's initialization method so we can check for
+    # changes in values we want to save with custom methods
     def __init__(self, *args, **kwargs):
         super (Issue, self).__init__(*args, **kwargs)
         self.__original_title = self.title
@@ -282,9 +311,11 @@ class Issue(models.Model):
         self.__original_associated_file = self.associated_file
         self.__original_associated_loc = self.associated_loc
 
-    # Override the model's save method so we can include custom save methods
+    # Override the model's save method so we can include custom save
+    # methods
     def save(self, *args, **kwargs):
-        # If we're creating the object for the first time, generate a slug
+        # If we're creating the object for the first time, generate a
+        # slug
 
         if not self.pk:
             print('NO SELF PK')
@@ -293,9 +324,14 @@ class Issue(models.Model):
         elif self.title != self.__original_title:
             self.slug = generate_slug(self, Issue)
 
-        # If we're changing the associated files, folders or lines of codes, let's
-        # update the body with our custom stamp methods defined above
-        old = [self.__original_associated_folder, self.__original_associated_file, self.__original_associated_loc]
+        # If we're changing the associated files, folders or lines of
+        # codes, let's update the body with our custom stamp methods
+        # defined above
+        old = [
+            self.__original_associated_folder, 
+            self.__original_associated_file, 
+            self.__original_associated_loc
+            ]
         print('TRYING TO CREATE STAMP ...')
         self.stamp = check_associations(old, self)
         super().save(*args, **kwargs)
@@ -304,11 +340,12 @@ class Issue(models.Model):
     def get_absolute_url(self):
         return reverse('issue-read', kwargs={'issue_slug': self.slug})
 
-    # Define which attribute the issue will be listed by in the admin portion of the site
+    # Define which attribute the issue will be listed by in the admin
+    # portion of the site
     def __str__(self):
         return self.title
 
 
-#################################################################################################################################
+##############################################################################
 # END
-#################################################################################################################################
+##############################################################################
