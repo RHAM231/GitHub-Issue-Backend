@@ -8,8 +8,8 @@ REPO_CHOICES = [
 ]
 
 
-# Define a select field import form for repositories so we can reuse our view
-# and template when importing repos
+# Define a select field import form for repositories so we can reuse
+# our view and template when importing repos
 class ImportRepoForm(forms.Form):
     repository = forms.CharField(
         required=False, 

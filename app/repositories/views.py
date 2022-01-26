@@ -12,19 +12,20 @@ from issues.models import Issue
 from . models import Repository, RepoFolder, RepoFile, LineOfCode
 
 
-#################################################################################################################################
+##############################################################################
 # SUMMARY
-#################################################################################################################################
+##############################################################################
 
 '''
-Let's define views to display a GitHub repo file structure. We use Django's generic ListView for the repos and folders, and
-DetailView for individual files. We'll override the views' get_queryset() and get_context_data() methods to customize our display
-data.
+Let's define views to display a GitHub repo file structure. We use
+Django's generic ListView for the repos and folders, and DetailView for
+individual files. We'll override the views' get_queryset() and
+get_context_data() methods to customize our display data.
 '''
 
-#################################################################################################################################
+##############################################################################
 # BEGIN VIEWS
-#################################################################################################################################
+##############################################################################
 
 
 # List all the GitHub repositories that have been imported to the site
@@ -33,7 +34,8 @@ class RepositoryListView(ListView):
     template_name = 'repositories/project_list.html'
     context_object_name = 'repositories'
     # Define our queryset. Annotate it with all its fk related issues
-    queryset = Repository.objects.all().annotate(issue_count=Count('issue_repo'))
+    queryset = Repository.objects.all().annotate(
+        issue_count=Count('issue_repo'))
 
     # Override get_context_data() to set the page title
     def get_context_data(self, **kwargs):
@@ -48,7 +50,8 @@ class RepoContentsListView(ListView):
     template_name = 'repositories/folder_contents.html'
     context_object_name = 'folder_contents'
 
-    # Override get_queryset() to define a folder list by the given repo_slug from the url
+    # Override get_queryset() to define a folder list by the given
+    # repo_slug from the url
     def get_queryset(self):
         # Get our slug from kwargs (url), use it to get our repo
         repo_slug = self.kwargs['repo_slug']
@@ -56,12 +59,20 @@ class RepoContentsListView(ListView):
 
         # Use our repo to get our root folder
         root_folder_name = repo.name + '_root'
-        root_folder = RepoFolder.objects.get(name='repo_root', repository=repo.id, parent_folder=None)
-        # Save root so we can access it in get_context_data() to list our files
+        root_folder = RepoFolder.objects.get(
+            name='repo_root', 
+            repository=repo.id, 
+            parent_folder=None
+            )
+        # Save root so we can access it in get_context_data() to list
+        # our files
         self.root = root_folder
 
-        # Now get all the folders in root and annotate them with their associated issue counts
-        queryset = RepoFolder.objects.filter(parent_folder=root_folder.id).annotate(issue_count=Count('repofolder'))
+        # Now get all the folders in root and annotate them with their
+        # associated issue counts
+        queryset = RepoFolder.objects.filter(
+            parent_folder=root_folder.id).annotate(
+                issue_count=Count('repofolder'))
         return queryset
 
     # Override get_context_data() to add items to context
@@ -69,10 +80,14 @@ class RepoContentsListView(ListView):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Repositories'
 
-        # Get a list of all files in the root folder by using self.root from get_queryset(). Add the issues count.
-        files = RepoFile.objects.filter(parent_folder=self.root).annotate(issue_count=Count('repofile'))
-        # Grab our folder_contents queryset defined by get_queryset() and add it to context with files
-        # as a dictionary. This allows us to minimize our html by iterating over one context object rather than two
+        # Get a list of all files in the root folder by using self.root
+        # from get_queryset(). Add the issues count.
+        files = RepoFile.objects.filter(
+            parent_folder=self.root).annotate(issue_count=Count('repofile'))
+        # Grab our folder_contents queryset defined by get_queryset()
+        # and add it to context with files as a dictionary. This allows
+        # us to minimize our html by iterating over one context object
+        # rather than two
         context['folders_and_files'] = {
             'folders': context['folder_contents'],
             'files': files

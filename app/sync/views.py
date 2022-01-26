@@ -11,9 +11,9 @@ from csp.decorators import csp_exempt
 
 
 
-# Define a view to begin the GitHub repo import process
-# Make our sync view csp exempt so django-csp doesn't block importing
-# on mobile devices.
+# Define a view to begin the GitHub repo import process Make our sync
+# view csp exempt so django-csp doesn't block importing on mobile
+# devices.
 @csp_exempt
 def confirm_sync(request):
     # If a form submission took place
@@ -24,15 +24,18 @@ def confirm_sync(request):
             # Get our repo choice
             repo_name = form.cleaned_data['repository']
 
-            # Get our authentication data to pass to our github_client script
+            # Get our authentication data to pass to our github_client
+            # script
             token = settings.TEST_TOKEN
             headers = {'Authorization': f'token {token}',}
             user = request.user
 
-            # Call our get_repo method in github_client.py to begin the import process
+            # Call our get_repo method in github_client.py to begin the
+            # import process
             get_repo('get_repo', repo_name, headers, user)
-            # While we wait, use AJAX to display a spinner and load message
-            # Use AJAX to redirect after successful form submission
+            # While we wait, use AJAX to display a spinner and load
+            # message Use AJAX to redirect after successful form
+            # submission
     
     # Otherwise we've loaded the page for the first time, display an
     # empty form
@@ -46,11 +49,13 @@ def confirm_sync(request):
     return render(request, 'sync/confirm_sync.html', context)
 
 
-# Define a view to display a success message after importing a GitHub repo
+# Define a view to display a success message after importing a GitHub
+# repo
 def sync_success(request):
     return render(request, 'sync/sync_success.html')
 
 
-# Define a view to display a failure message after importing a GitHub repo
+# Define a view to display a failure message after importing a GitHub
+# repo
 def sync_failure(request):
     return render(request, 'sync/sync_failure.html')
