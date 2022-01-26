@@ -14,26 +14,31 @@ from users.models import CustomUser, Profile
 from repositories.models import RepoFile, RepoFolder, Repository, LineOfCode
 
 
-#################################################################################################################################
+##############################################################################
 # SUMMARY
-#################################################################################################################################
+##############################################################################
 
 '''
-Let's define our Issue model with a generate_slug method and a set of custom stamping methods. We set up fields to store the 
-GitHub data we need and add the additional foreign key fields of associated files, folders, and lines of code. Because we're 
-adding fields, we need a way to store this extra information in GitHub issues when we sync and send our edited or 
-updated issues back to GitHub.
+Let's define our Issue model with a generate_slug method and a set of
+custom stamping methods. We set up fields to store the GitHub data we
+need and add the additional foreign key fields of associated files,
+folders, and lines of code. Because we're adding fields, we need a way
+to store this extra information in GitHub issues when we sync and send
+our edited or updated issues back to GitHub.
 
-We will do this by "stamping" our issues with the extra data if we introduce any of the new associations. We define a set of 
-custom CRUD methods for working with stamps and tie these into our Issue model by overriding its __init__ and save methods.
+We will do this by "stamping" our issues with the extra data if we
+introduce any of the new associations. We define a set of custom CRUD
+methods for working with stamps and tie these into our Issue model by
+overriding its __init__ and save methods.
 
-If adding or updating Issue associations, we will generate a stamp and append it to the top of the issue body. If deleting, we 
-will remove the stamp.
+If adding or updating Issue associations, we will generate a stamp and
+append it to the top of the issue body. If deleting, we will remove the
+stamp.
 '''
 
-#################################################################################################################################
+##############################################################################
 # BEGIN SCRIPT
-#################################################################################################################################
+##############################################################################
 
 
 class TestIssue(models.Model):

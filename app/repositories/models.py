@@ -26,15 +26,17 @@ class Repository(models.Model):
     slug = models.SlugField(max_length = 200)
 
     # Methods
-    # Override the model's initialization method so we can check for changes in values
-    # we want to save with custom methods
+    # Override the model's initialization method so we can
+    # check for changes in values we want to save with custom methods
     def __init__(self, *args, **kwargs):
         super (Repository, self).__init__(*args, **kwargs)
         self.__original_name = self.name
 
-    # Override the model's save method so we can include custom save methods
+    # Override the model's save method so we can include custom save
+    # methods
     def save(self, *args, **kwargs):
-        # If we're creating the object for the first time, generate a slug
+        # If we're creating the object for the first time, generate a
+        # slug
         if not self.pk:
             self.slug = issues_models.generate_slug(self, Repository)
         # Else if we changed the name, generate a slug
@@ -55,7 +57,11 @@ class RepoFolder(models.Model):
     sha = models.CharField(max_length=40)
     url = models.URLField(max_length=250)
     created_at = models.DateTimeField(default=timezone.now)
-    data_type = models.CharField(max_length=4, choices=type_choices(), default='blob')
+    data_type = models.CharField(
+        max_length=4, 
+        choices=type_choices(), 
+        default='blob'
+        )
     mode = models.CharField(max_length=100)
     issuetracker_url_path = models.CharField(max_length=150)
     slug = models.SlugField(max_length = 200)
@@ -80,14 +86,16 @@ class RepoFolder(models.Model):
         super (RepoFolder, self).__init__(*args, **kwargs)
         self.__original_name = self.name
 
-    # Override the model's save method so we can include custom save methods
+    # Override the model's save method so we can include custom save
+    # methods
     def save(self, *args, **kwargs):
         if self.path:
             self.issuetracker_url_path = self.repository.name + '/' + self.path
         else:
             self.issuetracker_url_path = self.repository.name
         
-        # If we're creating the object for the first time, generate a slug
+        # If we're creating the object for the first time, generate a
+        # slug
         if not self.pk:
             self.slug = issues_models.generate_slug(self, RepoFolder)
         # Else if we changed the name, generate a slug
@@ -110,9 +118,17 @@ class RepoFile(models.Model):
     # Fields
     name = models.CharField(max_length=100)
     path = models.CharField(max_length=150)
-    data_type = models.CharField(max_length=4, choices=type_choices(), default='blob')
+    data_type = models.CharField(
+        max_length=4, 
+        choices=type_choices(), 
+        default='blob'
+        )
     content = models.TextField()
-    encoding = models.CharField(max_length=50, choices=ENCODING_CHOICES, default='base64')
+    encoding = models.CharField(
+        max_length=50, 
+        choices=ENCODING_CHOICES, 
+        default='base64'
+        )
     size = models.CharField(max_length=10)
     sha = models.CharField(max_length=40)
     url = models.URLField(max_length=250)
@@ -135,19 +151,22 @@ class RepoFile(models.Model):
         blank=True
         )
 
-    # Grab our original name so we can detect changes for updating slugs
+    # Grab our original name so we can detect changes for updating
+    # slugs
     def __init__(self, *args, **kwargs):
         super (RepoFile, self).__init__(*args, **kwargs)
         self.__original_name = self.name
 
-    # Override the model's save method so we can save the path by parent repo and slug by file name
+    # Override the model's save method so we can save the path by
+    # parent repo and slug by file name
     def save(self, *args, **kwargs):
         if self.path:
             self.issuetracker_url_path = (self.repository.name + '/' + self.path).rsplit('/', 1)[0]
         else:
             self.issuetracker_url_path = self.repository.name
 
-        # If we're creating the object for the first time, generate a slug
+        # If we're creating the object for the first time, generate a
+        # slug
         if not self.pk:
             self.slug = issues_models.generate_slug(self, RepoFile)
         # Else if we changed the name, generate a slug
@@ -165,13 +184,20 @@ class LineOfCode(models.Model):
     # Fields
     content = models.TextField()
     line_number = models.IntegerField()
-    repofile = models.ForeignKey(RepoFile, max_length=100, on_delete=models.CASCADE, related_name='loc')
+    repofile = models.ForeignKey(
+        RepoFile, 
+        max_length=100, 
+        on_delete=models.CASCADE, 
+        related_name='loc'
+        )
     path = models.CharField(max_length=255)
 
     # Methods
-    # Override the model's save method so we can save the path based on the parent file
+    # Override the model's save method so we can save the path based on
+    # the parent file
     def save(self, *args, **kwargs):
-        self.path = RepoFile.objects.get(id=self.repofile.id).issuetracker_url_path
+        self.path = RepoFile.objects.get(
+            id=self.repofile.id).issuetracker_url_path
         super().save(*args, **kwargs)
 
     # Display the line of code by its line number in the admin site
