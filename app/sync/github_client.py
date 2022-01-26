@@ -9,42 +9,56 @@ from github import Github, GithubException
 from issues.models import Issue
 from users.models import Profile
 from repositories.models import Repository, RepoFolder, RepoFile, LineOfCode
-from consume_api.serializers import RepoSerializer, RepoFolderSerializer, RepoFileSerializer, IssueSerializer
+from consume_api.serializers import (
+    RepoSerializer, 
+    RepoFolderSerializer, 
+    RepoFileSerializer, 
+    IssueSerializer)
 
 
-################################################################################
+##############################################################################
 # SUMMARY
-#################################################################################################################################
+##############################################################################
 
 '''
-Let's build a client for retrieving a GitHub repository and all its folders and files.
-
-First we define two dictionary lookup methods, get_query_url(), and get_serializer_and_model() for managing our data that we use
-to retrieve and serialize GitHub objects. We'll call the first method to get GitHub API endpoints, then use these endpoints to
-retrieve GitHub objects. Next, we'll call our second method to get the appropriate Django REST serializer and Django model to 
-save the GitHub object to our database.
-
-To retrieve GitHub objects from their API, we define a series of "get" methods for the repository, repository root folder, and 
-the folders and files. We also define an unpack_repository() method which we will call recursively to iterate through all the 
+Let's build a client for retrieving a GitHub repository and all its
 folders and files.
 
-Finally we define a serialize_github_object_method() for dumping our retrieved json objects to our database while the unpack
-method is running.
+First we define two dictionary lookup methods, get_query_url(), and
+get_serializer_and_model() for managing our data that we use to
+retrieve and serialize GitHub objects. We'll call the first method to
+get GitHub API endpoints, then use these endpoints to retrieve GitHub
+objects. Next, we'll call our second method to get the appropriate
+Django REST serializer and Django model to save the GitHub object to
+our database.
 
-We also define a method for decoding and saving all the individual lines of code for each GitHub file we serialize.
+To retrieve GitHub objects from their API, we define a series of "get"
+methods for the repository, repository root folder, and the folders and
+files. We also define an unpack_repository() method which we will call
+recursively to iterate through all the folders and files.
 
-We start this entire process by calling the get_repo() method from our views.py file in this app.
+Finally we define a serialize_github_object_method() for dumping our
+retrieved json objects to our database while the unpack method is
+running.
+
+We also define a method for decoding and saving all the individual
+lines of code for each GitHub file we serialize.
+
+We start this entire process by calling the get_repo() method from our
+views.py file in this app.
 '''
 
 
-#################################################################################################################################
+##############################################################################
 # BEGIN SCRIPT
-#################################################################################################################################
+##############################################################################
 
 
-# Given a query url lookup string and additional needed parameters, return an endpoint for
-# retrieving GitHub objects from GitHub's API.
-def get_query_url(lookup, repo, branch=None, sha=None, path=None, issue_id=None):
+# Given a query url lookup string and additional needed parameters,
+# return an endpoint for retrieving GitHub objects from GitHub's API.
+def get_query_url(
+    lookup, repo, branch=None, 
+    sha=None, path=None, issue_id=None):
     # Define our base endpoint
     if repo == 'IssueTrackerSandbox':
         endpoint = "https://api.github.com/repos/RHAM231-IssueTracker/IssueTrackerSandbox"
@@ -75,8 +89,9 @@ def get_query_url(lookup, repo, branch=None, sha=None, path=None, issue_id=None)
     return url_value
 
 
-# Given a serializer lookup string and a raw json object, return a tuple 
-# containing the appropriate Django REST serializer and Django model
+# Given a serializer lookup string and a raw json object, return a
+# tuple containing the appropriate Django REST serializer and Django
+# model
 def get_serializer_and_model(slookup, raw):
     # Define a dictionary linking lookup to tuple
     serializer_model_dict = {
@@ -96,54 +111,68 @@ def get_serializer_and_model(slookup, raw):
 
 # Define our get GitHub repository method.
 def get_repo(lookup, repo_name, headers, user):
-    # Given a lookup, retrieve our query url, get our repo, and convert it to json
+    # Given a lookup, retrieve our query url, get our repo, and convert
+    # it to json
     query_url = get_query_url(lookup, repo_name)
     r = requests.get(query_url, headers=headers)
     raw = r.json()
-    # Pull some additional parameters out of the json that we'll need later
+    # Pull some additional parameters out of the json that we'll need
+    # later
     repo_url = raw['url']
     repo_branch = raw['default_branch']
 
     # For development/testing, purge our database on each new retrieval
     Repository.objects.filter(name=repo_name).delete()
 
-    # Now call our serializer method. We'll serialize the repo independently 
-    # from our serialize_github_object() method below because this is an edge case.
+    # Now call our serializer method. We'll serialize the repo
+    # independently from our serialize_github_object() method below
+    # because this is an edge case.
     serializer = RepoSerializer(data=raw)
     if serializer.is_valid():
         serializer.save()
     
-    # Use our json url parameter from above to get the repo's new primary key
-    # from our database
+    # Use our json url parameter from above to get the repo's new
+    # primary key from our database
     repo_pk = str(Repository.objects.get(url=repo_url).pk)
 
-    # Now call our root folder method. Pass our extra parameters so we can continue
-    # getting and serializing github objects.
+    # Now call our root folder method. Pass our extra parameters so we
+    # can continue getting and serializing github objects.
     get_root_folder(repo_pk, repo_name, repo_branch, headers)
     get_repo_issues('get_repo_issues', repo_name, repo_pk, headers, user)
 
 
 # Define a method for retrieving the root folder of a GitHub repository
 def get_root_folder(repo_pk, repo_name, repo_branch, headers):
-    # Get the GitHub project's main branch so we can access the root folder sha
-    query_url_branch = get_query_url('get_branch', repo_name, branch=repo_branch)
+    # Get the GitHub project's main branch so we can access the root
+    # folder sha
+    query_url_branch = get_query_url(
+        'get_branch', repo_name, 
+        branch=repo_branch)
     main_branch = requests.get(query_url_branch, headers=headers)
     raw_branch = main_branch.json()
     root_folder_sha = raw_branch['commit']['commit']['tree']['sha']
 
     # Use the root folder sha to get the root folder
-    query_url_root = get_query_url('get_root_repo_tree', repo_name, sha=root_folder_sha)
+    query_url_root = get_query_url(
+        'get_root_repo_tree', repo_name, 
+        sha=root_folder_sha)
     root_folder = requests.get(query_url_root, headers=headers)
     raw_folder = root_folder.json()
     injected_json = {"repository":repo_pk, "parent_folder":None}
     raw_folder.update(injected_json)
 
-    # Now save our root folder to database using a Django REST serializer
+    # Now save our root folder to database using a Django REST
+    # serializer
     serializer = RepoFolderSerializer(data=raw_folder)
     if serializer.is_valid():
-        saved = serializer.save(name='repo_root', path='', data_type='tree', mode='040000')
+        saved = serializer.save(
+            name='repo_root', 
+            path='', 
+            data_type='tree', 
+            mode='040000')
     
-    # Call our recursive method to begin retrieving and saving the repository folders and files
+    # Call our recursive method to begin retrieving and saving the
+    # repository folders and files
     unpack_repository(repo_pk, repo_name, raw_folder, headers, '')
 
 
