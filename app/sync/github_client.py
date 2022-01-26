@@ -19,8 +19,8 @@ from consume_api.serializers import RepoSerializer, RepoFolderSerializer, RepoFi
 '''
 Let's build a client for retrieving a GitHub repository and all its folders and files.
 
-First we define two Dictionary lookup methods, get_query_url(), and get_serializer_and_model() for managing our data that we use
-to retrieve and serialize GitHub objects. We'll call the first method to get GitHub API endpoints, then use these endpoinnts to
+First we define two dictionary lookup methods, get_query_url(), and get_serializer_and_model() for managing our data that we use
+to retrieve and serialize GitHub objects. We'll call the first method to get GitHub API endpoints, then use these endpoints to
 retrieve GitHub objects. Next, we'll call our second method to get the appropriate Django REST serializer and Django model to 
 save the GitHub object to our database.
 

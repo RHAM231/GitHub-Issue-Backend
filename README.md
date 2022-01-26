@@ -1,9 +1,9 @@
 # GitHub-Issue-Backend
-This is the source code for my API project [Issue Tracker]().
+This is the source code for my API project [Issue Tracker](https://www.djangoissuetracker.com/). Visit the site [here](https://www.djangoissuetracker.com/).
 
 # Motivation
 
-I wanted a project that dove deeper into Django functionality. I also wanted to learn the Django REST framwork and practice integrating with a third pary API.
+I wanted a project that dove deeper into Django functionality. I also wanted to learn the Django REST framwork and practice integrating with a third party API.
 
 # Goals
 
@@ -42,20 +42,20 @@ The app that houses all Django REST specific functionality such as serializers.p
 The default generated app when the Django project was created. Controls admin functions such as overall url mapping, email settings, security settings, installed Django apps, Django REST settings, etc.
 
 ##### 'issues'
-Houses all logic for creating, reading, updating, and closing, issues. The models.py file in this app also defines custom stamping methods for issues to enable extra data not tracked by GitHub.
+Houses all logic for creating, reading, updating, and closing issues. The models.py file in this app also defines custom stamping methods for issues to enable extra data not tracked by GitHub.
 
 ##### 'repositories'
 Houses all logic for storing and displaying GitHub repo structures. Handles repositories, folders, and files.
 
 ##### 'sync'
-Houses the heart of the project, a Python script called [github_client.py](). This script is responsible for moving GitHub data between my site's frontend, backend, Django REST, and GitHub's API. It utilizes custom code for importing a repo and the third party Python package, [PyGithub]() for editing and creating issues from the site's frontend.
+Houses the heart of the project, a Python script called [github_client.py](https://github.com/RHAM231/GitHub-Issue-Backend/blob/master/app/sync/github_client.py). This script is responsible for moving GitHub data between my site's frontend, backend, Django REST, and GitHub's API. It utilizes custom code for importing a repo and the third party Python package, [PyGithub](https://pygithub.readthedocs.io/en/latest/introduction.html) for editing and creating issues from the site's frontend.
 
 ##### 'users'
 Contains logic for overriding Django's User class with a CustomUser class, allowing me to easily add fields and user types.
 
 # Security
 
-This site scores an A on [SecurityHeaders.com](). For more detailed information on my approach to security see the [README]() on my portfolio site.
+This site scores an A on [SecurityHeaders.com](https://securityheaders.com/?q=https%3A%2F%2Fwww.djangoissuetracker.com%2F&followRedirects=on). For more detailed information on my approach to security see the [README](https://github.com/RHAM231/My-Django-Website#readme) on my portfolio site.
 
 # Deployment
 
@@ -63,8 +63,8 @@ I utilized the following process to deploy the site to an AWS EC2 instance, conn
 
 ## Pre-Deployment
 
-1. **Run through my [Checklist]()**
-1. **Run through the [Django deployment checklist]()**
+1. **Run through my [Checklist](https://rexhmitchell.com/portfolio-project/project_checklist/)**
+1. **Run through the [Django deployment checklist](https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/)**
 1. **Create Deploy Branch**
     1. Create branch “deploy” on Github then pull from server
       1. Use “git checkout branch name” to swap between master and deploy
@@ -91,11 +91,11 @@ I utilized the following process to deploy the site to an AWS EC2 instance, conn
     1. Give ourselves the ability to modify file permissions on Ubuntu for Windows
         1. sudo umount /mnt/c
         1. sudo mount -t drvfs C: /mnt/c -o metadata
-        1. cd /mnt/c/Users/user/PycharmProjects/ “Directory Name”
+        1. cd /mnt/c/path/to/file/we/want/to/modify
     1. Change the file permissions on the key
         1. sudo chmod 400 KEY_NAME.pem
 1. **SSH into EC2 instance**
-    1. cd /mnt/c/Users/steph/OneDrive/Documents/VS-Code/ITDK
+    1. cd /mnt/c/path/to/.pem/file
     1. sudo ssh -i "FILE_NAME.pem" <span>ubuntu@ec2-IP-ADDRESS.REGION.compute.amazonaws.com</span>
 1. **Upgrade instance**
     1. apt-get update && apt-get upgrade
@@ -115,21 +115,22 @@ I utilized the following process to deploy the site to an AWS EC2 instance, conn
 1. **Install packages (while in ~/django/GitHub-Issue-Backend/app)**
     1. pip install -r requirements.txt
     1. Manually install as needed
-1. **Update settings.py (while in ~/django/GitHub-Issue-Backend/app/GITB)**
+1. **Update settings.py (while in ~/django/GitHub-Issue-Backend/app/GITB)** (home/django/TOP_FOLDER/PROJECT/SETTINGS APP)
     1. nano settings.py
     1. Set ALLOWED HOSTS to temporary IP address
     1. Turn on config settings and make sure that the secrect key is loading from a config file.
 1. **Create config.json file in etc directory to house sensitive info**
     1. sudo touch /etc/config.json
     1. sudo nano /etc/config.json
-    1. Edit the file to look like the following:
+    1. Add necessary entries
+    1. Ctrl x, y, Enter to save file
 1. **Run collectstatic (while in ~/django/GitHub-Issue-Backend/app)**
     1. python manage.py collectstatic
-1. **Test Development Server on EC2 instance (while in ~/django/GitHub-Issue-Backend/app)**
+1. **Test Development Server on EC2 instance (while in ~/django/GitHub-Issue-Backend/app)** (home/django/TOP_FOLDER/PROJECT)
     1. python manage.py runserver 0.0.0.0:8000
     1. Type “temporary IP address:8000” into browser
     1. Everything should be running, test the site
-    1. Anything that requires environment variables will not work yet
+    1. Anything that requires a production database will not work yet
     1. Stop server, Ctrl c
 
 ### Configure Apache2
@@ -140,7 +141,6 @@ I utilized the following process to deploy the site to an AWS EC2 instance, conn
      1. cd /etc/apache2/sites-available/
      1. sudo cp 000-default.conf django_project.conf
      1. sudo nano django_project.conf
-     1. Edit the file to look like the following:
      1. Ctrl x, y, Enter to save file
  1. **Enable the django_project.conf file and disable the default.conf file**
      1. cd ~/
@@ -167,7 +167,7 @@ I utilized the following process to deploy the site to an AWS EC2 instance, conn
 ### Database
 
 1. **Create RDS instance**
-    1. Set public accessiblity to “Yes”
+    1. Set public accessiblity to “No”
 1. **Configure security group settings on RDS**
     1. Add the EC2 instance’s security group to the RDS instance (this should be the default instance) allow access to the EC2 instance by Postgres from the default instance
 1. **If you haven’t already, install psycopg2 on EC2 (while in ~)**
@@ -189,15 +189,14 @@ I utilized the following process to deploy the site to an AWS EC2 instance, conn
 
 ### Build additional security settings in settings.py
 
-1. Turn on all security settings except for SSL and HSTS settings (we will turn these on after enabling the SSL certificate:
-1. Leave HSTS seconds at 60 for now to avoid breaking the site
+1. Turn on all security settings except for SSL, HSTS, and cookie settings (we will turn these on after enabling the SSL certificate:
 1. Build up a Content Security Policy using Django-CSP, test each value
 
 ### Custom Domain
 
 1. **Configure domain settings on domain provider**
     1. Add AWS’s name servers on provider
-    1. Name servers can be found in AWS Route 53, Hosted Zones, Type NS
+    1. Name servers can be found in AWS Route 53, Hosted Zones, Type NS (don't leave the period at the end off)
         1. ns-####.awsdns-##.net.
         1. ns-####.awsdns-##.co.uk.
         1. ns-####.awsdns-##.com.
@@ -216,9 +215,9 @@ I utilized the following process to deploy the site to an AWS EC2 instance, conn
     1. sudo apt-get update
     1. sudo apt-get install software-properties-common
     1. sudo add-apt-repository universe
-    1. sudo add-apt-repository ppa:certbot/certbot
-    1. sudo apt-get update
-    1. sudo apt-get install python-certbot-apache
+    1. sudo snap install core; sudo snap refresh core
+    1. sudo apt-get remove certbot
+    1. sudo snap install --classic certbot
 1. **Edit .conf file**
     1. sudo nano /etc/apache2/sites-available/django_project.conf
     1. set ServerName to domain name
@@ -244,16 +243,16 @@ I utilized the following process to deploy the site to an AWS EC2 instance, conn
 3. **Setup auto rewew**
     1. sudo certbot renew--dry-run
     1. sudo crontab -e, 1 to use nano
-    1. Edit to look like the following:
+    1. Add cron commands, also add command to periodically expire the Sandbox-Import repository
     1. Manually renew if needed
     1. sudo certbot renew –apache
 
 ### Add auto update to crontabs
 
-1. **Open crotab file for editing**
+1. **Open crontab file for editing**
     1. cd /etc/
     1. sudo nano crontab -e
-    1. make the file look like the following
+    1. Add Ubuntu update command
 
 # Build Status
 
