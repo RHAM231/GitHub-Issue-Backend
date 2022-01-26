@@ -12,7 +12,7 @@ from repositories.models import Repository, RepoFolder, RepoFile, LineOfCode
 from consume_api.serializers import RepoSerializer, RepoFolderSerializer, RepoFileSerializer, IssueSerializer
 
 
-#################################################################################################################################
+################################################################################
 # SUMMARY
 #################################################################################################################################
 
