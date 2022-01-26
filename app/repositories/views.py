@@ -104,22 +104,32 @@ class FolderContentsListView(ListView):
     # Override get_queryset() to list folders by parent folder
     def get_queryset(self):
         # Get the parent folder using the slug from the url
-        parent_folder = RepoFolder.objects.get(slug=self.kwargs['folder_slug'])
+        parent_folder = RepoFolder.objects.get(
+            slug=self.kwargs['folder_slug']
+            )
         self.folder = parent_folder
-        # Define the folder queryset by the parent folder. Annotate each folder with its issue count
-        queryset = RepoFolder.objects.filter(parent_folder=parent_folder).annotate(issue_count=Count('repofolder'))
+        # Define the folder queryset by the parent folder. Annotate
+        # each folder with its issue count
+        queryset = RepoFolder.objects.filter(
+            parent_folder=parent_folder).annotate(
+                issue_count=Count('repofolder'))
         return queryset
 
-    # Override get_context_data() to combine our files and folders into a single queryset.
+    # Override get_context_data() to combine our files and folders into
+    # a single queryset.
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['title'] = 'Repositories'
 
         # Get a list of all our files in the given folder
-        files = RepoFile.objects.filter(parent_folder=self.folder).annotate(issue_count=Count('repofile'))
+        files = RepoFile.objects.filter(
+            parent_folder=self.folder).annotate(
+                issue_count=Count('repofile'))
 
-        # Grab our folder_contents queryset defined by get_queryset() and add it to context with files
-        # as a dictionary. This allows us to minimize our html by iterating over one context object rather than two
+        # Grab our folder_contents queryset defined by get_queryset()
+        # and add it to context with files as a dictionary. This allows
+        # us to minimize our html by iterating over one context object
+        # rather than two
         context['folders_and_files'] = {
             'folders': context['folder_contents'],
             'files': files
@@ -143,18 +153,23 @@ class FileDetailView(DetailView):
         repofile = RepoFile.objects.get(slug=self.kwargs['file_slug'])
 
         # Get our issues associated to the given file
-        context['issues'] = Issue.objects.filter(associated_file=repofile.id).count
+        context['issues'] = Issue.objects.filter(
+            associated_file=repofile.id).count
 
         # Get our lines of code to iterate over in the template
-        lines = LineOfCode.objects.filter(repofile=repofile.id).order_by('line_number').annotate(issue_count=Count('issue_loc'))
+        lines = LineOfCode.objects.filter(
+            repofile=repofile.id).order_by(
+                'line_number').annotate(
+                    issue_count=Count('issue_loc'))
 
         # Define our individual file attributes
         context['lines'] = lines
         context['line_count'] = lines.count()
-        context['sloc'] = LineOfCode.objects.filter(repofile=repofile.id).exclude(content='').count()
+        context['sloc'] = LineOfCode.objects.filter(
+            repofile=repofile.id).exclude(content='').count()
         return context
 
 
-#################################################################################################################################
+##############################################################################
 # END
-#################################################################################################################################
+##############################################################################
