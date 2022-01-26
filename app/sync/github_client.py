@@ -474,7 +474,8 @@ def update_issue(token, user, data, stamp, issue_number):
     )
 
 
-# Given data from our frontend, open or close an existing issue on GitHub
+# Given data from our frontend, open or close an existing issue on
+# GitHub
 def open_close_issue(token, user, state, repo, issue_number):
     g = Github(token)
     user_repo = user + '/' + repo
@@ -485,42 +486,60 @@ def open_close_issue(token, user, state, repo, issue_number):
     )
 
 
-# Define a method for serializing raw json output from our get methods above
-def serialize_github_object(repo_pk, slookup, raw, path=None, file_listing=None, folder_listing=None, folder_sha=None):
-    # Get the primary key of our parent folder from our database by its sha. Convert to string.
+# Define a method for serializing raw json output from our get methods
+# above
+def serialize_github_object(
+    repo_pk, slookup, raw, path=None, 
+    file_listing=None, folder_listing=None, 
+    folder_sha=None):
+    # Get the primary key of our parent folder from our database by its
+    # sha. Convert to string.
     if folder_sha:
         parent_folder_pk = str(RepoFolder.objects.get(sha=folder_sha).pk)
     
-    # GitHub's API stores children information in parent objects rather than parent information in children objects. 
-    # As a result, we need to inject all parent information into our database objects as additional parameters when
-    # we serialize. Normally we use the serializer's save method to do this. But this method doesn't appear to work
-    # for foreign key relations. As a workaround, we inject the fk parameters directly into the raw json before call-
+    # GitHub's API stores children information in parent objects rather
+    # than parent information in children objects. As a result, we need
+    # to inject all parent information into our database objects as
+    # additional parameters when we serialize. Normally we use the
+    # serializer's save method to do this. But this method doesn't
+    # appear to work for foreign key relations. As a workaround, we
+    # inject the fk parameters directly into the raw json before call-
     # ing the serializer.
-        injected_json = {"repository":repo_pk, "parent_folder":parent_folder_pk}
+        injected_json = {
+            "repository":repo_pk, 
+            "parent_folder":parent_folder_pk
+            }
     else:
         injected_json = {
             "repository":repo_pk
             }
     raw.update(injected_json)
 
-    # Now we can call our serializer. We use our serializer/model lookup method to match the raw json object
-    # with its appropriate serializer and model.
+    # Now we can call our serializer. We use our serializer/model
+    # lookup method to match the raw json object with its appropriate
+    # serializer and model.
     serializer, model = get_serializer_and_model(slookup, raw)
-    # Now we check validity and type, then save with additional parameters
+    # Now we check validity and type, then save with additional
+    # parameters
     if serializer.is_valid(raise_exception=True):
         if file_listing:
-            # Save a file object with the extra data_type parameter obtained from its parent GitHub tree
+            # Save a file object with the extra data_type parameter
+            # obtained from its parent GitHub tree
             saved = serializer.save(data_type=file_listing['type'])
         elif folder_listing:
-            # Save a folder object with additional parameters obtained from its parent GitHub tree
+            # Save a folder object with additional parameters obtained
+            # from its parent GitHub tree
             name=folder_listing['path']
             data_type=folder_listing['type']
             mode=folder_listing['mode']
-            saved = serializer.save(name=name, path=path, data_type=data_type, mode=mode)
+            saved = serializer.save(
+                name=name, path=path, 
+                data_type=data_type, mode=mode
+                )
         else:
             saved = serializer.save()
 
 
-#################################################################################################################################
+##############################################################################
 # END
-#################################################################################################################################
+##############################################################################
