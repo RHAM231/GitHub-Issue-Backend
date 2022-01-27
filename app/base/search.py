@@ -10,32 +10,38 @@ from issues import models as issue_models
 from repositories import models as repo_models
 
 
-#################################################################################################################################
+##############################################################################
 # SUMMARY
-#################################################################################################################################
+##############################################################################
 
 '''
-Let's build basic search functionality for our site (master search bar in the navbar). We define a get_search_models() method to
-dynamically extract our searchable classes, excluding the ones we don't want.
+Let's build basic search functionality for our site (master search bar
+in the navbar). We define a get_search_models() method to dynamically
+extract our searchable classes, excluding the ones we don't want.
 
-Next we build a get_search_results() method. This queries our list of search models by the term provided from our search form and
-returns a sorted list of results from the database.
+Next we build a get_search_results() method. This queries our list of
+search models by the term provided from our search form and returns a
+sorted list of results from the database.
 
-Last we define a get_structured_search_results() method called by the SearchResultsView in base.views.py. This takes our
-sorted list and breaks it into lists by model, returning the lists to the SearchResultsView.
+Last we define a get_structured_search_results() method called by the
+SearchResultsView in base.views.py. This takes our sorted list and
+breaks it into lists by model, returning the lists to the
+SearchResultsView.
 '''
 
-#################################################################################################################################
+##############################################################################
 # BEGIN CODE
-#################################################################################################################################
+##############################################################################
 
 
-# Method for dynamically importing our models. We pass it a list of modules to iterate over and a list of classes to exclude.
-# Returns a list of search models to construct queries from.
+# Method for dynamically importing our models. We pass it a list of
+# modules to iterate over and a list of classes to exclude. Returns a
+# list of search models to construct queries from.
 def get_search_models(modules, exclusions):
     search_models = []
     for module in modules:
-        # Get our models from each module as a dictionary in case we need a dictionary structure in the future
+        # Get our models from each module as a dictionary in case we
+        # need a dictionary structure in the future
         model_classes = dict([(name, cls) for name, cls in module.__dict__.items() if isinstance(cls, type)])
         # Remove the classes we wish to exclude
         for key in exclusions:

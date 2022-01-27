@@ -3,7 +3,8 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from consume_api import views
 
 
-# Define our urls for our REST portion that displays Issue Tracker's API
+# Define our urls for our REST portion that displays Issue Tracker's
+# API
 urlpatterns = [
     # API Home
     path('', views.api_root, name='api-home'),
