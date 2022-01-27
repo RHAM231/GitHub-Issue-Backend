@@ -9,9 +9,9 @@ from . search import get_structured_search_results
 from repositories.models import Repository, RepoFolder, RepoFile
 
 
-#################################################################################################################################
+##############################################################################
 # BEGIN VIEWS
-#################################################################################################################################
+##############################################################################
 
 
 # Renders the home page
@@ -40,7 +40,8 @@ class SearchResultsView(FormView):
 
         form = self.form_class(self.request.GET)
         if self.request.GET and form.is_valid():
-            # Call our structured method from search.py to get our search results
+            # Call our structured method from search.py to get our
+            # search results
             issues, repos, folders, files = get_structured_search_results(form)
             # Add results to context
             context['issues'] = issues
@@ -58,6 +59,6 @@ def about(request):
     return render(request, 'base/about.html', context)
 
 
-#################################################################################################################################
+##############################################################################
 # END
-#################################################################################################################################
+##############################################################################
