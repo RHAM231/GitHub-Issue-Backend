@@ -103,7 +103,8 @@ def set_association_atrs(issue):
         issue.associated_folder = issue.associated_file.parent_folder
         file_name = str(issue.associated_file.name)
         folder_name = str(issue.associated_folder.name)
-        full_path = str(issue.associated_file.repository.name) + '/' + str(issue.associated_file.path)
+        full_path = str(issue.associated_file.repository.name) + '/' \
+            + str(issue.associated_file.path)
 
     # Next check for a file. If present, set line to none and
     # everything based on the file.
@@ -112,7 +113,8 @@ def set_association_atrs(issue):
         issue.associated_folder = issue.associated_file.parent_folder
         file_name = str(issue.associated_file.name)
         folder_name = str(issue.associated_folder.name)
-        full_path = str(issue.associated_file.repository.name) + '/' + str(issue.associated_file.path)
+        full_path = str(issue.associated_file.repository.name) + '/' \
+            + str(issue.associated_file.path)
     
     # Last, check for a folder. If present set line and file to none
     # and run a check to set path
@@ -121,7 +123,8 @@ def set_association_atrs(issue):
         file_name = 'None'
         folder_name = str(issue.associated_folder.name)
         if issue.associated_folder.path:
-            full_path = str(issue.repository.name) + '/' + str(issue.associated_folder.path)
+            full_path = str(issue.repository.name) + '/' \
+                + str(issue.associated_folder.path)
         else:
             full_path = str(issue.repository.name)
 

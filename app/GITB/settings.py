@@ -17,8 +17,8 @@ from decouple import config
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
+# Quick-start development settings - unsuitable for production. See
+# https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('IT_SECRET_KEY')
@@ -80,8 +80,8 @@ TEMPLATES = [
                 'base.context_processors.get_profile',
             ],
 
-            # Registers a custom filters.py file in the base app.
-            # Gives access to custom template tags.
+            # Registers a custom filters.py file in the base app. Gives
+            # access to custom template tags.
             'libraries':{
                 'filters': 'base.filters',
             }
