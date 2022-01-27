@@ -90,7 +90,8 @@ class RepoFolder(models.Model):
     # methods
     def save(self, *args, **kwargs):
         if self.path:
-            self.issuetracker_url_path = self.repository.name + '/' + self.path
+            self.issuetracker_url_path = \
+                self.repository.name + '/' + self.path
         else:
             self.issuetracker_url_path = self.repository.name
         
@@ -161,7 +162,8 @@ class RepoFile(models.Model):
     # parent repo and slug by file name
     def save(self, *args, **kwargs):
         if self.path:
-            self.issuetracker_url_path = (self.repository.name + '/' + self.path).rsplit('/', 1)[0]
+            self.issuetracker_url_path = \
+                (self.repository.name + '/' + self.path).rsplit('/', 1)[0]
         else:
             self.issuetracker_url_path = self.repository.name
 
