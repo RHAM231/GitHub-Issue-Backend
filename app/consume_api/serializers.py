@@ -7,9 +7,9 @@ from users.models import Profile
 from repositories.models import Repository, RepoFolder, RepoFile, LineOfCode
 
 
-#################################################################################################################################
+##############################################################################
 # SUMMARY
-#################################################################################################################################
+##############################################################################
 
 '''
 Let's use Django REST to easily consume API data from GitHub. We define
@@ -21,31 +21,35 @@ We'll use each serializer to create entries in our database from the
 GitHub json objects.
 '''
 
-#################################################################################################################################
+##############################################################################
 # BEGIN SERIALIZERS FOR CONSUMING GITHUB API DATA
-#################################################################################################################################
+##############################################################################
 
 
-# Define a Django REST model serializer for our issue model. This is equivalent/similiar to a Django modelform
-# except for consuming json API data instead of user input data.
+# Define a Django REST model serializer for our issue model. This is
+# equivalent/similiar to a Django modelform except for consuming json
+# API data instead of user input data.
 class IssueSerializer(serializers.ModelSerializer):
     # Declare our required foreign key fields
-    repository = serializers.PrimaryKeyRelatedField(queryset=Repository.objects.all())
-    author = serializers.PrimaryKeyRelatedField(queryset=Profile.objects.all())
+    repository = serializers.PrimaryKeyRelatedField(
+        queryset=Repository.objects.all())
+    author = serializers.PrimaryKeyRelatedField(
+        queryset=Profile.objects.all())
     class Meta:
         # Set our model to recieve the data
         model = Issue
         author = serializers.CharField(read_only=True)
         
-        # Declare our serializer fields the same way we would for a Django modelform
+        # Declare our serializer fields the same way we would for a
+        # Django modelform
         fields = [
-            'id', 'title', 'state', 'body', 'created_at', 'updated_at', 'closed_at', 
-            'number', 'author', 'repository', 'associated_folder', 'associated_file', 
-            'associated_loc'
+            'id', 'title', 'state', 'body', 'created_at', 'updated_at', 
+            'closed_at', 'number', 'author', 'repository', 
+            'associated_folder', 'associated_file', 'associated_loc'
             ]
 
-    # Define custom methods for our association foreign key fields to make these fields optional
-    # Folders
+    # Define custom methods for our association foreign key fields to
+    # make these fields optional Folders
     def get_folder(self, obj):
         if obj.associated_folder is not None:
             return IssueSerializer(obj.associated_folder).data
@@ -71,12 +75,16 @@ class IssueSerializer(serializers.ModelSerializer):
 class RepoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Repository
-        fields = ['id', 'name', 'description', 'open_issues_count', 'created_at', 'updated_at', 'url']
+        fields = [
+            'id', 'name', 'description', 'open_issues_count', 'created_at',
+            'updated_at', 'url'
+            ]
 
 
 # Serializer to consume GitHub folder json objects
 class RepoFolderSerializer(serializers.ModelSerializer):
-    repository = serializers.PrimaryKeyRelatedField(queryset=Repository.objects.all())
+    repository = serializers.PrimaryKeyRelatedField(
+        queryset=Repository.objects.all())
     class Meta:
         model = RepoFolder
         fields = ['id', 'sha', 'url', 'repository', 'parent_folder']
@@ -103,12 +111,15 @@ class RepoFileSerializer(serializers.ModelSerializer):
 class TestIssueSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = TestIssue
-        fields = ['id', 'title', 'state', 'body', 'number', 'created_at', 'repository_url']
+        fields = [
+            'id', 'title', 'state', 'body', 'number', 'created_at', 
+            'repository_url'
+            ]
 
 
-#################################################################################################################################
+##############################################################################
 # BEGIN SERIALIZERS FOR DISPLAYING JSON OBJECTS IN ISSUE TRACKER'S API
-#################################################################################################################################
+##############################################################################
 
 
 # Serializer to display issue json objects in Issue Trackers's API
@@ -121,7 +132,8 @@ class HyperlinkedIssueSerializer(serializers.HyperlinkedModelSerializer):
         queryset=Repository.objects.all()
         )
     # Set author as a display only field
-    author = serializers.PrimaryKeyRelatedField(queryset=Profile.objects.all())
+    author = serializers.PrimaryKeyRelatedField(
+        queryset=Profile.objects.all())
     # Define a link to our issue detail view
     IssueDetail = serializers.HyperlinkedIdentityField(
         view_name='api-issue-detail',
@@ -147,17 +159,19 @@ class HyperlinkedIssueSerializer(serializers.HyperlinkedModelSerializer):
         # Set our model to recieve the data
         model = Issue
         
-        # Declare our serializer fields the same way we would for a Django modelform
+        # Declare our serializer fields the same way we would for a
+        # Django modelform
         fields = [
-            'IssueDetail', 'id', 'title', 'state', 'body', 'created_at', 'updated_at', 
-            'closed_at', 'number', 'author', 'repository', 'associated_folder', 
-            'associated_file', 'associated_loc'
+            'IssueDetail', 'id', 'title', 'state', 'body', 'created_at', 
+            'updated_at', 'closed_at', 'number', 'author', 'repository', 
+            'associated_folder', 'associated_file', 'associated_loc'
             ]
     
-    # Define a method for our lines of code field to display the line of code by its
-    # line number rather than its id
+    # Define a method for our lines of code field to display the line
+    # of code by its line number rather than its id
     def get_loc_line_number(self, obj):
-        # Check if we have an associated line of code before trying to access line number
+        # Check if we have an associated line of code before trying to
+        # access line number
         if obj.associated_loc:
             return obj.associated_loc.line_number
         # If there's no line of code, return null
@@ -175,7 +189,10 @@ class HyperlinkedRepoSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = Repository
         # Declare our display fields
-        fields = ['RepoDetail', 'id', 'name', 'description', 'open_issues_count', 'created_at', 'updated_at', 'url']
+        fields = [
+            'RepoDetail', 'id', 'name', 'description', 'open_issues_count', 
+            'created_at', 'updated_at', 'url'
+            ]
 
 
 # Serializer to display folder json objects in Issue Trackers's API
@@ -200,7 +217,10 @@ class HyperlinkedRepoFolderSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = RepoFolder
         # Declare our display fields
-        fields = ['FolderDetail', 'id', 'sha', 'url', 'repository', 'parent_folder']
+        fields = [
+            'FolderDetail', 'id', 'sha', 'url', 
+            'repository', 'parent_folder'
+            ]
 
 
 # Serializer to display file json objects in Issue Trackers's API
@@ -226,11 +246,11 @@ class HyperlinkedRepoFileSerializer(serializers.HyperlinkedModelSerializer):
         model = RepoFile
         # Declare our display fields
         fields = [
-            'FileDetail', 'id', 'name', 'path', 'sha', 'url', 'data_type', 'content', 
-            'encoding', 'size', 'repository', 'parent_folder'
+            'FileDetail', 'id', 'name', 'path', 'sha', 'url', 'data_type', 
+            'content', 'encoding', 'size', 'repository', 'parent_folder'
             ]
 
 
-#################################################################################################################################
+##############################################################################
 # END
-#################################################################################################################################
+##############################################################################
