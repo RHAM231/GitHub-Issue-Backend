@@ -1,5 +1,5 @@
 # GitHub-Issue-Backend
-This is the source code for my API project [Issue Tracker](https://www.djangoissuetracker.com/). Visit the site [here](https://www.djangoissuetracker.com/).
+This is the source code for my API project [Issue Tracker](https://www.djangoissuetracker.com/).
 
 # Motivation
 
