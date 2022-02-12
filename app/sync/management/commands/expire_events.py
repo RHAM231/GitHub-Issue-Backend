@@ -14,10 +14,18 @@ class Command(BaseCommand):
             expire = timedelta(hours=1)
 
             if time_check >= expire:
-                print('Repository expired, deleting ...')
+                print(
+                    'Time Check: ', time_check, 
+                    'Expire: ', expire, 
+                    ' Repository expired, deleting ...'
+                )
                 repo.delete()
             else:
-                print('Repository not expired yet, keeping ...')
+                print(
+                    'Time Check: ', time_check, 
+                    'Expire: ', expire, 
+                    ' Repository not expired yet, keeping ...'
+                )
 
         except ObjectDoesNotExist:
             print('No repository to delete')
