@@ -18,7 +18,7 @@ class Command(BaseCommand):
             # Get the length of the time the repo has existed in the
             # database
             time_check = timezone.now() - repo.expire_time
-            # Set our expiry time to one hour
+            # Set our expiration time to one hour
             expire = timedelta(hours=1)
 
             # If an hour has passed, delete the repo, otherwise do
