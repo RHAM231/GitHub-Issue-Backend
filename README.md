@@ -149,12 +149,12 @@ I utilized the following process to deploy the site to an AWS EC2 instance, conn
      1. sudo a2dissite 000-default.conf
      1. sudo systemctl reload apache2
  1. **Give Apache access to the development database**
-     1. Within the ~/ directory, set apache as the group owner of the db.sqlite3 file and parent directory, and set file permissions on  db.sqlite3 and parent directory
+     1. Within the ~/ directory, set apache as the group owner of the db.sqlite3 file and parent directory, and set file permissions on  db.sqlite3 and PARENT DIRECTORY
          1. sudo chown :www-data PATH TO FILE/db.sqlite3
-         1. sudo chmod 664 PROJECT NAME/db.sqlite3
-         1. sudo chown :www-data PROJECT NAME/
-         1. sudo chmod 775 PROJECT NAME/
-         1. ls -la, verify permissions
+         1. sudo chmod 664 PATH TO FILE/db.sqlite3
+         3. sudo chown :www-data PATH TO PARENT DIRECTORY/
+         4. sudo chmod 775 PATH TO PARENT DIRECTORY/
+         5. ls -la, verify permissions
      1. Set owner and permissions for project media folder so we can access it with our database
          1. sudo chown -R :www-data PROJECT NAME/media/
          1. sudo chmod -R 775 PROJECT NAME/media
