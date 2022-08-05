@@ -147,6 +147,7 @@ I utilized the following process to deploy the site to an AWS EC2 instance, conn
      1. cd ~/
      1. sudo a2ensite YOUR_CONF_FILE
      1. sudo a2dissite 000-default.conf
+     1. sudo systemctl reload apache2
  1. **Give Apache access to the development database**
      1. Within the ~/ directory, set apache as the group owner of the db.sqlite3 file and parent directory, and set file permissions on  db.sqlite3 and parent directory
          1. sudo chown :www-data PATH TO FILE/db.sqlite3
