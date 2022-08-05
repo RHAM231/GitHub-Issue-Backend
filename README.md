@@ -157,7 +157,7 @@ I utilized the following process to deploy the site to an AWS EC2 instance, conn
          5. ls -la, verify permissions
      1. Set owner and permissions for project media folder so we can access it with our database
          1. sudo chown -R :www-data PATH TO FOLDER/media/
-         1. sudo chmod -R 775 PROJECT PATH TO FOLDER/media
+         1. sudo chmod -R 775 PATH TO FOLDER/media
      1. Verify DEBUG = True (we will set this to False once we’re using the real domain)
  1. **Restart apache and test the site**
      1. sudo service apache2 restart
