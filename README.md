@@ -98,7 +98,8 @@ I utilized the following process to deploy the site to an AWS EC2 instance, conn
     1. cd /mnt/c/path/to/.pem/file
     1. sudo ssh -i "FILE_NAME.pem" <span>ubuntu@ec2-IP-ADDRESS.REGION.compute.amazonaws.com</span>
 1. **Upgrade instance**
-    1. apt-get update && apt-get upgrade
+    1. apt-get update
+    2. apt-get upgrade
 1. **Make Django Directory (while in ~)**
     1. mkdir django
     1. cd django
